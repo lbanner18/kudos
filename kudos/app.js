@@ -69,6 +69,7 @@
       summary: '',
       sections: [],
       checklist: { text: '', done: {} },
+      seen: {}, removed: {}, // merge history, see merge.js
     };
   }
   let state = defaultState();
@@ -263,7 +264,9 @@
     $('#preview').innerHTML = html;
     const all = allText();
     const left = new Set(Array.from(all.matchAll(PH_RE), x => x[1])).size + (all.match(PROMPT_RE) || []).length;
-    $('#saveStatus').dataset.ph = left ? `· ${left} unfilled prompt${left > 1 ? 's' : ''}` : '';
+    const open = state.sections.filter(s => s.conflictOf).length;
+    $('#saveStatus').dataset.ph = [left && `· ${left} unfilled prompt${left > 1 ? 's' : ''}`,
+      open && `· ${open} merge conflict${open > 1 ? 's' : ''} to resolve`].filter(Boolean).join(' ');
     updateStatus();
   }
 
@@ -432,7 +435,11 @@
       h('button', { class: 'tiny', text: '↑', title: 'Move up', onclick: () => move(-1) }),
       h('button', { class: 'tiny', text: '↓', title: 'Move down', onclick: () => move(1) }),
       def ? h('button', { class: 'tiny', text: 'Reset', title: 'Restore the draft text for this section', onclick: () => { const fresh = makeSection(def); fresh.uid = s.uid; fresh.evidence = s.evidence; if (fresh.perHost && s.perHost) fresh.perHost.evidence = s.perHost.evidence; state.sections[i] = fresh; renderSectionCards(); } }) : null,
-      h('button', { class: 'tiny danger', text: '✕', title: 'Delete section', onclick: () => { state.sections.splice(i, 1); renderSectionCards(); } })));
+      h('button', { class: 'tiny danger', text: '✕', title: 'Delete section', onclick: () => { window.KudosMerge.noteDeleted(state, s); state.sections.splice(i, 1); renderSectionCards(); } })));
+    if (s.conflictOf) card.append(h('div', { class: 'dirty' },
+      `Teammate's version from ${s.mergeFrom}: you both changed ${s.conflictOf === 'summary' ? 'the summary' : 'this section'}.`,
+      h('button', { class: 'tiny', text: 'Use this version', onclick: () => resolveConflict(s, true) }),
+      h('button', { class: 'tiny danger', text: 'Discard', onclick: () => resolveConflict(s, false) })));
     const body = h('div', { class: 'secbody' });
     body.append(textArea(s.text, v => { s.text = v; s.edited = true; changed(); }));
     if (s.table) body.append(tableEditor(s.table, s.hostRows ? () => { const rows = hostRowsFor(s.hostRows); if (rows.length) { s.table.rows = rows; renderSectionCards(); } else flash('Add hosts first (section 2).'); } : null));
@@ -440,6 +447,18 @@
     if (s.perHost) body.append(perHostEditor(s));
     card.append(body);
     return card;
+  }
+  // A merged-in copy of a section (or the summary) that both people changed.
+  function resolveConflict(s, use) {
+    const drop = () => state.sections.splice(state.sections.indexOf(s), 1);
+    if (use && s.conflictOf === 'summary') { state.summary = s.text; syncInputs(); drop(); }
+    else if (use) {
+      const j = state.sections.findIndex(x => x.uid === s.conflictOf);
+      s.uid = s.conflictOf;
+      delete s.conflictOf; delete s.mergeFrom;
+      if (j >= 0) { state.sections.splice(j, 1); }
+    } else drop();
+    renderSectionCards();
   }
   function tableEditor(tb, fillFromHosts) {
     const wrap = h('div');
@@ -599,15 +618,16 @@
     saveHosts();
     updateStatus();
   }
-  function loadState(obj) {
+  function normalize(obj) {
     const base = defaultState();
     const s = Object.assign(base, obj || {});
     s.meta = Object.assign(defaultState().meta, obj && obj.meta);
     s.checklist = Object.assign({ text: '', done: {} }, obj && obj.checklist);
     s.sections = (s.sections || []).map(x => Object.assign({ evidence: [], captions: [], table: null, perHost: null, hostRows: null, level: 1, on: true, heading: '', text: '' }, x));
     s.hosts = (s.hosts || []).map(x => Object.assign({ id: uid(), name: '', os: 'Linux', ip: '' }, x));
-    state = s;
+    return s;
   }
+  function loadState(obj) { state = normalize(obj); }
   function syncInputs() {
     $$('[data-meta]').forEach(inp => { inp.value = state.meta[inp.dataset.meta] == null ? '' : state.meta[inp.dataset.meta]; });
     $('#summaryText').value = state.summary;
@@ -622,9 +642,11 @@
     document.body.append(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }
-  function fileName(ext) {
+  function fileName(ext, stamp) {
     const n = state.meta.injectNo.trim();
-    return `inject${n ? (/^\d$/.test(n) ? '0' + n : n) : ''}_team${state.meta.team || ''}.${ext}`;
+    // Saved drafts get the time, so teammates' uploads to one shared folder don't collide.
+    const d = new Date(), t = stamp ? `_${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}` : '';
+    return `inject${n ? (/^\d$/.test(n) ? '0' + n : n) : ''}_team${state.meta.team || ''}${t}.${ext}`;
   }
 
   // ---------- .docx export ----------
@@ -712,7 +734,11 @@
       numbering: { config: [{ reference: 'num', levels: [{ level: 0, format: D.LevelFormat.DECIMAL, text: '%1.', alignment: D.AlignmentType.LEFT, style: { paragraph: { indent: { left: 720, hanging: 360 } } } }] }] },
       sections: [{ properties: { page: { margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 } } }, children }],
     });
-    D.Packer.toBlob(doc).then(blob => download(blob, fileName('docx')), err => { console.error(err); flash('Export failed: ' + err.message); });
+    const open = state.sections.filter(s => s.conflictOf).length;
+    D.Packer.toBlob(doc).then(blob => {
+      download(blob, fileName('docx'));
+      if (open) flash(`Exported with ${open} unresolved merge conflict${open > 1 ? 's' : ''}: both versions are in the file.`);
+    }, err => { console.error(err); flash('Export failed: ' + err.message); });
   }
 
   // ---------- wiring ----------
@@ -730,14 +756,36 @@
     $('#btnAddSection').onclick = () => { state.sections.push(makeSection({ heading: 'New section', text: '' })); renderSectionCards(); };
     $$('[data-snippet]').forEach(b => b.onclick = () => { state.sections.push(makeSection(SNIPPETS[b.dataset.snippet])); renderSectionCards(); flash('Added at the end — edit the highlighted placeholder.'); });
     $('#btnExport').onclick = exportDocx;
-    $('#btnSave').onclick = () => download(new Blob([JSON.stringify(state)], { type: 'application/json' }), fileName('json'));
+    $('#btnSave').onclick = () => { window.KudosMerge.record(state); save(); download(new Blob([JSON.stringify(state)], { type: 'application/json' }), fileName('json', true)); };
     $('#btnLoad').onclick = () => $('#fileLoad').click();
     $('#fileLoad').onchange = async e => {
       const f = e.target.files[0];
       e.target.value = '';
       if (!f) return;
-      try { loadState(JSON.parse(await f.text())); renderAll(); save(); flash(`Loaded ${f.name}`); }
-      catch (err) { flash('That file is not a saved draft.'); }
+      try {
+        loadState(JSON.parse(await f.text()));
+        window.KudosMerge.record(state);
+        renderAll(); save(); flash(`Loaded ${f.name}`);
+      } catch (err) { flash('That file is not a saved draft.'); }
+    };
+    $('#btnMerge').onclick = () => $('#fileMerge').click();
+    $('#fileMerge').onchange = async e => {
+      const files = Array.from(e.target.files);
+      e.target.value = '';
+      if (!files.length) return;
+      const notes = [];
+      for (const f of files) {
+        let inc;
+        try { inc = JSON.parse(await f.text()); } catch (err) { inc = null; }
+        if (!inc || !Array.isArray(inc.sections)) { notes.push(`${f.name}: not a saved draft`); continue; }
+        const { state: merged, report: r } = window.KudosMerge.merge(state, normalize(inc), f.name);
+        loadState(merged);
+        const bits = [r.updated && `${r.updated} updated`, r.added && `${r.added} added`, r.hosts && `${r.hosts} host${r.hosts > 1 ? 's' : ''} added`,
+          r.conflicts && `${r.conflicts} changed on both sides (kept both, marked below)`,
+          r.fields.length && `kept yours for ${r.fields.join(', ')}`].filter(Boolean);
+        notes.push(`${f.name}: ${bits.join(', ') || 'nothing new'}`);
+      }
+      renderAll(); save(); flash(notes.join(' · '));
     };
     const btnNew = $('#btnNew');
     btnNew.onclick = () => {

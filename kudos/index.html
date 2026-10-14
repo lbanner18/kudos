@@ -16,8 +16,10 @@
     <button id="btnNew" class="ghost">New inject</button>
     <button id="btnLoad" class="ghost">Load draft</button>
     <button id="btnSave" class="ghost">Save draft</button>
+    <button id="btnMerge" class="ghost" title="Bring in sections teammates filled in from their saved drafts">Merge drafts</button>
     <button id="btnExport" class="primary">Export .docx</button>
     <input type="file" id="fileLoad" accept=".json,application/json" hidden>
+    <input type="file" id="fileMerge" accept=".json,application/json" multiple hidden>
   </div>
 </header>
 
@@ -128,6 +130,7 @@
 <script src="drafts/remote-access-automation.js"></script>
 <script src="drafts/service-documentation.js"></script>
 <script src="drafts/monitoring-scripts.js"></script>
+<script src="merge.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

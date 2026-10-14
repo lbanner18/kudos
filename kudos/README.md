@@ -22,6 +22,17 @@ Drafts autosave in your browser. **Save draft** / **Load draft** passes one (scr
 
 Everything runs in the browser and nothing is uploaded. It works offline from a local copy: open `index.html` directly.
 
+## Splitting an inject
+
+To split one inject across teammates, pass drafts around through a shared folder (Nextcloud or anything else):
+
+1. One person starts the draft, then **Save draft** and puts the `.json` in the shared folder.
+2. Each teammate opens it with **Load draft**, fills in their sections, and puts their **Save draft** file back. Saved drafts are named with the time (`inject12_team07_1432.json`) so uploads don't overwrite each other. Send updates as often as you like.
+3. The person submitting clicks **Merge drafts** and picks one or more of those files. For each section, the summary and each header field, the newer version wins: if you haven't touched it since the teammate got it, theirs comes in; if they haven't, yours stays. Hosts and checklist lines are added, never removed. Sections you deleted stay deleted unless a teammate changed them afterwards. Merging the same file twice does nothing.
+4. If you both changed the same section, you get both: the teammate's copy sits right under yours, marked, with **Use this version** and **Discard**. Unresolved copies are counted next to "Autosaved", and both versions go into the export until you pick one.
+
+Teammates must start from the shared draft with **Load draft**, not a draft of their own, so their sections match up. Each draft keeps a short history of fingerprints of each part (`seen` in the `.json`) so a merge can tell which version is newer.
+
 
 ## Text formatting
 
@@ -71,6 +82,7 @@ If a file declares top-level `const`s (e.g. a long script reused in several sect
 ```
 index.html        page + list of draft <script> tags
 app.js            form, drafts, hosts, tables, evidence, preview, .docx export
+merge.js          Merge drafts: fold teammates' saved drafts into this one
 styles.css
 drafts/*.js       one template file per type (23 types, 95 variants)
 lib/docx.umd.js   docx 8.5.0 (MIT), included locally so the page works offline
