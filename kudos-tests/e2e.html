@@ -1,0 +1,150 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Kudos merge e2e</title>
+<iframe id="f" style="width:1400px;height:900px"></iframe>
+<script>
+const KUDOS = '/kudos/index.html';
+const results = [];
+const check = (name, ok, detail) => results.push({ name, ok: !!ok, detail: ok ? undefined : detail });
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const frame = document.getElementById('f');
+let w, d, downloads = [], names = [], errors = [];
+
+async function boot() {
+  frame.src = KUDOS + '?' + Math.random();
+  await new Promise(r => frame.onload = r);
+  w = frame.contentWindow; d = w.document;
+  w.addEventListener('error', e => errors.push(String(e.message)));
+  w.addEventListener('unhandledrejection', e => errors.push(String(e.reason)));
+  // Capture downloads instead of saving them.
+  w.URL.createObjectURL = blob => { downloads.push(blob); return 'blob:captured'; };
+  w.HTMLAnchorElement.prototype.click = function () { names.push(this.download); };
+  await wait(100);
+}
+const $ = s => d.querySelector(s);
+const $$ = s => Array.from(d.querySelectorAll(s));
+const cards = () => $$('#sectionCards > .card');
+const cardBy = heading => cards().find(c => c.querySelector('.sechead input[type=text]').value === heading);
+function type(el, v) { el.value = v; el.dispatchEvent(new w.Event('input', { bubbles: true })); }
+const click = el => el.click();
+async function settle() { await wait(350); }
+async function saveDraft() {
+  downloads = []; names = [];
+  click($('#btnSave')); await wait(50);
+  return { name: names[0], text: await downloads[0].text() };
+}
+async function pick(inputSel, files) {
+  const dt = new w.DataTransfer();
+  files.forEach(f => dt.items.add(new w.File([f.text], f.name, { type: 'application/json' })));
+  const inp = $(inputSel);
+  inp.files = dt.files;
+  inp.dispatchEvent(new w.Event('change'));
+  await wait(400);
+}
+const stored = () => JSON.parse(localStorage.getItem('kudos.draft.v1'));
+const banner = () => $('#banner').textContent;
+const secText = h => cardBy(h).querySelector('.secbody > textarea').value;
+
+async function run() {
+  // ---------- lead starts the inject ----------
+  localStorage.clear(); await boot();
+  click($('#btnSampleHosts')); await settle();
+  click($$('#typeGrid button').find(b => b.textContent.startsWith('Host firewalls')));
+  click($('#variantPanel .variant-actions button.primary')); await settle();
+  type($('[data-meta="injectNo"]'), '12');
+  click($('#btnAddSection')); await settle();
+  type(cards()[3].querySelector('.sechead input[type=text]'), 'Extra'); await settle();
+  type($('#checkText'), '- Screenshot of each server firewall'); await settle();
+  check('lead has 4 sections', cards().length === 4, cards().length);
+  const F0 = await saveDraft();
+  check('saved draft name is timestamped', /^inject12_team07_\d{4}\.json$/.test(F0.name), F0.name);
+  const lead = localStorage.getItem('kudos.draft.v1');
+
+  // ---------- teammate A: Packet Log Analysis, handed off twice ----------
+  localStorage.clear(); await boot();
+  await pick('#fileLoad', [F0]);
+  check('A loaded the shared draft', cards().length === 4 && banner().includes('Loaded'), banner());
+  type(cardBy('Packet Log Analysis').querySelector('.secbody > textarea'), 'A drops v1'); await settle();
+  const A1 = await saveDraft(); A1.name = 'A1.json';
+  type(cardBy('Packet Log Analysis').querySelectorAll('table.grid textarea')[1], 'A: nothing unusual on Ubuntu Ecom'); await settle();
+  const A2 = await saveDraft(); A2.name = 'A2.json';
+
+  // ---------- teammate B: Linux screenshots + also touches Packet Log Analysis ----------
+  localStorage.clear(); await boot();
+  await pick('#fileLoad', [F0]);
+  const linux = cardBy('Firewall Rules on Linux Devices');
+  const block = linux.querySelector('details.hostblock');
+  click(Array.from(block.querySelectorAll('.evadd button'))[0]); await settle();
+  type(block.querySelector('.evrow textarea'), 'Chain INPUT (policy DROP)'); await settle();
+  type(cardBy('Packet Log Analysis').querySelector('.secbody > textarea'), 'B drops'); await settle();
+  type($('#summaryText'), 'B wrote the summary.'); await settle();
+  type($('#checkText'), '- Screenshot of each server firewall\n- Table of dropped packets'); await settle();
+  const B1 = await saveDraft(); B1.name = 'B1.json';
+
+  // ---------- lead keeps working, then merges ----------
+  localStorage.setItem('kudos.draft.v1', lead); await boot();
+  type(cardBy('Firewall Rules on Windows Devices').querySelector('.secbody > textarea'), 'Lead: Windows notes'); await settle();
+  click(cardBy('Extra').querySelector('.sechead button.danger')); await settle();
+  check('lead deleted Extra', !cardBy('Extra'));
+
+  await pick('#fileMerge', [A1, A2]);
+  check('A1+A2 merged in one pick without a conflict', !$('.dirty') && /A2\.json: 1 updated/.test(banner()), banner());
+  check('A\'s latest Packet Log Analysis text', secText('Packet Log Analysis') === 'A drops v1');
+  check('A\'s table cell came through', cardBy('Packet Log Analysis').querySelectorAll('table.grid textarea')[1].value === 'A: nothing unusual on Ubuntu Ecom');
+  check('lead\'s Windows edit kept', secText('Firewall Rules on Windows Devices') === 'Lead: Windows notes');
+  check('Extra stays deleted', !cardBy('Extra'));
+
+  await pick('#fileMerge', [B1]);
+  const st = stored();
+  const lin = st.sections.find(s => s.heading === 'Firewall Rules on Linux Devices');
+  const ev = Object.values(lin.perHost.evidence).flat();
+  check('B\'s per-host command output came through', ev.some(e => e.text === 'Chain INPUT (policy DROP)'), JSON.stringify(ev));
+  check('B\'s summary taken (lead never changed it)', $('#summaryText').value === 'B wrote the summary.', $('#summaryText').value);
+  const notes = $$('.dirty');
+  check('one conflict, on Packet Log Analysis', notes.length === 1 && notes[0].closest('.card').querySelector('.sechead input[type=text]').value === 'Packet Log Analysis', notes.length);
+  check('conflict copy sits right after the original', cards().findIndex(c => c.querySelector('.dirty')) === cards().findIndex(c => c === cardBy('Packet Log Analysis')) + 1);
+  check('status counts the conflict', $('#saveStatus').textContent.includes('1 merge conflict to resolve'), $('#saveStatus').textContent);
+  check('checklist gained B\'s line', $('#checkText').value.includes('Table of dropped packets'), $('#checkText').value);
+  check('lead\'s Windows edit still kept', secText('Firewall Rules on Windows Devices') === 'Lead: Windows notes');
+  check('Extra still deleted', !cardBy('Extra'));
+
+  if (location.search.includes('stop')) {
+    frame.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;border:0';
+    document.body.style.margin = '0';
+    $('.dirty').closest('.card').previousElementSibling.scrollIntoView();
+    return;
+  }
+  await pick('#fileMerge', [B1]);
+  check('merging B1 again changes nothing', $$('.dirty').length === 1 && /nothing new/.test(banner()), banner());
+
+  click(Array.from($('.dirty').querySelectorAll('button')).find(b => b.textContent === 'Use this version')); await settle();
+  check('Use this version resolves it', !$('.dirty') && secText('Packet Log Analysis') === 'B drops'
+    && cards().filter(c => c.querySelector('.sechead input[type=text]').value === 'Packet Log Analysis').length === 1);
+  check('status no longer counts conflicts', !$('#saveStatus').textContent.includes('conflict'), $('#saveStatus').textContent);
+
+  // Old-format draft (no merge history, from the current Kudos): only fills blanks, never silently overwrites.
+  const old = JSON.parse(F0.text); delete old.seen; delete old.removed;
+  old.sections.find(s => s.heading === 'Firewall Rules on Windows Devices').text = 'old file windows';
+  await pick('#fileMerge', [{ name: 'old.json', text: JSON.stringify(old) }]);
+  check('old-format draft: differing section becomes a conflict, not an overwrite',
+    secText('Firewall Rules on Windows Devices') === 'Lead: Windows notes' && $$('.dirty').length >= 1, banner());
+  click(Array.from($('.dirty').querySelectorAll('button')).find(b => b.textContent === 'Discard')); await settle();
+  check('Discard removes the copy', secText('Firewall Rules on Windows Devices') === 'Lead: Windows notes');
+
+  // Export still works on the merged draft.
+  downloads = [];
+  click($('#btnExport')); await wait(1500);
+  check('docx export after merging', downloads.length === 1 && downloads[0].size > 5000, downloads.map(b => b.size));
+  // Screenshots live in the draft as base64; time a merge carrying ~20 MB of them.
+  const big = JSON.parse(JSON.stringify(stored()));
+  big.sections[0].evidence = Array.from({ length: 10 }, (_, i) => ({ id: 'img' + i, type: 'image', caption: '', data: 'data:image/png;base64,' + String.fromCharCode(65 + i).repeat(2e6), w: 800, h: 600 }));
+  const t0 = performance.now();
+  w.KudosMerge.merge(big, JSON.parse(JSON.stringify(big)), 'big.json');
+  const ms = Math.round(performance.now() - t0);
+  check(`merge with ~20 MB of screenshots took ${ms} ms (< 2000)`, ms < 2000, ms);
+  check('no page errors', !errors.length, errors);
+}
+
+run().catch(e => check('test crashed', false, String(e && e.stack || e)))
+  .finally(() => fetch('/results', { method: 'POST', body: JSON.stringify(results, null, 1) }));
+</script>
