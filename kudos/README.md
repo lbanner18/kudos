@@ -16,9 +16,9 @@ Pick the type and a variant, and the page lays out a **template**: the sections,
 6. **Sections:** untick sections you don't need, edit the text and headings, reorder them, and use **Reset** to get the draft text back. Tables are editable grids, and **Fill rows from hosts** rebuilds the rows from your host list.
 7. **Evidence:** click a dashed box and paste a screenshot (Ctrl/⌘+V), drop images onto it, or add pasted command output as text. Click a *caption idea* to caption the first figure that doesn't have one yet.
 8. **Insert:** quick buttons for phrases we use often: the "unable to finish" note, a bold **Please note** callout, the AI-use disclosure, and a Sources section.
-9. **Export .docx.**
+9. **Export .docx**, or click **▾** next to it for **Export PDF**. The PDF is printed from the preview: pick **Save as PDF** as the printer in the print dialog. The file name is filled in for you.
 
-Drafts autosave in your browser. **Save draft** / **Load draft** passes one (screenshots included) to a teammate as a `.json` file. **New** keeps the team settings and hosts and clears everything else, and needs two clicks.
+Drafts autosave in your browser. **Save draft** / **Load draft** passes one (screenshots included) to a teammate as a `.json` file. **Load draft** replaces the whole page, so if you've started a draft it asks first and offers **Merge drafts** instead. **New** keeps the team settings and hosts and clears everything else, and needs two clicks.
 
 Everything runs in the browser and nothing is uploaded. It works offline from a local copy: open `index.html` directly.
 
@@ -33,6 +33,12 @@ To split one inject across teammates, pass drafts around through a shared folder
 
 Teammates must start from the shared draft with **Load draft**, not a draft of their own, so their sections match up. Each draft keeps a short history of fingerprints of each part (`seen` in the `.json`) so a merge can tell which version is newer.
 
+
+## Examples (demo)
+
+`examples.js` adds sanitized, annotated sample answers to variants without touching `drafts/`. Types and variants that have one show a **DEMO** badge in the picker. Pick the variant and click **View example** to read it, with a short "Why" under each section. **Start from this example** loads it as the draft, with every `[[prompt]]` still yours to fill.
+
+Entries are keyed `typeId/variantId`. This repo is public: never put real IPs, usernames, passwords or screenshots in an example.
 
 ## Text formatting
 

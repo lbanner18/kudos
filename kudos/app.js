@@ -25,6 +25,7 @@
   };
 
   const TYPES = window.INJECT_TYPES || [];
+  const EX = window.KUDOS_EXAMPLES || {};
   const findType = id => TYPES.find(t => t.id === id);
   const findVariant = (tid, vid) => { const t = findType(tid); return t && t.variants.find(v => v.id === vid); };
 
@@ -303,7 +304,8 @@
     TYPES.filter(match).forEach(t => grid.append(h('button', {
       class: (pickedType || state.typeId) === t.id ? 'active' : '',
       onclick: () => { pickedType = t.id; renderTypeGrid(); renderVariants(); },
-    }, t.name, h('small', { text: `${t.variants.length} draft${t.variants.length > 1 ? 's' : ''}` }))));
+    }, t.name, t.variants.some(v => EX[t.id + '/' + v.id]) ? h('em', { class: 'badge demo', text: 'DEMO' }) : null,
+      h('small', { text: `${t.variants.length} draft${t.variants.length > 1 ? 's' : ''}` }))));
   }
   function renderVariants() {
     const panel = $('#variantPanel');
@@ -320,10 +322,47 @@
     const t = findType(tid);
     if (t.description) panel.append(h('p', { class: 'muted small', text: t.description }));
     let chosen = state.typeId === t.id ? state.variantId : t.variants[0].id;
+    const exBox = h('div', { class: 'guide' });
     t.variants.forEach(v => panel.append(h('label', { class: 'variant' },
-      h('input', { type: 'radio', name: 'variant', value: v.id, checked: v.id === chosen, onchange: () => { chosen = v.id; } }),
-      h('div', {}, h('b', { text: v.name }), h('span', { text: [v.description, v.source && `From: ${v.source}`].filter(Boolean).join(' — ') })))));
+      h('input', { type: 'radio', name: 'variant', value: v.id, checked: v.id === chosen, onchange: () => { chosen = v.id; renderExample(t, v, exBox); } }),
+      h('div', {}, h('b', { text: v.name }, EX[t.id + '/' + v.id] ? h('em', { class: 'badge demo', text: 'DEMO example' }) : null),
+        h('span', { text: [v.description, v.source && `From: ${v.source}`].filter(Boolean).join(' — ') })))));
+    panel.append(exBox);
+    renderExample(t, t.variants.find(v => v.id === chosen), exBox);
     panel.append(useButton(() => applyVariant(t, t.variants.find(v => v.id === chosen)), 'Use this draft'));
+  }
+
+  // ---------- examples (examples.js) ----------
+  function renderExample(t, v, box) {
+    box.innerHTML = '';
+    const g = EX[t.id + '/' + v.id];
+    if (g && g.example) box.append(h('div', { class: 'variant-actions' }, h('button', { class: 'tiny', text: 'View example', onclick: () => showExample(t, v, g) })));
+  }
+  function showExample(t, v, g) {
+    const ex = g.example;
+    const vals = values();
+    for (const d of v.vars || []) if (!vals[d.key] && d.default) vals[d.key] = d.default;
+    const sub = txt => subst(txt || '', vals);
+    const md = txt => { const d = h('div', { class: 'ex-text' }); d.innerHTML = blocksHtml(parseBlocks(txt)); return d; };
+    const body = h('div', { class: 'modal-body' },
+      h('p', { class: 'muted small', text: ex.label || '' }),
+      ex.summary ? h('div', {}, h('h4', { text: 'Summary' }), md(sub(ex.summary))) : null,
+      (v.sections || []).filter(s => ex.sections && ex.sections[s.id]).map(s => h('div', {},
+        h('h4', { text: s.heading }),
+        md(sub(ex.sections[s.id].text)),
+        ex.sections[s.id].why ? h('p', { class: 'why' }, h('b', { text: 'Why: ' }), ex.sections[s.id].why) : null)));
+    const close = () => wrap.remove();
+    const start = useButton(() => {
+      applyVariant(t, v);
+      if (ex.summary) state.summary = ex.summary;
+      state.sections.forEach(s => { const e = ex.sections && ex.sections[s.srcId]; if (e && e.text) s.text = e.text; });
+      close();
+    }, 'Start from this example');
+    const wrap = h('div', { class: 'modal', onclick: e => { if (e.target === wrap) close(); } },
+      h('div', { class: 'modal-card' },
+        h('div', { class: 'modal-head' }, h('h3', { text: `Example: ${v.name}` }), h('button', { class: 'ghost tiny', text: 'Close', onclick: close })),
+        body, start));
+    document.body.append(wrap);
   }
   function useButton(apply, label) {
     const btn = h('button', { class: 'primary', text: label });
@@ -649,6 +688,16 @@
     return `inject${n ? (/^\d$/.test(n) ? '0' + n : n) : ''}_team${state.meta.team || ''}${t}.${ext}`;
   }
 
+  // ---------- PDF export: print the preview (print styles in styles.css); the title becomes the suggested file name ----------
+  function exportPdf() {
+    renderPreview();
+    const title = document.title, open = state.sections.filter(s => s.conflictOf).length;
+    document.title = fileName('pdf').replace(/\.pdf$/, '');
+    window.addEventListener('afterprint', () => { document.title = title; }, { once: true });
+    window.print();
+    if (open) flash(`Exported with ${open} unresolved merge conflict${open > 1 ? 's' : ''}: both versions are in the file.`);
+  }
+
   // ---------- .docx export ----------
   function exportDocx() {
     const D = window.docx;
@@ -756,8 +805,29 @@
     $('#btnAddSection').onclick = () => { state.sections.push(makeSection({ heading: 'New section', text: '' })); renderSectionCards(); };
     $$('[data-snippet]').forEach(b => b.onclick = () => { state.sections.push(makeSection(SNIPPETS[b.dataset.snippet])); renderSectionCards(); flash('Added at the end — edit the highlighted placeholder.'); });
     $('#btnExport').onclick = exportDocx;
+    const menu = $('#exportMenu'), menuBtn = $('#btnExportMenu');
+    const showMenu = on => { menu.hidden = !on; menuBtn.setAttribute('aria-expanded', on); };
+    menuBtn.onclick = e => { e.stopPropagation(); showMenu(menu.hidden); };
+    document.addEventListener('click', () => showMenu(false));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') showMenu(false); });
+    $('#btnExportPdf').onclick = () => { showMenu(false); exportPdf(); };
     $('#btnSave').onclick = () => { window.KudosMerge.record(state); save(); download(new Blob([JSON.stringify(state)], { type: 'application/json' }), fileName('json', true)); };
-    $('#btnLoad').onclick = () => $('#fileLoad').click();
+    $('#btnLoad').onclick = () => {
+      if (!state.typeId && !hasWork() && !state.summary.trim() && !state.sections.some(s => s.text.trim())) return $('#fileLoad').click();
+      const close = () => wrap.remove();
+      const pick = input => () => { close(); $(input).click(); };
+      const wrap = h('div', { class: 'modal', onclick: e => { if (e.target === wrap) close(); }, onkeydown: e => { if (e.key === 'Escape') close(); } },
+        h('div', { class: 'modal-card narrow' },
+          h('div', { class: 'modal-head' }, h('h3', { text: 'Replace this draft?' })),
+          h('p', {}, h('b', { text: 'Any unsaved progress will be lost!' }), ' Load draft replaces everything on this page with the file you pick. Click Save draft first if you want to keep it.'),
+          h('p', { class: 'muted small', text: 'To add a teammate\'s work to this draft instead, use Merge drafts.' }),
+          h('div', { class: 'modal-actions' },
+            h('button', { class: 'ghost', text: 'Cancel', onclick: close }),
+            h('button', { text: 'Merge drafts instead', onclick: pick('#fileMerge') }),
+            h('button', { class: 'danger', text: 'Load and replace', onclick: pick('#fileLoad') }))));
+      document.body.append(wrap);
+      wrap.querySelector('button').focus();
+    };
     $('#fileLoad').onchange = async e => {
       const f = e.target.files[0];
       e.target.value = '';

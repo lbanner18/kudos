@@ -17,7 +17,13 @@
     <button id="btnLoad" class="ghost">Load draft</button>
     <button id="btnSave" class="ghost">Save draft</button>
     <button id="btnMerge" class="ghost" title="Bring in sections teammates filled in from their saved drafts">Merge drafts</button>
-    <button id="btnExport" class="primary">Export .docx</button>
+    <div class="split">
+      <button id="btnExport" class="primary">Export .docx</button>
+      <button id="btnExportMenu" class="primary" title="More export formats" aria-haspopup="menu" aria-expanded="false">▾</button>
+      <div class="menu" id="exportMenu" role="menu" hidden>
+        <button id="btnExportPdf" role="menuitem">Export PDF<small>Opens the print dialog: choose "Save as PDF"</small></button>
+      </div>
+    </div>
     <input type="file" id="fileLoad" accept=".json,application/json" hidden>
     <input type="file" id="fileMerge" accept=".json,application/json" multiple hidden>
   </div>
@@ -130,6 +136,7 @@
 <script src="drafts/remote-access-automation.js"></script>
 <script src="drafts/service-documentation.js"></script>
 <script src="drafts/monitoring-scripts.js"></script>
+<script src="examples.js"></script>
 <script src="merge.js"></script>
 <script src="app.js"></script>
 </body>
