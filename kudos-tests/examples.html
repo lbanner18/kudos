@@ -1,0 +1,79 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Kudos examples check</title>
+<iframe id="f" style="width:1400px;height:900px"></iframe>
+<script>
+// Opens each example in examples.js (or ?v=type/variant,...), starts a draft from it, and checks it renders and exports.
+const KUDOS = '/kudos/index.html';
+const results = [];
+const check = (name, ok, detail) => (results.push({ name, ok: !!ok, detail: ok ? undefined : detail }), !!ok);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const frame = document.getElementById('f');
+let w, d, downloads = [], errors = [];
+
+async function boot() {
+  frame.src = KUDOS + '?' + Math.random();
+  await new Promise(r => frame.onload = r);
+  w = frame.contentWindow; d = w.document;
+  w.addEventListener('error', e => errors.push(String(e.message)));
+  w.addEventListener('unhandledrejection', e => errors.push(String(e.reason)));
+  w.URL.createObjectURL = blob => { downloads.push(blob); return 'blob:captured'; };
+  w.HTMLAnchorElement.prototype.click = function () {};
+  await wait(100);
+}
+const $ = s => d.querySelector(s);
+const $$ = s => Array.from(d.querySelectorAll(s));
+const settle = () => wait(300);
+const norm = s => String(s).replace(/\s+/g, ' ');
+// A run of plain words from the text (no markup, placeholders or prompts) that must show up once rendered
+function fragment(text) {
+  const words = text.replace(/```[\s\S]*?```/g, ' ').replace(/\{\{\w+\}\}|\[\[[^\]]*\]\]|\*\*|`|^#+ |^- |^1\. /gm, '\n')
+    .split('\n').map(s => s.trim()).filter(s => s.length > 20);
+  return words.length ? words[0].split(' ').slice(0, 6).join(' ') : '';
+}
+async function exportDocx() { downloads = []; $('#btnExport').click(); await wait(1500); return downloads.length === 1 ? downloads[0].size : 0; }
+
+async function run() {
+  localStorage.clear(); await boot();
+  const want = (new URLSearchParams(location.search).get('v') || '').split(',').filter(Boolean);
+  const keys = Object.keys(w.KUDOS_EXAMPLES).filter(k => !want.length || want.includes(k));
+  check(`examples to check: ${keys.length}`, keys.length > 0, want);
+  for (const key of keys) {
+    const [tid, vid] = key.split('/');
+    const t = w.INJECT_TYPES.find(x => x.id === tid), v = t && t.variants.find(x => x.id === vid);
+    if (!check(`${key}: variant exists`, v)) continue;
+    const ex = w.KUDOS_EXAMPLES[key].example;
+    localStorage.clear(); await boot();
+    $('#btnSampleHosts').click(); await settle();
+    const typeBtn = $$('#typeGrid button').find(b => b.firstChild.textContent === t.name);
+    check(`${key}: type shows Example Available`, typeBtn && /Example Available/.test(typeBtn.textContent), typeBtn && typeBtn.textContent);
+    typeBtn.click();
+    $(`#variantPanel input[value="${vid}"]`).click(); await settle();
+    const label = $(`#variantPanel input[value="${vid}"]`).closest('label');
+    check(`${key}: variant shows Example Available`, /Example Available/.test(label.textContent), label.textContent);
+    const view = $$('#variantPanel button').find(b => b.textContent === 'View example');
+    if (!check(`${key}: View example button`, view)) continue;
+    view.click(); await settle();
+    const modal = $('.modal');
+    check(`${key}: label shown`, modal && modal.textContent.includes(ex.label), ex.label);
+    const secs = Object.entries(ex.sections || {});
+    const tables = secs.filter(([, e]) => e.rows).length;
+    check(`${key}: example tables render (${tables})`, modal.querySelectorAll('.ex-text table').length === tables, [modal.querySelectorAll('.ex-text table').length, tables]);
+    modal.querySelector('.variant-actions button.primary').click(); await settle();
+    check(`${key}: modal closed after start`, !$('.modal'));
+    const preview = norm($('#preview').textContent);
+    const missing = secs.flatMap(([id, e]) => [e.text && fragment(e.text), e.rows && e.rows[0].find(c => c && !/[[{]/.test(c))])
+      .concat(ex.summary ? [fragment(ex.summary)] : []).filter(Boolean).map(norm).filter(f => !preview.includes(f));
+    check(`${key}: example text in preview`, !missing.length, missing);
+    for (const [id, e] of secs) if (e.on) check(`${key}: "${id}" turned on`, !$$('#sectionCards > .card')[v.sections.findIndex(s => s.id === id)].classList.contains('off'));
+    if (key === 'remote-access-automation/playbooks')
+      check(`${key}: Ansible {{ var }} left alone`, preview.includes('{{ ansible_hostname }}') && preview.includes('{{ inventory_hostname }}'), preview.slice(0, 300));
+    const size = await exportDocx();
+    check(`${key}: docx export (${size} bytes)`, size > 5000, size);
+  }
+  check('no page errors', !errors.length, errors);
+}
+
+run().catch(e => check('test crashed', false, String(e && e.stack || e)))
+  .finally(() => fetch('/results', { method: 'POST', body: JSON.stringify(results, null, 1) }));
+</script>

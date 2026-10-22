@@ -91,7 +91,7 @@
     return v;
   }
   const hostVals = (vals, hs) => ({ ...vals, host: hs.name, host_os: hs.os, host_ip: hs.ip });
-  const PH_RE = /\{\{\s*([a-z0-9_]+)\s*\}\}/gi;
+  const PH_RE = /\{\{([a-z0-9_]+)\}\}/gi; // no spaces, so Jinja/Ansible "{{ var }}" in pasted code is left alone
   const PROMPT_RE = /\[\[[^\]]+\]\]/g; // template prompts still to be written
   const subst = (text, vals) => String(text || '').replace(PH_RE, (m, k) => vals[k] || `{{${k}}}`);
 
@@ -242,6 +242,7 @@
       return `<pre>${esc(b.text)}</pre>`;
     }).join('');
   }
+  const tableHtml = (columns, rows) => `<table><tr>${columns.map(c => `<th>${inlineHtml(c)}</th>`).join('')}</tr>${rows.map(r => `<tr>${r.map(c => `<td>${inlineHtml(c).replace(/\n/g, '<br>')}</td>`).join('')}</tr>`).join('')}</table>`;
   function renderPreview() {
     const vals = values();
     const m = state.meta;
@@ -255,7 +256,7 @@
     for (const b of docModel()) {
       if (b.t === 'h') html += `<h${b.level}>${inlineHtml(b.text)}</h${b.level}>`;
       else if (b.t === 'md') html += blocksHtml(b.blocks);
-      else if (b.t === 'table') html += `<table><tr>${b.columns.map(c => `<th>${inlineHtml(c)}</th>`).join('')}</tr>${b.rows.map(r => `<tr>${r.map(c => `<td>${inlineHtml(c).replace(/\n/g, '<br>')}</td>`).join('')}</tr>`).join('')}</table>`;
+      else if (b.t === 'table') html += tableHtml(b.columns, b.rows);
       else if (b.t === 'fig') {
         const body = b.ev.type === 'image' ? `<img src="${b.ev.data}" alt="">` : `<pre>${esc(b.ev.text || '')}</pre>`;
         html += `<figure>${body}<figcaption><i>Figure ${b.n}. ${inlineHtml(subst(b.ev.caption || '', vals)) || '<span class="ph">caption</span>'}</i></figcaption></figure>`;
@@ -304,7 +305,7 @@
     TYPES.filter(match).forEach(t => grid.append(h('button', {
       class: (pickedType || state.typeId) === t.id ? 'active' : '',
       onclick: () => { pickedType = t.id; renderTypeGrid(); renderVariants(); },
-    }, t.name, t.variants.some(v => EX[t.id + '/' + v.id]) ? h('em', { class: 'badge demo', text: 'DEMO' }) : null,
+    }, t.name, t.variants.some(v => EX[t.id + '/' + v.id]) ? h('em', { class: 'badge demo', text: 'Example Available' }) : null,
       t.variants.some(v => v.new) ? h('em', { class: 'badge new', text: 'NEW' }) : null,
       h('small', { text: `${t.variants.length} draft${t.variants.length > 1 ? 's' : ''}` }))));
   }
@@ -326,7 +327,7 @@
     const exBox = h('div', { class: 'guide' });
     t.variants.forEach(v => panel.append(h('label', { class: 'variant' },
       h('input', { type: 'radio', name: 'variant', value: v.id, checked: v.id === chosen, onchange: () => { chosen = v.id; renderExample(t, v, exBox); } }),
-      h('div', {}, h('b', { text: v.name }, EX[t.id + '/' + v.id] ? h('em', { class: 'badge demo', text: 'DEMO example' }) : null,
+      h('div', {}, h('b', { text: v.name }, EX[t.id + '/' + v.id] ? h('em', { class: 'badge demo', text: 'Example Available' }) : null,
         v.new ? h('em', { class: 'badge new', text: 'NEW' }) : null),
         h('span', { text: [v.description, v.source && `From: ${v.source}`].filter(Boolean).join(' — ') })))));
     panel.append(exBox);
@@ -344,20 +345,31 @@
     const ex = g.example;
     const vals = values();
     for (const d of v.vars || []) if (!vals[d.key] && d.default) vals[d.key] = d.default;
+    Object.assign(vals, ex.vars);
     const sub = txt => subst(txt || '', vals);
     const md = txt => { const d = h('div', { class: 'ex-text' }); d.innerHTML = blocksHtml(parseBlocks(txt)); return d; };
+    const tbl = (cols, rows) => { const d = h('div', { class: 'ex-text' }); d.innerHTML = tableHtml(cols.map(sub), rows.map(r => r.map(sub))); return d; };
+    const exCols = (s, e) => e.columns || (s.table && s.table.columns) || [];
     const body = h('div', { class: 'modal-body' },
       h('p', { class: 'muted small', text: ex.label || '' }),
       ex.summary ? h('div', {}, h('h4', { text: 'Summary' }), md(sub(ex.summary))) : null,
-      (v.sections || []).filter(s => ex.sections && ex.sections[s.id]).map(s => h('div', {},
-        h('h4', { text: s.heading }),
-        md(sub(ex.sections[s.id].text)),
-        ex.sections[s.id].why ? h('p', { class: 'why' }, h('b', { text: 'Why: ' }), ex.sections[s.id].why) : null)));
+      (v.sections || []).filter(s => ex.sections && ex.sections[s.id]).map(s => { const e = ex.sections[s.id]; return h('div', {},
+        h('h4', { text: sub(s.heading) }),
+        e.text ? md(sub(e.text)) : null,
+        e.rows ? tbl(exCols(s, e), e.rows) : null,
+        e.why ? h('p', { class: 'why' }, h('b', { text: 'Why: ' }), e.why) : null); }));
     const close = () => wrap.remove();
     const start = useButton(() => {
       applyVariant(t, v);
+      Object.assign(state.vars, ex.vars);
       if (ex.summary) state.summary = ex.summary;
-      state.sections.forEach(s => { const e = ex.sections && ex.sections[s.srcId]; if (e && e.text) s.text = e.text; });
+      state.sections.forEach(s => {
+        const e = ex.sections && ex.sections[s.srcId];
+        if (!e) return;
+        if (e.text) s.text = e.text;
+        if (e.rows) s.table = { columns: clone(exCols(s, e)), rows: clone(e.rows) };
+        if (e.on) s.on = true;
+      });
       close();
     }, 'Start from this example');
     const wrap = h('div', { class: 'modal', onclick: e => { if (e.target === wrap) close(); } },

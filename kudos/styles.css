@@ -267,6 +267,8 @@ div.ex-text { font-family: inherit; }
 .why { font-size: 12.5px; color: var(--muted); border-left: 3px solid var(--ok); padding-left: 8px; margin: 6px 0 0; }
 .variant { flex-direction: row; color: var(--ink); }
 .ex-text pre { overflow-x: auto; }
+.ex-text table { border-collapse: collapse; width: 100%; margin-top: 6px; }
+.ex-text th, .ex-text td { border: 1px solid var(--line); padding: 3px 6px; text-align: left; vertical-align: top; }
 .variant input { width: auto; flex: none; }
 
 /* export split button */

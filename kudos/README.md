@@ -34,11 +34,11 @@ To split one inject across teammates, pass drafts around through a shared folder
 Teammates must start from the shared draft with **Load draft**, not a draft of their own, so their sections match up. Each draft keeps a short history of fingerprints of each part (`seen` in the `.json`) so a merge can tell which version is newer.
 
 
-## Examples (demo)
+## Examples
 
-`examples.js` adds sanitized, annotated sample answers to variants without touching `drafts/`. Types and variants that have one show a **DEMO** badge in the picker. Pick the variant and click **View example** to read it, with a short "Why" under each section. **Start from this example** loads it as the draft, with every `[[prompt]]` still yours to fill.
+`examples.js` adds sample answers to variants without touching `drafts/`. Each one is a scored team submission, transcribed as written (typos included) and sanitized. Types and variants that have one show an **Example Available** badge in the picker. Pick the variant and click **View example** to read it. The label says where it came from and whether it is **READY** or **FLAGGED** (good apart from the one thing named). **Start from this example** loads it as the draft, and sections the example doesn't fill keep their `[[prompt]]`.
 
-Entries are keyed `typeId/variantId`. This repo is public: never put real IPs, usernames, passwords or screenshots in an example.
+Entries are keyed `typeId/variantId`. A section can have `text`, `rows` for its table (plus `columns` if the team's differ), `on: true` to turn on an off-by-default section, and an optional `why` note. `vars` on the example fills the variant's `{{vars}}`. This repo is public: never put real IPs, usernames, passwords or screenshots in an example.
 
 Variants with `"new": true` in `drafts/` show a **NEW** badge on the variant and its type. Remove the flag once the template has been reviewed.
 

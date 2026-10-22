@@ -18,3 +18,9 @@ Add `?stop` to halt right after the conflicting merge, to look at the conflict v
 `templates.html` applies every variant with the sample hosts and checks that each section gets a card,
 headings and tables render, prompts are counted, off sections render when ticked, and `.docx` export works.
 Run it the same way; `?v=type/variant,type/variant` checks only those.
+
+## Examples check
+
+`examples.html` opens every example in `examples.js`: the type and variant show **Example Available**, the pop-up shows
+the label and its tables, **Start from this example** puts the example text into the preview, and `.docx` export works.
+Run it the same way; `?v=type/variant,...` checks only those.
