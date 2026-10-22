@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "deploy-service",
   "name": "Deploy a business service",
-  "description": "Chat platforms, file shares/SFTP, network management tools, research software + Docker, and PowerShell on Linux.",
+  "description": "Chat platforms, file shares/SFTP, network management tools, research software + Docker, PowerShell on Linux, comparing two solutions, an IDS, and a TFTP server.",
   "variants": [
     {
       "id": "chat",
@@ -253,6 +253,290 @@ window.INJECT_TYPES.push({
           "text": "[[Describe what was done and what the evidence below shows]]\n\n```\n[[Paste the commands, script, or output]]\n```",
           "evidence": [
             "Running the command shows the OS of {{server}}"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compare-solutions",
+      "name": "Compare two solutions and recommend one",
+      "new": true,
+      "subject": "Comparison of {{solution_a}} and {{solution_b}}",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "solution_a",
+          "label": "First solution"
+        },
+        {
+          "key": "solution_b",
+          "label": "Second solution"
+        },
+        {
+          "key": "pick",
+          "label": "Recommended solution"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "a",
+          "heading": "{{solution_a}}",
+          "text": "[[Write this section: {{solution_a}}]]"
+        },
+        {
+          "id": "b",
+          "heading": "{{solution_b}}",
+          "text": "[[Write this section: {{solution_b}}]]"
+        },
+        {
+          "id": "table",
+          "heading": "Benefits and Limitations",
+          "text": "",
+          "table": {
+            "columns": [
+              "",
+              "{{solution_a}}",
+              "{{solution_b}}"
+            ],
+            "rows": [
+              [
+                "Benefits",
+                "",
+                ""
+              ],
+              [
+                "Limitations",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "test",
+          "heading": "Testing",
+          "on": false,
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "{{solution_a}} running",
+            "{{solution_b}} running"
+          ]
+        },
+        {
+          "id": "rec",
+          "heading": "Recommendation: {{pick}}",
+          "text": "[[Write this section: Recommendation]]"
+        },
+        {
+          "id": "just",
+          "heading": "Justification",
+          "text": "- [[Item]]\n- [[Item]]\n- [[Item]]"
+        }
+      ]
+    },
+    {
+      "id": "ids",
+      "name": "Install an IDS (selection, install, operations guide)",
+      "new": true,
+      "subject": "Intrusion Detection System",
+      "to": "System Administrator",
+      "vars": [
+        {
+          "key": "ids",
+          "label": "Chosen IDS"
+        },
+        {
+          "key": "option_2",
+          "label": "Option considered"
+        },
+        {
+          "key": "option_3",
+          "label": "Option considered"
+        },
+        {
+          "key": "ids_host",
+          "label": "IDS server"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "why",
+          "heading": "Why We Chose {{ids}}",
+          "text": "[[Write this section: Why We Chose {{ids}}]]"
+        },
+        {
+          "id": "compare",
+          "heading": "Options Considered",
+          "text": "",
+          "table": {
+            "columns": [
+              "",
+              "{{ids}}",
+              "{{option_2}}",
+              "{{option_3}}"
+            ],
+            "rows": [
+              [
+                "Detection method",
+                "",
+                "",
+                ""
+              ],
+              [
+                "Benefits",
+                "",
+                "",
+                ""
+              ],
+              [
+                "Limitations",
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "install",
+          "heading": "Installation in Our Environment",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]",
+          "evidence": [
+            "{{ids}} installed on {{ids_host}}",
+            "{{ids}} service running"
+          ]
+        },
+        {
+          "id": "hosts",
+          "heading": "Data Gathered From Each Host",
+          "text": "",
+          "table": {
+            "columns": [
+              "Host",
+              "IP",
+              "How Data Is Gathered",
+              "Status"
+            ],
+            "hostRows": {
+              "filter": "all",
+              "cells": [
+                "{{host}}",
+                "{{host_ip}}",
+                "",
+                ""
+              ]
+            },
+            "rows": []
+          }
+        },
+        {
+          "id": "running",
+          "heading": "{{ids}} Running in the Environment",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "{{ids}} receiving data from the hosts",
+            "{{ids}} alert"
+          ]
+        },
+        {
+          "id": "incompat",
+          "heading": "Hosts the IDS Could Not Monitor",
+          "text": "[[Write this section: Hosts the IDS Could Not Monitor]]"
+        },
+        {
+          "id": "guide",
+          "heading": "Guide to Operating {{ids}}",
+          "text": "### Bringing {{ids}} Back Up\n\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n\n### Pulling Information Off {{ids}}\n\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n\n### Finding an Intrusion\n\n[[Write this section: Finding an Intrusion]]",
+          "evidence": [
+            "Restarting {{ids}}",
+            "Exporting data from {{ids}}"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tftp",
+      "name": "Install a TFTP server",
+      "new": true,
+      "subject": "TFTP Server on {{server}}",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "server",
+          "label": "TFTP server"
+        },
+        {
+          "key": "tftp_dir",
+          "label": "TFTP directory"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "why",
+          "heading": "Server Selected and Why",
+          "text": "[[Write this section: Server Selected and Why]]"
+        },
+        {
+          "id": "software",
+          "heading": "Software Added",
+          "text": "[[Write this section: Software Added]]\n\n```\n[[Paste the commands, script, or output]]\n```"
+        },
+        {
+          "id": "fw",
+          "heading": "Firewall and Security Policy Changes",
+          "text": "",
+          "table": {
+            "columns": [
+              "Device / Policy",
+              "Change",
+              "Protocol",
+              "Port",
+              "Allowed From"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          },
+          "evidence": [
+            "Firewall rule for TFTP"
+          ]
+        },
+        {
+          "id": "dir",
+          "heading": "Security Profile of {{tftp_dir}}",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Permissions on {{tftp_dir}}"
+          ]
+        },
+        {
+          "id": "overrun",
+          "heading": "Protections From Being Overrun With Files",
+          "text": "[[Write this section: Protections From Being Overrun With Files]]"
+        },
+        {
+          "id": "proof",
+          "heading": "Evidence of the TFTP Service’s Functionality",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "File downloaded from {{server}} over TFTP",
+            "File uploaded to {{server}} over TFTP"
           ]
         }
       ]

@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "accounts-passwords",
   "name": "Accounts & passwords",
-  "description": "Admin account audits, password policies (GPO, Linux, audits), and protecting SSH access.",
+  "description": "Admin account audits, password policies (GPO, Linux, audits), session locking, and protecting SSH access.",
   "variants": [
     {
       "id": "admin-audit",
@@ -281,6 +281,63 @@ window.INJECT_TYPES.push({
             "label": "{{host}}:",
             "evidence": [
               "SSH running and securely configured on {{host}}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "session-lock",
+      "name": "Mandatory session locking (GPO)",
+      "new": true,
+      "subject": "Mandatory Session Locking",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "dc",
+          "label": "Domain controller",
+          "default": "Windows 2019 AD/DNS server"
+        },
+        {
+          "key": "timeout",
+          "label": "Inactivity timeout",
+          "default": "30 minutes"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "gpo",
+          "heading": "Implementation with Group Policy on the {{dc}}",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]",
+          "evidence": [
+            "Screen saver and session lock settings in the GPO",
+            "GPO linked in Group Policy Management"
+          ]
+        },
+        {
+          "id": "scope",
+          "heading": "Scope",
+          "text": "[[Write this section: Scope]]"
+        },
+        {
+          "id": "verify",
+          "heading": "Verification",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Policy applied on a domain member"
+          ]
+        },
+        {
+          "id": "hosts",
+          "heading": "Applied on Each Windows Host",
+          "on": false,
+          "text": "",
+          "perHost": {
+            "filter": "windows",
+            "label": "{{host}}:",
+            "evidence": [
+              "Session lock policy applied on {{host}}"
             ]
           }
         }

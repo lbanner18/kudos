@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "policies",
   "name": "Policies",
-  "description": "Incident response policy/form/procedure, elements of an IR report, and employee security, browsing, and malware awareness policies.",
+  "description": "Incident response policy/form/procedure, a web defacement IR procedure, elements of an IR report, policy vs. procedure, and employee security, browsing, and malware awareness policies.",
   "variants": [
     {
       "id": "ir-policy",
@@ -392,6 +392,260 @@ window.INJECT_TYPES.push({
           "id": "ack",
           "heading": "Employee Acknowledgment and Sign-off",
           "text": "[[Write this section: Employee Acknowledgment and Sign-off]]\n\n[[Write this section: Employee Acknowledgment and Sign-off]]\n\n[[Write this section: Employee Acknowledgment and Sign-off]]"
+        }
+      ]
+    },
+    {
+      "id": "policy-vs-procedure",
+      "name": "Difference between a policy and a procedure",
+      "new": true,
+      "subject": "Difference Between a Policy and a Procedure",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "example_policy",
+          "label": "Example policy from our work"
+        },
+        {
+          "key": "example_procedure",
+          "label": "Example procedure from our work"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "policy",
+          "heading": "Policy",
+          "text": "[[Write this section: Policy]]"
+        },
+        {
+          "id": "procedure",
+          "heading": "Procedure",
+          "text": "[[Write this section: Procedure]]"
+        },
+        {
+          "id": "diff",
+          "heading": "Key Differences",
+          "text": "",
+          "table": {
+            "columns": [
+              "",
+              "Policy",
+              "Procedure"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "example",
+          "heading": "Example From Our Work",
+          "text": "### Policy: {{example_policy}}\n\n[[Write this section: Example From Our Work]]\n\n### Procedure: {{example_procedure}}\n\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]"
+        },
+        {
+          "id": "src",
+          "heading": "Sources",
+          "level": 2,
+          "text": "- [[Item]]\n- [[Item]]"
+        }
+      ]
+    },
+    {
+      "id": "ir-procedure-defacement",
+      "name": "IR procedure for web site defacement",
+      "new": true,
+      "subject": "Incident Response Procedure for Web Site Defacement",
+      "to": "CISO",
+      "vars": [],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "sites",
+          "heading": "Web Sites Covered",
+          "text": "",
+          "table": {
+            "columns": [
+              "Web Site",
+              "Server",
+              "Content Location",
+              "Configuration Files"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "prereq",
+          "heading": "Prerequisites Completed",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Prerequisite 1 completed",
+            "Prerequisite 2 completed"
+          ]
+        },
+        {
+          "id": "prep",
+          "heading": "Preparation",
+          "text": "[[Write this section: Preparation]]\n\n- [[Item]]\n- [[Item]]\n- [[Item]]"
+        },
+        {
+          "id": "ident",
+          "heading": "Identification",
+          "text": "[[Write this section: Identification]]"
+        },
+        {
+          "id": "contain",
+          "heading": "Containment",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]"
+        },
+        {
+          "id": "erad",
+          "heading": "Eradication",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]"
+        },
+        {
+          "id": "recover",
+          "heading": "Recovery",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n\n```\n[[Paste the commands, script, or output]]\n```"
+        },
+        {
+          "id": "lessons",
+          "heading": "Lessons Learned",
+          "text": "[[Write this section: Lessons Learned]]"
+        },
+        {
+          "id": "script",
+          "heading": "Appendix: Restore Script",
+          "on": false,
+          "text": "```\n[[Paste the commands, script, or output]]\n```"
+        }
+      ]
+    },
+    {
+      "id": "incident-report",
+      "name": "Incident report (MWCCDC IR template)",
+      "new": true,
+      "description": "The organizers’ Incident Response Template: Incident Details table, then Vulnerability, Initial Access, Impact, Eradication, Remediation. Under Memo header, set From to “Team {{team}} – IT & Cyber Defense Division”, Summary label to (none), and clear the Closing line: the template’s own closing is the last section. WRCCDC: a report without the attacker’s source IP scores zero.",
+      "subject": "Incident Report",
+      "to": "CISO",
+      "vars": [],
+      "summary": "Team {{team}} would like to report evidence of [[what was found, on which host]].",
+      "sections": [
+        {
+          "id": "details",
+          "heading": "Incident Details",
+          "text": "",
+          "table": {
+            "columns": [
+              "Field",
+              "Details"
+            ],
+            "rows": [
+              [
+                "Affected Host",
+                ""
+              ],
+              [
+                "Source IP Address",
+                ""
+              ],
+              [
+                "Destination IP Address",
+                ""
+              ],
+              [
+                "Port and Service",
+                ""
+              ],
+              [
+                "Initial Access Timestamp",
+                ""
+              ],
+              [
+                "Service Downtime",
+                ""
+              ],
+              [
+                "Remediated Timestamp",
+                ""
+              ],
+              [
+                "Affected Account",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "vuln",
+          "heading": "Vulnerability",
+          "text": "[[Write this section: Vulnerability]]"
+        },
+        {
+          "id": "access",
+          "heading": "Initial Access",
+          "text": "[[Write this section: Initial Access]]",
+          "evidence": [
+            "How the attacker got in"
+          ]
+        },
+        {
+          "id": "impact",
+          "heading": "Impact",
+          "text": "[[Write this section: Impact]]"
+        },
+        {
+          "id": "erad",
+          "heading": "Eradication",
+          "text": "[[Write this section: Eradication]]",
+          "evidence": [
+            "Attacker access removed"
+          ]
+        },
+        {
+          "id": "remed",
+          "heading": "Remediation",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]",
+          "evidence": [
+            "Remediation in place"
+          ]
+        },
+        {
+          "id": "close",
+          "heading": "",
+          "text": "If there are any other questions about this incident, please do not hesitate to reach out and Team {{team}} would be happy to provide more information."
         }
       ]
     }

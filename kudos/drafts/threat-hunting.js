@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "threat-hunting",
   "name": "Threat hunting / traffic analysis",
-  "description": "Deny-any analysis, C2 beacon hunts, beacon detection scripts, AI threat hunting plans, server traffic profiles, cross-segment traffic, and DNS exfiltration.",
+  "description": "Deny-any analysis, C2 beacon hunts, beacon detection scripts, AI threat hunting plans, server traffic profiles, cross-segment traffic, DNS exfiltration, and rogue listening processes.",
   "variants": [
     {
       "id": "deny-any",
@@ -354,6 +354,85 @@ window.INJECT_TYPES.push({
           "heading": "Next Steps",
           "on": false,
           "text": "[[Write this section: Next Steps]]"
+        }
+      ]
+    },
+    {
+      "id": "network-processes",
+      "name": "Find rogue listening processes (per server)",
+      "new": true,
+      "subject": "Finding Rogue Network Processes",
+      "to": "CISO",
+      "vars": [],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "method",
+          "heading": "Method",
+          "text": "[[Describe what was done and what the evidence below shows]]\n\n```\n[[Paste the commands, script, or output]]\n```"
+        },
+        {
+          "id": "hosts",
+          "heading": "",
+          "text": "",
+          "perHost": {
+            "filter": "all",
+            "label": "{{host}}",
+            "evidence": [
+              "Listening processes on {{host}}"
+            ],
+            "table": {
+              "columns": [
+                "Port",
+                "Protocol",
+                "Process",
+                "Expected?"
+              ],
+              "rows": [
+                [
+                  "",
+                  "",
+                  "",
+                  ""
+                ],
+                [
+                  "",
+                  "",
+                  "",
+                  ""
+                ],
+                [
+                  "",
+                  "",
+                  "",
+                  ""
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "id": "suspicious",
+          "heading": "Suspicious Processes and Next Steps",
+          "text": "[[Write this section: Suspicious Processes and Next Steps]]",
+          "table": {
+            "columns": [
+              "Host",
+              "Process",
+              "Port",
+              "Why It Is Suspicious",
+              "Next Step"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
         }
       ]
     }

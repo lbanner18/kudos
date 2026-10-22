@@ -305,6 +305,7 @@
       class: (pickedType || state.typeId) === t.id ? 'active' : '',
       onclick: () => { pickedType = t.id; renderTypeGrid(); renderVariants(); },
     }, t.name, t.variants.some(v => EX[t.id + '/' + v.id]) ? h('em', { class: 'badge demo', text: 'DEMO' }) : null,
+      t.variants.some(v => v.new) ? h('em', { class: 'badge new', text: 'NEW' }) : null,
       h('small', { text: `${t.variants.length} draft${t.variants.length > 1 ? 's' : ''}` }))));
   }
   function renderVariants() {
@@ -325,7 +326,8 @@
     const exBox = h('div', { class: 'guide' });
     t.variants.forEach(v => panel.append(h('label', { class: 'variant' },
       h('input', { type: 'radio', name: 'variant', value: v.id, checked: v.id === chosen, onchange: () => { chosen = v.id; renderExample(t, v, exBox); } }),
-      h('div', {}, h('b', { text: v.name }, EX[t.id + '/' + v.id] ? h('em', { class: 'badge demo', text: 'DEMO example' }) : null),
+      h('div', {}, h('b', { text: v.name }, EX[t.id + '/' + v.id] ? h('em', { class: 'badge demo', text: 'DEMO example' }) : null,
+        v.new ? h('em', { class: 'badge new', text: 'NEW' }) : null),
         h('span', { text: [v.description, v.source && `From: ${v.source}`].filter(Boolean).join(' — ') })))));
     panel.append(exBox);
     renderExample(t, t.variants.find(v => v.id === chosen), exBox);

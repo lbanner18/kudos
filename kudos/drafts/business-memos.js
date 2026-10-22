@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "business-memos",
   "name": "Business / management memos",
-  "description": "Lessons learned, malware protection, ATT&CK-style incident catalog, interview checklist, status report, legal report, signed evidence, budget, AI, and current security state.",
+  "description": "Lessons learned, malware protection, ATT&CK-style incident catalog, interview checklist, status report, legal report, signed evidence, budget, AI, current security state, log files as evidence, breach regulations, job descriptions, and customer memos on firewall features.",
   "variants": [
     {
       "id": "avoided",
@@ -410,6 +410,172 @@ window.INJECT_TYPES.push({
           "id": "edr",
           "heading": "Additional Tools",
           "text": "[[Write this section: Additional Tools]]"
+        }
+      ]
+    },
+    {
+      "id": "log-evidence",
+      "name": "Legality of log files (hearsay & admissibility)",
+      "new": true,
+      "subject": "Legality of Log Files",
+      "to": "Legal Department",
+      "vars": [],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "hearsay",
+          "heading": "The Hearsay Issue",
+          "text": "[[Write this section: The Hearsay Issue]]"
+        },
+        {
+          "id": "admissibility",
+          "heading": "Admissibility of the Log Files",
+          "text": "[[Write this section: Admissibility of the Log Files]]\n\n- [[Item]]\n- [[Item]]\n- [[Item]]"
+        },
+        {
+          "id": "extract",
+          "heading": "How the Extract Was Made",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n\n[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Filter used to create the log extract",
+            "The exported log extract"
+          ]
+        },
+        {
+          "id": "concerns",
+          "heading": "Concerns With Admitting the Extract",
+          "text": "[[Write this section: Concerns With Admitting the Extract]]"
+        },
+        {
+          "id": "custody",
+          "heading": "Chain of Custody",
+          "text": "[[Write this section: Chain of Custody]]"
+        },
+        {
+          "id": "src",
+          "heading": "Sources",
+          "level": 2,
+          "text": "- [[Item]]\n- [[Item]]"
+        }
+      ]
+    },
+    {
+      "id": "breach-regulation",
+      "name": "Response to a breach: regulation, steps, penalty",
+      "new": true,
+      "subject": "Response to Breach",
+      "to": "CISO",
+      "vars": [],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "framework",
+          "heading": "Governing Regulatory Framework",
+          "text": "[[Write this section: Governing Regulatory Framework]]"
+        },
+        {
+          "id": "steps",
+          "heading": "Required Steps",
+          "text": "1. **[[Step]]:** [[Describe]]\n1. **[[Step]]:** [[Describe]]\n1. **[[Step]]:** [[Describe]]"
+        },
+        {
+          "id": "penalty",
+          "heading": "Penalty for Non-Compliance",
+          "text": "[[Write this section: Penalty for Non-Compliance]]"
+        },
+        {
+          "id": "src",
+          "heading": "Sources",
+          "level": 2,
+          "text": "- [[Item]]\n- [[Item]]"
+        }
+      ]
+    },
+    {
+      "id": "job-description",
+      "name": "Job description for HR",
+      "new": true,
+      "subject": "Job Description: {{position}}",
+      "to": "Human Resources",
+      "vars": [
+        {
+          "key": "position",
+          "label": "Position title"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "why",
+          "heading": "Why We Are Hiring",
+          "text": "[[Write this section: Why We Are Hiring]]"
+        },
+        {
+          "id": "summary",
+          "heading": "Position Summary",
+          "text": "[[Write this section: Position Summary]]"
+        },
+        {
+          "id": "duties",
+          "heading": "Responsibilities",
+          "text": "- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]"
+        },
+        {
+          "id": "tech",
+          "heading": "Required Technical Skills",
+          "text": "- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]"
+        },
+        {
+          "id": "soft",
+          "heading": "Soft Skills",
+          "text": "- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]"
+        },
+        {
+          "id": "quals",
+          "heading": "Qualifications",
+          "text": "- [[Item]]\n- [[Item]]\n- [[Item]]"
+        }
+      ]
+    },
+    {
+      "id": "firewall-features",
+      "name": "Customer memo: firewall features that stop illegitimate traffic",
+      "new": true,
+      "subject": "How Our Firewall Protects Your Data",
+      "to": "Prospective Customer",
+      "vars": [
+        {
+          "key": "fw1",
+          "label": "Firewall",
+          "default": "Palo Alto"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "concern",
+          "heading": "",
+          "text": "[[Write this paragraph]]"
+        },
+        {
+          "id": "features",
+          "heading": "Firewall Features That Stop Illegitimate Traffic",
+          "text": "### {{feature_1}}\n\n[[Describe]]\n\n### {{feature_2}}\n\n[[Describe]]\n\n### {{feature_3}}\n\n[[Describe]]"
+        },
+        {
+          "id": "evidence",
+          "heading": "Evidence These Features Are Enabled",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "{{feature_1}} enabled in the {{fw1}} security policy",
+            "{{feature_2}} enabled in the {{fw1}} security policy",
+            "{{feature_3}} enabled in the {{fw1}} security policy"
+          ]
+        },
+        {
+          "id": "close",
+          "heading": "",
+          "text": "[[Write this paragraph]]"
         }
       ]
     }

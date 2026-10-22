@@ -40,6 +40,8 @@ Teammates must start from the shared draft with **Load draft**, not a draft of t
 
 Entries are keyed `typeId/variantId`. This repo is public: never put real IPs, usernames, passwords or screenshots in an example.
 
+Variants with `"new": true` in `drafts/` show a **NEW** badge on the variant and its type. Remove the flag once the template has been reviewed.
+
 ## Text formatting
 
 In any text box: blank line = new paragraph, `- ` bullets, `1. ` numbered steps, `### ` small heading, `[[prompt]]` text still to be written (highlighted), triple-backtick fences for commands/code, `**bold**`, `` `inline code` ``.
@@ -90,6 +92,6 @@ index.html        page + list of draft <script> tags
 app.js            form, drafts, hosts, tables, evidence, preview, .docx export
 merge.js          Merge drafts: fold teammates' saved drafts into this one
 styles.css
-drafts/*.js       one template file per type (23 types, 95 variants)
+drafts/*.js       one template file per type (23 types, 124 variants)
 lib/docx.umd.js   docx 8.5.0 (MIT), included locally so the page works offline
 ```

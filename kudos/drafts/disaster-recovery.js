@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "disaster-recovery",
   "name": "Disaster recovery / backup",
-  "description": "Hot sites, DR activation plans, diagnosing failed servers, return-to-production plans, repairs, and config backups.",
+  "description": "Hot sites, DR activation plans, a DR solution for one server, resource needs for a DR consultant, diagnosing failed servers, return-to-production plans, repairs, and config backups.",
   "variants": [
     {
       "id": "hot-site",
@@ -313,6 +313,139 @@ window.INJECT_TYPES.push({
             "Cron job on the router automating the daily backup",
             "Backups from the firewalls and router on the {{backup_server}}"
           ]
+        }
+      ]
+    },
+    {
+      "id": "dr-facility",
+      "name": "DR solution for one server (competition pod)",
+      "new": true,
+      "subject": "Disaster Recovery Solution for {{server}}",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "server",
+          "label": "Server",
+          "placeholder": "Ubuntu Web Server"
+        },
+        {
+          "key": "dr_server",
+          "label": "Replacement server"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "scope",
+          "heading": "Server and Scope",
+          "text": "[[Write this section: Server and Scope]]"
+        },
+        {
+          "id": "build",
+          "heading": "Building {{dr_server}}",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]"
+        },
+        {
+          "id": "backup",
+          "heading": "Backing Up Application Files",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]"
+        },
+        {
+          "id": "restore",
+          "heading": "Restoring the Service on {{dr_server}}",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n\n```\n[[Paste the commands, script, or output]]\n```"
+        },
+        {
+          "id": "changes",
+          "heading": "Configuration Changes Elsewhere in the Pod",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]"
+        },
+        {
+          "id": "verify",
+          "heading": "Verification",
+          "text": "[[Write this section: Verification]]"
+        }
+      ]
+    },
+    {
+      "id": "resource-needs",
+      "name": "DRP resource needs for a consultant",
+      "new": true,
+      "subject": "Disaster Recovery Resource Needs",
+      "to": "DR Consultant",
+      "vars": [],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "physical",
+          "heading": "Physical Servers and Storage",
+          "text": "[[Write this section: Physical Servers and Storage]]"
+        },
+        {
+          "id": "vms",
+          "heading": "Virtual Machines",
+          "text": "[[Write this section: Virtual Machines]]",
+          "table": {
+            "columns": [
+              "Virtual Machine",
+              "Services"
+            ],
+            "hostRows": {
+              "filter": "all",
+              "cells": [
+                "{{host}}",
+                ""
+              ]
+            },
+            "rows": []
+          }
+        },
+        {
+          "id": "os",
+          "heading": "Operating Systems",
+          "text": "",
+          "table": {
+            "columns": [
+              "Host",
+              "Operating System",
+              "Version"
+            ],
+            "hostRows": {
+              "filter": "all",
+              "cells": [
+                "{{host}}",
+                "{{host_os}}",
+                ""
+              ]
+            },
+            "rows": []
+          }
+        },
+        {
+          "id": "apps",
+          "heading": "Application Software",
+          "text": "",
+          "table": {
+            "columns": [
+              "Host",
+              "Application",
+              "Version"
+            ],
+            "hostRows": {
+              "filter": "all",
+              "cells": [
+                "{{host}}",
+                "",
+                ""
+              ]
+            },
+            "rows": []
+          }
+        },
+        {
+          "id": "fw",
+          "heading": "Firewall Capabilities",
+          "text": "- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]"
         }
       ]
     }

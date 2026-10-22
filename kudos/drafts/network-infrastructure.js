@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "network-infrastructure",
   "name": "Network infrastructure",
-  "description": "Connectivity checks, secure SNMP, IPv6, multicast design, and ARP poisoning mitigation.",
+  "description": "Connectivity checks, default gateway verification, secure SNMP, IPv6, multicast design, QoS, and ARP poisoning mitigation.",
   "variants": [
     {
       "id": "connectivity",
@@ -216,6 +216,127 @@ window.INJECT_TYPES.push({
           "text": "",
           "evidence": [
             "Static ARP entries on the router"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gateway-check",
+      "name": "Verify the default gateway (suspicious ARP entry)",
+      "new": true,
+      "subject": "Verification of the Default Gateway",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "claimed_mac",
+          "label": "MAC address in question"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "params",
+          "heading": "Default Gateway Parameters",
+          "text": "",
+          "table": {
+            "columns": [
+              "Segment",
+              "Gateway IP",
+              "Gateway MAC",
+              "Device"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "evidence",
+          "heading": "Evidence",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "ARP table on a workstation",
+            "MAC address of the gateway interface"
+          ]
+        },
+        {
+          "id": "judgment",
+          "heading": "Judgment on {{claimed_mac}}",
+          "text": "[[Write this section: Judgment]]"
+        },
+        {
+          "id": "src",
+          "heading": "Sources",
+          "level": 2,
+          "text": "- [[Item]]\n- [[Item]]"
+        }
+      ]
+    },
+    {
+      "id": "qos",
+      "name": "QoS for management traffic under peak load",
+      "new": true,
+      "subject": "Preserving Network Integrity in Peak Loads",
+      "to": "IT Director",
+      "vars": [],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "overview",
+          "heading": "Solution Overview",
+          "text": "[[Write this section: Solution Overview]]"
+        },
+        {
+          "id": "devices",
+          "heading": "Devices Changed",
+          "text": "",
+          "table": {
+            "columns": [
+              "Device",
+              "Change Made",
+              "Traffic Prioritized"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "config",
+          "heading": "Configuration Changes",
+          "text": "### {{device_1}}\n\n[[Describe what was done and what the evidence below shows]]\n\n### {{device_2}}\n\n[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "QoS configuration on {{device_1}}",
+            "QoS configuration on {{device_2}}"
+          ]
+        },
+        {
+          "id": "verify",
+          "heading": "Verification",
+          "on": false,
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Prioritized traffic under load"
           ]
         }
       ]

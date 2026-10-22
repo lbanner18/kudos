@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "hardening",
   "name": "Hardening / remove unneeded stuff",
-  "description": "Hardening checklists, unnecessary software audits, cleaning up attacker debris, legacy Windows services, and SMB hardening.",
+  "description": "Hardening checklists, configuring to a list of guidelines, unnecessary software audits, cleaning up attacker debris, legacy Windows services and protocols, and SMB hardening.",
   "variants": [
     {
       "id": "checklist",
@@ -322,6 +322,157 @@ window.INJECT_TYPES.push({
           "id": "why",
           "heading": "Why This Matters",
           "text": "[[Write this section: Why This Matters]]"
+        }
+      ]
+    },
+    {
+      "id": "guideline-sections",
+      "name": "Configure to a list of guidelines (one section each)",
+      "new": true,
+      "subject": "Network Defensive Features",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "point_1",
+          "label": "Guideline 1 (copy from the request)"
+        },
+        {
+          "key": "point_2",
+          "label": "Guideline 2"
+        },
+        {
+          "key": "point_3",
+          "label": "Guideline 3"
+        },
+        {
+          "key": "point_4",
+          "label": "Guideline 4 (if any)"
+        },
+        {
+          "key": "point_5",
+          "label": "Guideline 5 (if any)"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "g1",
+          "heading": "{{point_1}}",
+          "text": "### What This Guideline Asks For\n\n[[Write this section: Guideline 1]]\n\n### What We Configured\n\n[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Guideline 1 on an example Linux server",
+            "Guideline 1 on an example Windows server"
+          ]
+        },
+        {
+          "id": "g2",
+          "heading": "{{point_2}}",
+          "text": "### What This Guideline Asks For\n\n[[Write this section: Guideline 2]]\n\n### What We Configured\n\n[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Guideline 2 on an example Linux server",
+            "Guideline 2 on an example Windows server"
+          ]
+        },
+        {
+          "id": "g3",
+          "heading": "{{point_3}}",
+          "text": "### What This Guideline Asks For\n\n[[Write this section: Guideline 3]]\n\n### What We Configured\n\n[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Guideline 3 on an example Linux server",
+            "Guideline 3 on an example Windows server"
+          ]
+        },
+        {
+          "id": "g4",
+          "heading": "{{point_4}}",
+          "on": false,
+          "text": "### What This Guideline Asks For\n\n[[Write this section: Guideline 4]]\n\n### What We Configured\n\n[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Guideline 4 on an example Linux server",
+            "Guideline 4 on an example Windows server"
+          ]
+        },
+        {
+          "id": "g5",
+          "heading": "{{point_5}}",
+          "on": false,
+          "text": "### What This Guideline Asks For\n\n[[Write this section: Guideline 5]]\n\n### What We Configured\n\n[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Guideline 5 on an example Linux server",
+            "Guideline 5 on an example Windows server"
+          ]
+        },
+        {
+          "id": "assure",
+          "heading": "Assurance That All Servers Are Configured",
+          "text": "[[Write this section: Assurance That All Servers Are Configured]]",
+          "table": {
+            "columns": [
+              "Host",
+              "OS",
+              "Guidelines Applied",
+              "How Verified"
+            ],
+            "hostRows": {
+              "filter": "all",
+              "cells": [
+                "{{host}}",
+                "{{host_os}}",
+                "",
+                ""
+              ]
+            },
+            "rows": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "verify-protocol",
+      "name": "Verify use of a legacy protocol (e.g. NetBEUI)",
+      "new": true,
+      "subject": "Verification of {{protocol}}",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "protocol",
+          "label": "Protocol",
+          "default": "NetBEUI"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "how",
+          "heading": "Where We Checked",
+          "text": "1. **[[Place checked]]:** [[Describe]]\n1. **[[Place checked]]:** [[Describe]]\n1. **[[Place checked]]:** [[Describe]]\n1. **[[Place checked]]:** [[Describe]]"
+        },
+        {
+          "id": "hosts",
+          "heading": "Results on Each Server",
+          "text": "",
+          "perHost": {
+            "filter": "windows",
+            "label": "{{host}}:",
+            "text": "[[Optional notes for {{host}}]]",
+            "evidence": [
+              "{{protocol}} check on {{host}}"
+            ]
+          }
+        },
+        {
+          "id": "conclusion",
+          "heading": "Conclusion",
+          "text": "[[Write this section: Conclusion]]"
+        },
+        {
+          "id": "disable",
+          "heading": "Disabling {{protocol}}",
+          "on": false,
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "{{protocol}} disabled"
+          ]
         }
       ]
     }

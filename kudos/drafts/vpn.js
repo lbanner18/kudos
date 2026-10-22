@@ -24,6 +24,12 @@ window.INJECT_TYPES.push({
           "text": "[[Write this section: What Is a VPN?]]"
         },
         {
+          "id": "why3",
+          "heading": "Why These Three Options",
+          "on": false,
+          "text": "[[Write this section: Why These Three Options]]"
+        },
+        {
           "id": "table",
           "heading": "Comparison",
           "text": "",
@@ -117,6 +123,15 @@ window.INJECT_TYPES.push({
             "{{vpn}} installed on {{device1}}",
             "{{vpn}} installed on {{device2}}",
             "Both devices connected in the admin console"
+          ]
+        },
+        {
+          "id": "ansible",
+          "heading": "Deployment With Ansible",
+          "on": false,
+          "text": "[[Describe what was done and what the evidence below shows]]\n\n```\n[[Paste the commands, script, or output]]\n```\n\n[[Write this paragraph]]",
+          "evidence": [
+            "Ansible playbook deploying {{vpn}}"
           ]
         },
         {

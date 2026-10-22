@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "team-feedback",
   "name": "Team / reflection / feedback",
-  "description": "Team organization, preparation reflection, competition feedback, and the welcome inject.",
+  "description": "Team organization, skills in the context of needs, preparation reflection, competition feedback, and the welcome inject.",
   "variants": [
     {
       "id": "team-org",
@@ -167,6 +167,78 @@ window.INJECT_TYPES.push({
           "id": "body",
           "heading": "",
           "text": "[[Write this paragraph]]\n\n- [[Item]]\n- [[Item]]\n\n[[Write this paragraph]]"
+        }
+      ]
+    },
+    {
+      "id": "skills-gap",
+      "name": "Team skills in the context of needs",
+      "new": true,
+      "subject": "Team Skills in the Context of Our Needs",
+      "to": "Network Operations Management",
+      "vars": [],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "needs",
+          "heading": "Technical Elements We Manage",
+          "text": "- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]"
+        },
+        {
+          "id": "matrix",
+          "heading": "Skills Coverage",
+          "text": "",
+          "table": {
+            "columns": [
+              "Technical Element",
+              "Members With This Skill",
+              "Primary Skill For",
+              "Backup"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "gaps",
+          "heading": "Areas Where We Are Weak",
+          "text": "[[Write this section: Areas Where We Are Weak]]"
+        },
+        {
+          "id": "plan",
+          "heading": "Plan to Close the Gaps",
+          "on": false,
+          "text": "[[Write this section: Plan to Close the Gaps]]"
         }
       ]
     }

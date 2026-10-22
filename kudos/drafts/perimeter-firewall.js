@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "perimeter-firewall",
   "name": "Perimeter firewall",
-  "description": "Least-privilege rule rewrites, policy inventories, rule-base evaluations, screening firewalls, inter-segment rules, and exports for auditors.",
+  "description": "Least-privilege rule rewrites, policies as found vs. changed, policy inventories, rule-base evaluations, screening firewalls, inter-segment rules and isolation design, NAT/PAT, SSL decryption, and exports for auditors.",
   "variants": [
     {
       "id": "least-privilege",
@@ -410,6 +410,375 @@ window.INJECT_TYPES.push({
           "id": "notes",
           "heading": "Notes for Auditors",
           "text": "[[Write this section: Notes for Auditors]]"
+        }
+      ]
+    },
+    {
+      "id": "as-found",
+      "name": "Firewall policy as found vs. changes made",
+      "new": true,
+      "subject": "Perimeter Firewall Setup and Configuration",
+      "to": "Network Operations Management",
+      "vars": [
+        {
+          "key": "fw1",
+          "label": "Firewall 1",
+          "default": "Palo Alto"
+        },
+        {
+          "key": "fw2",
+          "label": "Firewall 2",
+          "default": "Cisco FTD"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "found-fw1",
+          "heading": "{{fw1}}: Policy As Found",
+          "text": "",
+          "table": {
+            "columns": [
+              "Rule",
+              "Source",
+              "Destination",
+              "Application / Service",
+              "Action"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          },
+          "evidence": [
+            "{{fw1}} security policy as found"
+          ]
+        },
+        {
+          "id": "changes-fw1",
+          "heading": "{{fw1}}: Changes Made",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "table": {
+            "columns": [
+              "Rule",
+              "Change",
+              "Reason"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                ""
+              ]
+            ]
+          },
+          "evidence": [
+            "{{fw1}} security policy after changes",
+            "Packet inspection enabled on {{fw1}} rules",
+            "Denied packets logged on {{fw1}}"
+          ]
+        },
+        {
+          "id": "found-fw2",
+          "heading": "{{fw2}}: Policy As Found",
+          "text": "",
+          "table": {
+            "columns": [
+              "Rule",
+              "Source",
+              "Destination",
+              "Application / Service",
+              "Action"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          },
+          "evidence": [
+            "{{fw2}} security policy as found"
+          ]
+        },
+        {
+          "id": "changes-fw2",
+          "heading": "{{fw2}}: Changes Made",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "table": {
+            "columns": [
+              "Rule",
+              "Change",
+              "Reason"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                ""
+              ]
+            ]
+          },
+          "evidence": [
+            "{{fw2}} security policy after changes",
+            "Packet inspection enabled on {{fw2}} rules",
+            "Denied packets logged on {{fw2}}"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "isolation-design",
+      "name": "Design network isolation between segments",
+      "new": true,
+      "subject": "Network Isolation Between Segments",
+      "to": "CISO",
+      "vars": [],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "req",
+          "heading": "Requirement",
+          "text": "[[Write this section: Requirement]]"
+        },
+        {
+          "id": "caps",
+          "heading": "Capabilities in Our Existing Infrastructure",
+          "text": "- **[[Item]]:** [[Describe]]\n- **[[Item]]:** [[Describe]]\n- **[[Item]]:** [[Describe]]"
+        },
+        {
+          "id": "design",
+          "heading": "Design",
+          "text": "[[Write this section: Design]]",
+          "table": {
+            "columns": [
+              "Source Segment",
+              "Destination Segment",
+              "Allowed Service / Port",
+              "Logged?"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "impl",
+          "heading": "Implementation Evidence",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Inter-segment rules",
+            "Unexpected inter-segment packets being logged"
+          ]
+        },
+        {
+          "id": "logs",
+          "heading": "Using the Logs to Find Compromised Machines",
+          "text": "[[Write this section: Using the Logs to Find Compromised Machines]]"
+        }
+      ]
+    },
+    {
+      "id": "nat-sessions",
+      "name": "Examine NAT / PAT sessions",
+      "new": true,
+      "subject": "Address Translation on the {{fw1}} Firewall",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "fw1",
+          "label": "Firewall",
+          "default": "Palo Alto"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "policy",
+          "heading": "Address Translation Policy",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "NAT policy on the {{fw1}}"
+          ]
+        },
+        {
+          "id": "mapping",
+          "heading": "Public and Private Addressing",
+          "text": "",
+          "table": {
+            "columns": [
+              "Host",
+              "Private Address",
+              "Public Address",
+              "Translation"
+            ],
+            "hostRows": {
+              "filter": "all",
+              "cells": [
+                "{{host}}",
+                "{{host_ip}}",
+                "",
+                ""
+              ]
+            },
+            "rows": []
+          }
+        },
+        {
+          "id": "natpat",
+          "heading": "NAT or PAT?",
+          "text": "[[Write this section: NAT or PAT?]]"
+        },
+        {
+          "id": "diff",
+          "heading": "Differences Between NAT and PAT",
+          "text": "[[Write this section: Differences Between NAT and PAT]]"
+        },
+        {
+          "id": "sessions",
+          "heading": "Current Session Table",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Current session table on the {{fw1}}"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ssl-decryption",
+      "name": "Configure SSL decryption (Palo Alto)",
+      "new": true,
+      "subject": "SSL Decryption on the {{fw1}} Firewall",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "fw1",
+          "label": "Firewall",
+          "default": "Palo Alto"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "steps",
+          "heading": "Configuration Steps",
+          "text": "1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]\n1. [[Step]]",
+          "evidence": [
+            "Self-signed certificate on the {{fw1}}",
+            "Decryption profile",
+            "Decryption policy rule"
+          ]
+        },
+        {
+          "id": "why",
+          "heading": "Why SSL Decryption Is Useful",
+          "text": "[[Write this section: Why SSL Decryption Is Useful]]"
+        },
+        {
+          "id": "exclude",
+          "heading": "Traffic That Should Not Be Decrypted",
+          "text": "[[Write this section: Traffic That Should Not Be Decrypted]]",
+          "table": {
+            "columns": [
+              "Traffic / Site Category",
+              "Reason"
+            ],
+            "rows": [
+              [
+                "",
+                ""
+              ],
+              [
+                "",
+                ""
+              ],
+              [
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "test",
+          "heading": "Testing",
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "Decrypted traffic in the {{fw1}} logs"
+          ]
         }
       ]
     }
