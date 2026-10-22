@@ -51,6 +51,9 @@ async function run() {
     $(`#variantPanel input[value="${vid}"]`).click(); await settle();
     const label = $(`#variantPanel input[value="${vid}"]`).closest('label');
     check(`${key}: variant shows Example Available`, /Example Available/.test(label.textContent), label.textContent);
+    const status = { review: 'Needs Review', incomplete: 'Incomplete', outdated: 'Outdated' }[ex.status];
+    check(`${key}: variant shows its status (${status})`, status && label.querySelector(`.badge.status-${ex.status}`) && label.textContent.includes(status), label.textContent);
+    check(`${key}: type shows no status or NEW badge`, !typeBtn.querySelector('[class*="status-"]') && !/NEW|Needs Review|Incomplete|Outdated/.test(typeBtn.textContent), typeBtn.textContent);
     const view = $$('#variantPanel button').find(b => b.textContent === 'View example');
     if (!check(`${key}: View example button`, view)) continue;
     view.click(); await settle();
@@ -59,8 +62,33 @@ async function run() {
     const secs = Object.entries(ex.sections || {});
     const tables = secs.filter(([, e]) => e.rows).length;
     check(`${key}: example tables render (${tables})`, modal.querySelectorAll('.ex-text table').length === tables, [modal.querySelectorAll('.ex-text table').length, tables]);
+    const shots = secs.filter(([, e]) => e.screenshots).length;
+    check(`${key}: screenshot lists shown (${shots})`, modal.querySelectorAll('.shots').length === shots, [modal.querySelectorAll('.shots').length, shots]);
     modal.querySelector('.variant-actions button.primary').click(); await settle();
+    let want = 0;
+    for (const [id, e] of secs) if (e.screenshots) {
+      const card = $$('#sectionCards > .card')[v.sections.findIndex(s => s.id === id)];
+      const hosts = card.querySelectorAll('details.hostblock').length;
+      if (!card.classList.contains('off')) want += e.screenshots.length * (v.sections.find(s => s.id === id).perHost ? hosts : 1);
+      const ideas = Array.from(card.querySelectorAll('.suggest button'), b => b.textContent).join(' | ');
+      const first = e.screenshots[0].replace(/\{\{\w+\}\}/g, '');
+      check(`${key}: "${id}" offers the screenshots as caption ideas`, first.split(/\s+/).filter(x => x.length > 3).every(wd => ideas.includes(wd)), ideas);
+    }
     check(`${key}: modal closed after start`, !$('.modal'));
+    const slots = () => $$('#preview .slot');
+    check(`${key}: one "Figure N: ____" placeholder per expected screenshot (${want})`, slots().length === want, [slots().length, want]);
+    check(`${key}: placeholders counted in the status bar`, !want || $('#saveStatus').textContent.includes(`${want} screenshot`), $('#saveStatus').textContent);
+    if (key === 'perimeter-firewall/ssl-decryption') {
+      // Add one real screenshot to the first section that expects some: it takes Figure 1 and one placeholder goes away.
+      const id = secs.find(([, e]) => e.screenshots)[0];
+      const input = $$('#sectionCards > .card')[v.sections.findIndex(s => s.id === id)].querySelector('input[type=file]');
+      const c = d.createElement('canvas'); c.width = 40; c.height = 30;
+      const blob = await new Promise(r => c.toBlob(r, 'image/png'));
+      const dt = new w.DataTransfer(); dt.items.add(new w.File([blob], 'shot.png', { type: 'image/png' }));
+      input.files = dt.files; input.dispatchEvent(new w.Event('change')); await wait(800);
+      check(`${key}: a real screenshot fills a placeholder`, slots().length === want - 1 && $('#preview figure figcaption').textContent.startsWith('Figure 1.'), [slots().length, $('#preview figure') && $('#preview figure').textContent]);
+      check(`${key}: placeholders keep numbering after the real figure`, /Figure 2:/.test(slots()[0].textContent), slots()[0] && slots()[0].textContent);
+    }
     const preview = norm($('#preview').textContent);
     const missing = secs.flatMap(([id, e]) => [e.text && fragment(e.text), e.rows && e.rows[0].find(c => c && !/[[{]/.test(c))])
       .concat(ex.summary ? [fragment(ex.summary)] : []).filter(Boolean).map(norm).filter(f => !preview.includes(f));

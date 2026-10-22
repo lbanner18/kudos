@@ -360,7 +360,6 @@ window.INJECT_TYPES.push({
     {
       "id": "network-processes",
       "name": "Find rogue listening processes (per server)",
-      "new": true,
       "subject": "Finding Rogue Network Processes",
       "to": "CISO",
       "vars": [],

@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "hardening",
   "name": "Hardening / remove unneeded stuff",
-  "description": "Hardening checklists, configuring to a list of guidelines, unnecessary software audits, cleaning up attacker debris, legacy Windows services and protocols, and SMB hardening.",
+  "description": "Hardening checklists, network traffic defense, unnecessary software audits, cleaning up attacker debris, legacy Windows services and protocols, and SMB hardening.",
   "variants": [
     {
       "id": "checklist",
@@ -327,8 +327,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "guideline-sections",
-      "name": "Configure to a list of guidelines (one section each)",
-      "new": true,
+      "name": "Network Traffic Defense",
+      "description": "Ingress/Egress · Management · Granularity",
       "subject": "Network Defensive Features",
       "to": "CISO",
       "vars": [
@@ -430,7 +430,6 @@ window.INJECT_TYPES.push({
     {
       "id": "verify-protocol",
       "name": "Verify use of a legacy protocol (e.g. NetBEUI)",
-      "new": true,
       "subject": "Verification of {{protocol}}",
       "to": "CISO",
       "vars": [

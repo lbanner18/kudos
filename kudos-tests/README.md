@@ -24,3 +24,13 @@ Run it the same way; `?v=type/variant,type/variant` checks only those.
 `examples.html` opens every example in `examples.js`: the type and variant show **Example Available**, the pop-up shows
 the label and its tables, **Start from this example** puts the example text into the preview, and `.docx` export works.
 Run it the same way; `?v=type/variant,...` checks only those.
+
+## Appendix check
+
+`appendix.html` adds a section and an appendix and checks the appendix prints after the sign-off, that ticking **Appendix**
+moves a section there and back, that it survives a reload, and that `.docx` export works.
+
+## Requirements check
+
+`checklist.html` enters inject requirements on the login banner draft and checks matched lines show their heading,
+unmatched unticked lines are flagged and warned about on export (Cancel / Export anyway), and a matching section clears it.

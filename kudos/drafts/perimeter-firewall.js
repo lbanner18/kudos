@@ -416,7 +416,6 @@ window.INJECT_TYPES.push({
     {
       "id": "as-found",
       "name": "Firewall policy as found vs. changes made",
-      "new": true,
       "subject": "Perimeter Firewall Setup and Configuration",
       "to": "Network Operations Management",
       "vars": [
@@ -586,7 +585,6 @@ window.INJECT_TYPES.push({
     {
       "id": "isolation-design",
       "name": "Design network isolation between segments",
-      "new": true,
       "subject": "Network Isolation Between Segments",
       "to": "CISO",
       "vars": [],
@@ -654,7 +652,6 @@ window.INJECT_TYPES.push({
     {
       "id": "nat-sessions",
       "name": "Examine NAT / PAT sessions",
-      "new": true,
       "subject": "Address Translation on the {{fw1}} Firewall",
       "to": "CISO",
       "vars": [
@@ -720,7 +717,6 @@ window.INJECT_TYPES.push({
     {
       "id": "ssl-decryption",
       "name": "Configure SSL decryption (Palo Alto)",
-      "new": true,
       "subject": "SSL Decryption on the {{fw1}} Firewall",
       "to": "CISO",
       "vars": [

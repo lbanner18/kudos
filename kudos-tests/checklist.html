@@ -1,0 +1,67 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Kudos requirements check</title>
+<iframe id="f" style="width:1400px;height:900px"></iframe>
+<script>
+// Inject requirements vs section headings: unmatched, unticked lines are flagged and warned about before export.
+const KUDOS = '/kudos/index.html';
+const results = [];
+const check = (name, ok, detail) => (results.push({ name, ok: !!ok, detail: ok ? undefined : detail }), !!ok);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const frame = document.getElementById('f');
+let w, d, downloads = [], errors = [];
+
+async function boot() {
+  frame.src = KUDOS + '?' + Math.random();
+  await new Promise(r => frame.onload = r);
+  w = frame.contentWindow; d = w.document;
+  w.addEventListener('error', e => errors.push(String(e.message)));
+  w.URL.createObjectURL = blob => { downloads.push(blob); return 'blob:captured'; };
+  w.HTMLAnchorElement.prototype.click = function () {};
+  await wait(100);
+}
+const $ = s => d.querySelector(s);
+const $$ = s => Array.from(d.querySelectorAll(s));
+const settle = () => wait(400);
+const type = (el, v) => { el.value = v; el.dispatchEvent(new w.Event('input', { bubbles: true })); };
+const flagged = () => $$('#checkList li').filter(li => li.querySelector('.nohead')).map(li => li.querySelector('span').textContent);
+const exportNow = async () => { downloads = []; $('#btnExport').click(); await wait(1500); };
+
+async function run() {
+  localStorage.clear(); await boot();
+  $('#btnSampleHosts').click(); await settle();
+  $$('#typeGrid button').find(b => b.firstChild.textContent === 'Login banner').click();
+  $('#variantPanel input[value="banner"]').click();
+  $('#variantPanel .variant-actions button.primary').click(); await settle();
+  type($('#checkText'), [
+    '- Identify the key elements of a login banner',
+    '- Install the banner on every Linux device',
+    '- Provide a disaster recovery cost estimate',
+    '- Cite any sources used',
+  ].join('\n')); await settle();
+  check('matched lines show their heading', $$('#checkList li small').some(s => /Key Elements of a Login Banner/.test(s.textContent)) && $$('#checkList li small').some(s => /Completion on Linux Devices/.test(s.textContent)), $('#checkList').textContent);
+  check('unmatched lines are flagged', JSON.stringify(flagged()) === JSON.stringify(['Provide a disaster recovery cost estimate', 'Cite any sources used']), flagged());
+  // tick one unmatched line: it is no longer flagged
+  $$('#checkList li').find(li => /Cite any sources/.test(li.textContent)).querySelector('input').click(); await settle();
+  check('ticked line is not flagged', JSON.stringify(flagged()) === JSON.stringify(['Provide a disaster recovery cost estimate']), flagged());
+  await exportNow();
+  const modal = $('.modal');
+  check('export warns about the unmatched line', modal && /disaster recovery cost estimate/.test(modal.textContent) && !/Cite any sources/.test(modal.textContent) && !downloads.length, modal && modal.textContent);
+  $$('.modal button').find(b => b.textContent === 'Cancel').click(); await wait(1500);
+  check('Cancel does not export', !$('.modal') && !downloads.length, downloads.length);
+  await exportNow();
+  $$('.modal button').find(b => b.textContent === 'Export anyway').click(); await wait(1500);
+  check('Export anyway exports', downloads.length === 1 && downloads[0].size > 5000, downloads.map(b => b.size));
+  // add a section for it: no flag, no warning
+  $('#btnAddSection').click(); await settle();
+  const cards = $$('#sectionCards > .card');
+  type(cards[cards.length - 1].querySelector('.sechead input[type=text]'), 'Disaster Recovery Cost Estimate'); await settle();
+  check('a matching section clears the flag', !flagged().length, flagged());
+  await exportNow();
+  check('no warning once every line has a heading', !$('.modal') && downloads.length === 1, [!!$('.modal'), downloads.length]);
+  check('no page errors', !errors.length, errors);
+}
+
+run().catch(e => check('test crashed', false, String(e && e.stack || e)))
+  .finally(() => fetch('/results', { method: 'POST', body: JSON.stringify(results, null, 1) }));
+</script>

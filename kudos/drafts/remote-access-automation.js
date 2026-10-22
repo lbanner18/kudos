@@ -119,7 +119,6 @@ window.INJECT_TYPES.push({
     {
       "id": "playbooks",
       "name": "Ansible playbooks from a central host (+ Vault)",
-      "new": true,
       "subject": "Infrastructure Automation",
       "to": "CTO",
       "vars": [

@@ -397,18 +397,20 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "policy-vs-procedure",
-      "name": "Difference between a policy and a procedure",
-      "new": true,
+      "name": "Difference between a policy and a procedure (password example)",
+      "description": "Explain each, compare them, then illustrate with passwords: the password policy (the rules) and the procedure that enforces it on our systems (e.g. PAM pwquality on Linux, a password GPO on Windows).",
       "subject": "Difference Between a Policy and a Procedure",
       "to": "CISO",
       "vars": [
         {
           "key": "example_policy",
-          "label": "Example policy from our work"
+          "label": "Example policy from our work",
+          "placeholder": "Password complexity policy"
         },
         {
           "key": "example_procedure",
-          "label": "Example procedure from our work"
+          "label": "Example procedure from our work",
+          "placeholder": "Enforcing password complexity with PAM"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
@@ -473,7 +475,6 @@ window.INJECT_TYPES.push({
     {
       "id": "ir-procedure-defacement",
       "name": "IR procedure for web site defacement",
-      "new": true,
       "subject": "Incident Response Procedure for Web Site Defacement",
       "to": "CISO",
       "vars": [],
@@ -556,7 +557,6 @@ window.INJECT_TYPES.push({
     {
       "id": "incident-report",
       "name": "Incident report (MWCCDC IR template)",
-      "new": true,
       "description": "The organizers’ Incident Response Template: Incident Details table, then Vulnerability, Initial Access, Impact, Eradication, Remediation. Under Memo header, set From to “Team {{team}} – IT & Cyber Defense Division”, Summary label to (none), and clear the Closing line: the template’s own closing is the last section. WRCCDC: a report without the attacker’s source IP scores zero.",
       "subject": "Incident Report",
       "to": "CISO",

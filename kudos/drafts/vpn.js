@@ -93,7 +93,7 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "implement",
-      "name": "Implement VPN + user guide",
+      "name": "Implement VPN + user guide (Tailscale)",
       "subject": "VPN Installation",
       "to": "CEO",
       "vars": [

@@ -8,14 +8,14 @@ Pick the type and a variant, and the page lays out a **template**: the sections,
 
 ## Using it
 
-1. **requirements (private):** paste the deliverables from the request, one per line, and tick them off. This box is never exported.
+1. **requirements (private):** paste the deliverables from the request, one per line, and tick them off. This box is never exported. Each unticked line shows the section heading it matches (by shared keywords), or **no heading** if none does. Exporting with a **no heading** line left asks first, so every requirement gets its own section before the doc leaves Kudos. Tick a line when it is covered some other way (e.g. screenshots).
 2. **Memo header:** team number, number, To, subject, and sign-off. The exported file is named `NN_teamXX.docx`.
 3. **writing type:** pick the type, then the variant closest to the request, then **Use this draft**. Search works on type and variant names. **Blank memo** starts with just the header and summary.
 4. **Environment hosts:** enter the competition's hosts once, or load the sample 8-host topology. Per-host sections ("Ubuntu Ecom:" + screenshot) and table rows are built from this list, and it's kept between them.
 5. **Draft details:** every `{{placeholder}}` in it gets a box here, so you never have to hunt through the text for blanks. Anything still unfilled is highlighted in the preview and in the Word file, and is counted next to "Autosaved".
 6. **Sections:** untick sections you don't need, edit the text and headings, reorder them, and use **Reset** to get the draft text back. Tables are editable grids, and **Fill rows from hosts** rebuilds the rows from your host list.
 7. **Evidence:** click a dashed box and paste a screenshot (Ctrl/⌘+V), drop images onto it, or add pasted command output as text. Click a *caption idea* to caption the first figure that doesn't have one yet.
-8. **Insert:** quick buttons for phrases we use often: the "unable to finish" note, a bold **Please note** callout, the AI-use disclosure, and a Sources section.
+8. **Insert:** quick buttons for phrases we use often: the "unable to finish" note, a bold **Please note** callout, the AI-use disclosure, a Sources section, and an **Appendix**. An appendix section prints after the sign-off (on a new page in the `.docx` and PDF), with figure numbers continuing from the memo. Tick **Appendix** on any section card to move it there.
 9. **Export .docx**, or click **▾** next to it for **Export PDF**. The PDF is printed from the preview: pick **Save as PDF** as the printer in the print dialog. The file name is filled in for you.
 
 Drafts autosave in your browser. **Save draft** / **Load draft** passes one (screenshots included) to a teammate as a `.json` file. **Load draft** replaces the whole page, so if you've started a draft it asks first and offers **Merge drafts** instead. **New** keeps the team settings and hosts and clears everything else, and needs two clicks.
@@ -36,11 +36,11 @@ Teammates must start from the shared draft with **Load draft**, not a draft of t
 
 ## Examples
 
-`examples.js` adds sample answers to variants without touching `drafts/`. Each one is a scored team submission, transcribed as written (typos included) and sanitized. Types and variants that have one show an **Example Available** badge in the picker. Pick the variant and click **View example** to read it. The label says where it came from and whether it is **READY** or **FLAGGED** (good apart from the one thing named). **Start from this example** loads it as the draft, and sections the example doesn't fill keep their `[[prompt]]`.
+`examples.js` adds sample answers to variants without touching `drafts/`. Each one is a scored team submission, transcribed as written (typos included) and sanitized. Types and variants that have one show an **Example Available** badge in the picker. Pick the variant and click **View example** to read it. The label says where it came from and whether it is **READY** or **FLAGGED** (good apart from the one thing named). **Start from this example** loads it as the draft, and sections the example doesn't fill keep their `[[prompt]]`. Each screenshot the team included shows in the draft as a blank **Figure N: ________** with space below it (counted as "screenshots to add" in the status bar) until you add your own; the on-screen gap says what it should show.
 
-Entries are keyed `typeId/variantId`. A section can have `text`, `rows` for its table (plus `columns` if the team's differ), `on: true` to turn on an off-by-default section, and an optional `why` note. `vars` on the example fills the variant's `{{vars}}`. This repo is public: never put real IPs, usernames, passwords or screenshots in an example.
+Entries are keyed `typeId/variantId`. A section can have `text`, `rows` for its table (plus `columns` if the team's differ), `on: true` to turn on an off-by-default section, `screenshots` (descriptions of the figures the team included, shown in the example and offered as caption ideas; never the images), and an optional `why` note. `vars` on the example fills the variant's `{{vars}}`. This repo is public: never put real IPs, usernames, passwords or screenshots in an example.
 
-Variants with `"new": true` in `drafts/` show a **NEW** badge on the variant and its type. Remove the flag once the template has been reviewed.
+Set `status` on an example to show its review state next to **Example Available** on the variant (the type only shows **Example Available**): `'review'` → **Needs Review**, `'incomplete'` → **Incomplete** (a section is still an unfilled template prompt), `'outdated'` → **Outdated** (needs updating for the current competition).
 
 ## Text formatting
 
@@ -92,6 +92,6 @@ index.html        page + list of draft <script> tags
 app.js            form, drafts, hosts, tables, evidence, preview, .docx export
 merge.js          Merge drafts: fold teammates' saved drafts into this one
 styles.css
-drafts/*.js       one template file per type (23 types, 124 variants)
+drafts/*.js       one template file per type (23 types, 125 variants)
 lib/docx.umd.js   docx 8.5.0 (MIT), included locally so the page works offline
 ```

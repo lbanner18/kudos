@@ -319,7 +319,6 @@ window.INJECT_TYPES.push({
     {
       "id": "dr-facility",
       "name": "DR solution for one server (competition pod)",
-      "new": true,
       "subject": "Disaster Recovery Solution for {{server}}",
       "to": "CISO",
       "vars": [
@@ -370,7 +369,6 @@ window.INJECT_TYPES.push({
     {
       "id": "resource-needs",
       "name": "DRP resource needs for a consultant",
-      "new": true,
       "subject": "Disaster Recovery Resource Needs",
       "to": "DR Consultant",
       "vars": [],

@@ -75,7 +75,6 @@ window.INJECT_TYPES.push({
     {
       "id": "nmap-per-server",
       "name": "Nmap exposed services, one section per server",
-      "new": true,
       "subject": "Exposed Services of Each Server",
       "to": "CISO",
       "vars": [
@@ -144,7 +143,6 @@ window.INJECT_TYPES.push({
     {
       "id": "internal-vuln",
       "name": "Internal vulnerability scan (OpenVAS)",
-      "new": true,
       "subject": "Assessment of Internal Device Vulnerabilities",
       "to": "CISO",
       "vars": [

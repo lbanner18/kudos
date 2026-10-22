@@ -416,7 +416,6 @@ window.INJECT_TYPES.push({
     {
       "id": "log-evidence",
       "name": "Legality of log files (hearsay & admissibility)",
-      "new": true,
       "subject": "Legality of Log Files",
       "to": "Legal Department",
       "vars": [],
@@ -462,7 +461,6 @@ window.INJECT_TYPES.push({
     {
       "id": "breach-regulation",
       "name": "Response to a breach: regulation, steps, penalty",
-      "new": true,
       "subject": "Response to Breach",
       "to": "CISO",
       "vars": [],
@@ -494,7 +492,6 @@ window.INJECT_TYPES.push({
     {
       "id": "job-description",
       "name": "Job description for HR",
-      "new": true,
       "subject": "Job Description: {{position}}",
       "to": "Human Resources",
       "vars": [
@@ -540,7 +537,6 @@ window.INJECT_TYPES.push({
     {
       "id": "firewall-features",
       "name": "Customer memo: firewall features that stop illegitimate traffic",
-      "new": true,
       "subject": "How Our Firewall Protects Your Data",
       "to": "Prospective Customer",
       "vars": [

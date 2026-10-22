@@ -119,7 +119,6 @@ window.INJECT_TYPES.push({
     {
       "id": "half-open-tcp",
       "name": "Incomplete TCP connection monitor (cron)",
-      "new": true,
       "subject": "Script to Monitor Incomplete TCP Connections",
       "to": "CISO",
       "vars": [
@@ -188,7 +187,6 @@ window.INJECT_TYPES.push({
     {
       "id": "process-priority",
       "name": "Process priority manager script (CLI tool)",
-      "new": true,
       "subject": "Script to Manage Process Priorities",
       "to": "CISO",
       "vars": [

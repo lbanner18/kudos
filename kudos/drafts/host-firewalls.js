@@ -64,7 +64,6 @@ window.INJECT_TYPES.push({
     {
       "id": "policy-summary",
       "name": "Per-server firewall policy summary",
-      "new": true,
       "subject": "Server-Based Firewalls",
       "to": "CISO",
       "vars": [

@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "deploy-service",
   "name": "Deploy a business service",
-  "description": "Chat platforms, file shares/SFTP, network management tools, research software + Docker, PowerShell on Linux, comparing two solutions, an IDS, and a TFTP server.",
+  "description": "Chat platforms, file shares/SFTP, network management tools, research software + Docker, PowerShell on Linux, comparing two solutions (incl. WSL vs Docker Desktop), an IDS, and a TFTP server.",
   "variants": [
     {
       "id": "chat",
@@ -260,7 +260,6 @@ window.INJECT_TYPES.push({
     {
       "id": "compare-solutions",
       "name": "Compare two solutions and recommend one",
-      "new": true,
       "subject": "Comparison of {{solution_a}} and {{solution_b}}",
       "to": "CISO",
       "vars": [
@@ -336,9 +335,88 @@ window.INJECT_TYPES.push({
       ]
     },
     {
+      "id": "wsl-docker",
+      "name": "Compare WSL and Docker Desktop",
+      "description": "Run Linux business apps on Windows for disaster recovery (VIRT01A): WSL and Docker Desktop (the container option), benefits and limitations of each, then recommend one and justify it.",
+      "subject": "Develop a Solution to Run a Linux App on Windows",
+      "to": "CISO",
+      "vars": [
+        {
+          "key": "solution_a",
+          "label": "First solution",
+          "default": "WSL"
+        },
+        {
+          "key": "solution_b",
+          "label": "Second solution",
+          "default": "Docker Desktop"
+        },
+        {
+          "key": "pick",
+          "label": "Recommended solution"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "a",
+          "heading": "{{solution_a}}",
+          "text": "[[Write this section: {{solution_a}}]]"
+        },
+        {
+          "id": "b",
+          "heading": "{{solution_b}}",
+          "text": "[[Write this section: {{solution_b}}]]"
+        },
+        {
+          "id": "table",
+          "heading": "Benefits and Limitations",
+          "text": "",
+          "table": {
+            "columns": [
+              "",
+              "{{solution_a}}",
+              "{{solution_b}}"
+            ],
+            "rows": [
+              [
+                "Benefits",
+                "",
+                ""
+              ],
+              [
+                "Limitations",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "test",
+          "heading": "Testing",
+          "on": false,
+          "text": "[[Describe what was done and what the evidence below shows]]",
+          "evidence": [
+            "{{solution_a}} running",
+            "{{solution_b}} running"
+          ]
+        },
+        {
+          "id": "rec",
+          "heading": "Recommendation: {{pick}}",
+          "text": "[[Write this section: Recommendation]]"
+        },
+        {
+          "id": "just",
+          "heading": "Justification",
+          "text": "- [[Item]]\n- [[Item]]\n- [[Item]]"
+        }
+      ]
+    },
+    {
       "id": "ids",
       "name": "Install an IDS (selection, install, operations guide)",
-      "new": true,
       "subject": "Intrusion Detection System",
       "to": "System Administrator",
       "vars": [
@@ -459,7 +537,6 @@ window.INJECT_TYPES.push({
     {
       "id": "tftp",
       "name": "Install a TFTP server",
-      "new": true,
       "subject": "TFTP Server on {{server}}",
       "to": "CISO",
       "vars": [

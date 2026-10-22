@@ -27,7 +27,8 @@
       per = [ph.filter, ph.label, ph.text, ph.table,
         sorted(ph.exclude, v => v), sorted(ph.tables, v => JSON.stringify(v) !== blank), sorted(ph.evidence, v => v && v.length)];
     }
-    return hash(JSON.stringify([s.on, s.heading, s.level, s.text, s.table, s.evidence, per]));
+    // appendix only when set, so fingerprints of drafts saved before it existed don't change
+    return hash(JSON.stringify([s.on, s.heading, s.level, s.text, s.table, s.evidence, per].concat(s.appendix ? ['appendix'] : [])));
   }
   const valKey = v => hash(String(v == null ? '' : v));
   const FIELDS = ['meta', 'vars'];

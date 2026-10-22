@@ -206,10 +206,17 @@ pre.codeblock {
 .checklist li label { flex-direction: row; gap: 8px; align-items: flex-start; color: var(--ink); font-size: 13px; padding: 2px 0; }
 .checklist li label input { margin-top: 3px; }
 .checklist li.done label span { text-decoration: line-through; color: var(--muted); }
+.checklist li label small { white-space: nowrap; }
+.badge.nohead { color: var(--warn); border-color: var(--warn); white-space: nowrap; }
 
 .sechead { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
 .sechead input[type=text] { flex: 1 1 220px; font-weight: 600; }
 .sechead select { width: auto; }
+.apptoggle { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.apptoggle input { width: auto; }
+.paper .slot p { margin-bottom: 4px; }
+.paper .slot .gap { min-height: 90px; margin-bottom: 14px; border: 1px dashed var(--line); border-radius: 4px; padding: 6px 8px; font-size: 12px; color: var(--muted); }
+.paper .appendix { margin-top: 28px; padding-top: 12px; border-top: 1px dashed var(--line); }
 .card.off { opacity: .6; }
 .card.off .secbody { display: none; }
 .secbody > * + * { margin-top: 8px; }
@@ -251,7 +258,9 @@ table.grid td.rowbtn { width: 1%; border: 0; padding-left: 4px; vertical-align: 
 /* examples (examples.js) */
 .badge { font-style: normal; font-size: 11px; font-weight: 600; margin-left: 8px; padding: 1px 6px; border-radius: 10px; background: var(--chip); color: var(--ok); border: 1px solid var(--ok); }
 .badge.demo { color: var(--warn); border-color: var(--warn); letter-spacing: .04em; }
-.badge.new { color: var(--accent); border-color: var(--accent); letter-spacing: .04em; }
+.badge.status-review { color: var(--accent); border-color: var(--accent); }
+.badge.status-incomplete { color: var(--fail); border-color: var(--fail); }
+.badge.status-outdated { color: var(--muted); border-color: var(--muted); }
 .guide { margin: 8px 0 4px; }
 .guide:empty { display: none; }
 /* pop-ups (example viewer, Load draft warning) */
@@ -267,6 +276,8 @@ div.ex-text { font-family: inherit; }
 .why { font-size: 12.5px; color: var(--muted); border-left: 3px solid var(--ok); padding-left: 8px; margin: 6px 0 0; }
 .variant { flex-direction: row; color: var(--ink); }
 .ex-text pre { overflow-x: auto; }
+.shots { font-size: 12.5px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 8px; margin: 6px 0 0; }
+.shots ul { margin: 2px 0 0; padding-left: 18px; }
 .ex-text table { border-collapse: collapse; width: 100%; margin-top: 6px; }
 .ex-text th, .ex-text td { border: 1px solid var(--line); padding: 3px 6px; text-align: left; vertical-align: top; }
 .variant input { width: auto; flex: none; }
@@ -292,4 +303,6 @@ div.ex-text { font-family: inherit; }
   .paper .ph, .paper pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .paper figure, .paper pre, .paper tr { break-inside: avoid; }
   .paper h1, .paper h2, .paper h3 { break-after: avoid; }
+  .paper .slot .gap { border: 0; color: transparent; }
+  .paper .appendix { break-before: page; margin-top: 0; padding-top: 0; border-top: 0; }
 }

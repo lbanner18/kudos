@@ -289,7 +289,6 @@ window.INJECT_TYPES.push({
     {
       "id": "session-lock",
       "name": "Mandatory session locking (GPO)",
-      "new": true,
       "subject": "Mandatory Session Locking",
       "to": "CISO",
       "vars": [

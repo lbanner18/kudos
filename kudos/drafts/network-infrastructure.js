@@ -223,7 +223,6 @@ window.INJECT_TYPES.push({
     {
       "id": "gateway-check",
       "name": "Verify the default gateway (suspicious ARP entry)",
-      "new": true,
       "subject": "Verification of the Default Gateway",
       "to": "CISO",
       "vars": [
@@ -286,7 +285,6 @@ window.INJECT_TYPES.push({
     {
       "id": "qos",
       "name": "QoS for management traffic under peak load",
-      "new": true,
       "subject": "Preserving Network Integrity in Peak Loads",
       "to": "IT Director",
       "vars": [],

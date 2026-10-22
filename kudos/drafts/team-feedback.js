@@ -173,7 +173,6 @@ window.INJECT_TYPES.push({
     {
       "id": "skills-gap",
       "name": "Team skills in the context of needs",
-      "new": true,
       "subject": "Team Skills in the Context of Our Needs",
       "to": "Network Operations Management",
       "vars": [],

@@ -22,6 +22,7 @@
     pleaseNote: { heading: '', text: '**Please note that {{note}}.**' },
     ai: { heading: '', text: 'AI was used to assist in the creation of this {{ai_artifact}}. Specifically, free Google Gemini (gemini.google.com) was utilized, and the output was reviewed and tested by our team before it was deployed.' },
     sources: { heading: 'Sources:', level: 2, text: '- {{source_url}}' },
+    appendix: { heading: 'Appendix', appendix: true, text: '' },
   };
 
   const TYPES = window.INJECT_TYPES || [];
@@ -102,7 +103,7 @@
   }
   function makeSection(def) {
     const s = {
-      uid: uid(), srcId: def.id || null, on: def.on !== false,
+      uid: uid(), srcId: def.id || null, on: def.on !== false, appendix: !!def.appendix,
       heading: def.heading || '', level: def.level || 1, text: def.text || '',
       table: null, hostRows: null, perHost: null, evidence: [], captions: def.evidence || [],
     };
@@ -196,28 +197,35 @@
     const vals = values();
     const out = [];
     let n = 0;
-    const figs = list => list.forEach(ev => out.push({ t: 'fig', ev, n: ++n }));
+    // Screenshots an example expects (owner.expect) that aren't added yet print as numbered blank "Figure N: ____" slots.
+    const figs = (list, owner) => {
+      list.forEach(ev => out.push({ t: 'fig', ev, n: ++n }));
+      for (let i = list.length; i < (owner.expect || 0); i++) out.push({ t: 'slot', n: ++n, hint: owner.captions[i] || '' });
+    };
     const md = (text, v) => { const s = subst(text, v); if (s.trim()) out.push({ t: 'md', blocks: parseBlocks(s) }); };
     const table = (tb, v) => {
       const rows = tb ? tb.rows.filter(r => r.some(c => String(c || '').trim())) : [];
       if (!rows.length) return;
       out.push({ t: 'table', columns: tb.columns.map(c => subst(c, v)), rows: rows.map(r => r.map(c => subst(c, v))) });
     };
-    for (const s of state.sections) {
+    // Appendix sections print after the sign-off; number their figures after the memo's.
+    for (const s of [...state.sections.filter(x => !x.appendix), ...state.sections.filter(x => x.appendix)]) {
       if (!s.on) continue;
+      const start = out.length;
       if (s.heading.trim()) out.push({ t: 'h', level: s.level, text: subst(s.heading, vals) });
       md(s.text, vals);
       table(s.table, vals);
-      figs(s.evidence);
+      figs(s.evidence, s);
       if (s.perHost) {
         for (const hs of hostsFor(s.perHost.filter, s.perHost.exclude)) {
           const hv = hostVals(vals, hs);
           out.push({ t: 'h', level: Math.min(3, s.level + 1), text: subst(s.perHost.label, hv) });
           md(s.perHost.text, hv);
           if (s.perHost.table) table({ columns: s.perHost.table.columns, rows: s.perHost.tables[hs.id] || s.perHost.table.rows }, hv);
-          figs(s.perHost.evidence[hs.id] || []);
+          figs(s.perHost.evidence[hs.id] || [], s.perHost);
         }
       }
+      if (s.appendix) for (let i = start; i < out.length; i++) out[i].app = true;
     }
     return out;
   }
@@ -253,21 +261,26 @@
       <p>Subject: ${inlineHtml(subst(m.subject, vals)) || '<span class="ph">subject</span>'}</p></div>`;
     if (m.summaryLabel) html += `<h1>${esc(m.summaryLabel)}</h1>`;
     html += blocksHtml(parseBlocks(subst(state.summary, vals)));
-    for (const b of docModel()) {
-      if (b.t === 'h') html += `<h${b.level}>${inlineHtml(b.text)}</h${b.level}>`;
-      else if (b.t === 'md') html += blocksHtml(b.blocks);
-      else if (b.t === 'table') html += tableHtml(b.columns, b.rows);
-      else if (b.t === 'fig') {
-        const body = b.ev.type === 'image' ? `<img src="${b.ev.data}" alt="">` : `<pre>${esc(b.ev.text || '')}</pre>`;
-        html += `<figure>${body}<figcaption><i>Figure ${b.n}. ${inlineHtml(subst(b.ev.caption || '', vals)) || '<span class="ph">caption</span>'}</i></figcaption></figure>`;
-      }
-    }
+    const model = docModel();
+    const blockHtml = b => {
+      if (b.t === 'h') return `<h${b.level}>${inlineHtml(b.text)}</h${b.level}>`;
+      if (b.t === 'md') return blocksHtml(b.blocks);
+      if (b.t === 'table') return tableHtml(b.columns, b.rows);
+      if (b.t === 'slot') return `<div class="slot"><p><i>Figure ${b.n}: <span class="ph">________</span></i></p><div class="gap">${b.hint ? `Screenshot: ${inlineHtml(subst(b.hint, vals))}` : ''}</div></div>`;
+      const body = b.ev.type === 'image' ? `<img src="${b.ev.data}" alt="">` : `<pre>${esc(b.ev.text || '')}</pre>`;
+      return `<figure>${body}<figcaption><i>Figure ${b.n}. ${inlineHtml(subst(b.ev.caption || '', vals)) || '<span class="ph">caption</span>'}</i></figcaption></figure>`;
+    };
+    html += model.filter(b => !b.app).map(blockHtml).join('');
     html += `<p class="sig">${inlineHtml(subst(m.closing, vals))}</p><p>${esc(m.signoff)}<br>${subst(m.signature, vals).split('\n').map(inlineHtml).join('<br>')}</p>`;
+    const app = model.filter(b => b.app);
+    if (app.length) html += `<div class="appendix">${app.map(blockHtml).join('')}</div>`;
     $('#preview').innerHTML = html;
     const all = allText();
     const left = new Set(Array.from(all.matchAll(PH_RE), x => x[1])).size + (all.match(PROMPT_RE) || []).length;
     const open = state.sections.filter(s => s.conflictOf).length;
+    const slots = model.filter(b => b.t === 'slot').length;
     $('#saveStatus').dataset.ph = [left && `· ${left} unfilled prompt${left > 1 ? 's' : ''}`,
+      slots && `· ${slots} screenshot${slots > 1 ? 's' : ''} to add`,
       open && `· ${open} merge conflict${open > 1 ? 's' : ''} to resolve`].filter(Boolean).join(' ');
     updateStatus();
   }
@@ -286,11 +299,53 @@
     items.forEach(it => {
       const on = !!state.checklist.done[it];
       if (on) done++;
+      const match = on ? null : headingFor(it);
       ul.append(h('li', { class: on ? 'done' : '' }, h('label', {},
         h('input', { type: 'checkbox', checked: on, onchange: e => { state.checklist.done[it] = e.target.checked; renderChecklist(); save(); } }),
-        h('span', { text: it }))));
+        h('span', { text: it }),
+        on ? null : match ? h('small', { class: 'muted', text: `→ ${match}` })
+          : h('em', { class: 'badge nohead', text: 'no heading', title: 'No section heading matches this requirement. Add a section for it, or tick it if it is covered.' }))));
     });
     $('#checkCount').textContent = items.length ? `${done} of ${items.length} done · private, never exported` : 'private — never exported';
+  }
+
+  // ---------- requirement ↔ section heading match (warns before export) ----------
+  // Loose keyword match: a heading matches a requirement if they share 2+ significant words
+  // (1 if the requirement has only one), or every word of the heading is in the requirement.
+  const STOP = new Set(('the and for with that this from each your what which have been will should must can provide include describe ' +
+    'explain show memo list using used also into their them they about these those make sure please every team teams following based within ' +
+    'how why who when where are was were all any our its other one two three').split(' '));
+  const keyWords = t => [...new Set(String(t).toLowerCase().replace(/[^a-z0-9]+/g, ' ').split(' ')
+    .filter(x => x.length > 2 && !STOP.has(x))
+    .map(x => x.replace(/ies$/, 'y').replace(/([^s])s$/, '$1').slice(0, 6)))];
+  function headingFor(line) {
+    const want = keyWords(line);
+    if (!want.length) return '';
+    const vals = values();
+    for (const s of state.sections) {
+      if (!s.on || !s.heading.trim()) continue;
+      const head = subst(s.heading, vals), got = keyWords(head);
+      const shared = got.filter(x => want.includes(x)).length;
+      if (got.length && (shared >= Math.min(2, want.length) || shared === got.length)) return head;
+    }
+    return '';
+  }
+  // Unticked requirements with no matching heading: confirm before exporting.
+  function checkRequirements(go) {
+    const miss = checkItems().filter(it => !state.checklist.done[it] && !headingFor(it));
+    if (!miss.length) return go();
+    const close = () => wrap.remove();
+    const wrap = h('div', { class: 'modal', onclick: e => { if (e.target === wrap) close(); }, onkeydown: e => { if (e.key === 'Escape') close(); } },
+      h('div', { class: 'modal-card narrow' },
+        h('div', { class: 'modal-head' }, h('h3', { text: `${miss.length} requirement${miss.length > 1 ? 's have' : ' has'} no section` })),
+        h('p', { text: 'These inject requirements are not ticked and no section heading matches them:' }),
+        h('ul', {}, miss.map(it => h('li', { text: it }))),
+        h('p', { class: 'muted small', text: 'Add a section for each one, or tick it in Inject requirements if the memo already covers it.' }),
+        h('div', { class: 'modal-actions' },
+          h('button', { class: 'ghost', text: 'Cancel', onclick: close }),
+          h('button', { class: 'danger', text: 'Export anyway', onclick: () => { close(); go(); } }))));
+    document.body.append(wrap);
+    wrap.querySelector('button').focus();
   }
 
   // ---------- type picker ----------
@@ -306,7 +361,6 @@
       class: (pickedType || state.typeId) === t.id ? 'active' : '',
       onclick: () => { pickedType = t.id; renderTypeGrid(); renderVariants(); },
     }, t.name, t.variants.some(v => EX[t.id + '/' + v.id]) ? h('em', { class: 'badge demo', text: 'Example Available' }) : null,
-      t.variants.some(v => v.new) ? h('em', { class: 'badge new', text: 'NEW' }) : null,
       h('small', { text: `${t.variants.length} draft${t.variants.length > 1 ? 's' : ''}` }))));
   }
   function renderVariants() {
@@ -327,8 +381,7 @@
     const exBox = h('div', { class: 'guide' });
     t.variants.forEach(v => panel.append(h('label', { class: 'variant' },
       h('input', { type: 'radio', name: 'variant', value: v.id, checked: v.id === chosen, onchange: () => { chosen = v.id; renderExample(t, v, exBox); } }),
-      h('div', {}, h('b', { text: v.name }, EX[t.id + '/' + v.id] ? h('em', { class: 'badge demo', text: 'Example Available' }) : null,
-        v.new ? h('em', { class: 'badge new', text: 'NEW' }) : null),
+      h('div', {}, h('b', { text: v.name }, ...exampleBadges(EX[t.id + '/' + v.id])),
         h('span', { text: [v.description, v.source && `From: ${v.source}`].filter(Boolean).join(' — ') })))));
     panel.append(exBox);
     renderExample(t, t.variants.find(v => v.id === chosen), exBox);
@@ -336,6 +389,10 @@
   }
 
   // ---------- examples (examples.js) ----------
+  // Review status of an example, shown on its variant only (the type just says "Example Available").
+  const EX_STATUS = { review: 'Needs Review', incomplete: 'Incomplete', outdated: 'Outdated' };
+  const exampleBadges = g => !g ? [] : [h('em', { class: 'badge demo', text: 'Example Available' }),
+    EX_STATUS[g.example.status] ? h('em', { class: `badge status-${g.example.status}`, text: EX_STATUS[g.example.status] }) : null];
   function renderExample(t, v, box) {
     box.innerHTML = '';
     const g = EX[t.id + '/' + v.id];
@@ -357,6 +414,7 @@
         h('h4', { text: sub(s.heading) }),
         e.text ? md(sub(e.text)) : null,
         e.rows ? tbl(exCols(s, e), e.rows) : null,
+        e.screenshots ? h('div', { class: 'shots' }, h('b', { text: 'Screenshots to include:' }), h('ul', {}, e.screenshots.map(c => h('li', { text: sub(c) })))) : null,
         e.why ? h('p', { class: 'why' }, h('b', { text: 'Why: ' }), e.why) : null); }));
     const close = () => wrap.remove();
     const start = useButton(() => {
@@ -369,6 +427,7 @@
         if (e.text) s.text = e.text;
         if (e.rows) s.table = { columns: clone(exCols(s, e)), rows: clone(e.rows) };
         if (e.on) s.on = true;
+        if (e.screenshots) Object.assign(s.perHost || s, { captions: e.screenshots.slice(), expect: e.screenshots.length });
       });
       close();
     }, 'Start from this example');
@@ -485,6 +544,8 @@
       h('input', { type: 'checkbox', checked: s.on, title: 'Include this section', onchange: e => { s.on = e.target.checked; card.classList.toggle('off', !s.on); changed(); } }),
       h('input', { type: 'text', value: s.heading, placeholder: '(no heading)', oninput: e => { s.heading = e.target.value; s.edited = true; changed(); } }),
       lvl,
+      h('label', { class: 'apptoggle', title: 'Print this section after the sign-off' },
+        h('input', { type: 'checkbox', checked: s.appendix, onchange: e => { s.appendix = e.target.checked; s.edited = true; changed(); } }), 'Appendix'),
       h('button', { class: 'tiny', text: '↑', title: 'Move up', onclick: () => move(-1) }),
       h('button', { class: 'tiny', text: '↓', title: 'Move down', onclick: () => move(1) }),
       def ? h('button', { class: 'tiny', text: 'Reset', title: 'Restore the draft text for this section', onclick: () => { const fresh = makeSection(def); fresh.uid = s.uid; fresh.evidence = s.evidence; if (fresh.perHost && s.perHost) fresh.perHost.evidence = s.perHost.evidence; state.sections[i] = fresh; renderSectionCards(); } }) : null,
@@ -646,7 +707,7 @@
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (varDefs().map(d => d.key).join('|') !== varKeys) renderVars();
-      renderPreview(); save();
+      renderPreview(); renderChecklist(); save();
     }, 150);
   }
   function flash(msg) {
@@ -782,15 +843,16 @@
     ];
     if (m.summaryLabel) children.push(heading(m.summaryLabel, 1));
     children.push(...mdParas(parseBlocks(subst(state.summary, vals))));
-    for (const b of docModel()) {
-      if (b.t === 'h') children.push(heading(b.text, b.level));
-      else if (b.t === 'md') children.push(...mdParas(b.blocks));
-      else if (b.t === 'table') children.push(...tableEl(b));
-      else if (b.t === 'fig') children.push(...figure(b));
-    }
+    const model = docModel();
+    const slot = b => [new D.Paragraph({ keepNext: true, spacing: { before: 120, after: 1440 }, children: [
+      ...runs(`Figure ${b.n}: `, { italics: true }), new D.TextRun({ text: '________', italics: true, highlight: 'yellow' })] })];
+    const blockEls = b => b.t === 'h' ? [heading(b.text, b.level)] : b.t === 'md' ? mdParas(b.blocks) : b.t === 'table' ? tableEl(b) : b.t === 'slot' ? slot(b) : figure(b);
+    children.push(...model.filter(b => !b.app).flatMap(blockEls));
     children.push(para(subst(m.closing, vals), { spacing: { before: 240, after: 200 } }),
       new D.Paragraph({ children: [new D.TextRun(m.signoff)] }),
       ...subst(m.signature, vals).split('\n').map(line => new D.Paragraph({ children: runs(line) })));
+    const app = model.filter(b => b.app);
+    if (app.length) children.push(new D.Paragraph({ children: [new D.PageBreak()] }), ...app.flatMap(blockEls));
     const doc = new D.Document({
       creator: subst(m.from, vals), title: subst(m.subject, vals),
       styles: { default: { document: { run: { font: 'Aptos', size: 24 } } } },
@@ -817,14 +879,14 @@
       renderHosts(); hostsChanged();
     };
     $('#btnAddSection').onclick = () => { state.sections.push(makeSection({ heading: 'New section', text: '' })); renderSectionCards(); };
-    $$('[data-snippet]').forEach(b => b.onclick = () => { state.sections.push(makeSection(SNIPPETS[b.dataset.snippet])); renderSectionCards(); flash('Added at the end — edit the highlighted placeholder.'); });
-    $('#btnExport').onclick = exportDocx;
+    $$('[data-snippet]').forEach(b => b.onclick = () => { state.sections.push(makeSection(SNIPPETS[b.dataset.snippet])); renderSectionCards(); flash(b.dataset.snippet === 'appendix' ? 'Appendix added at the end: it prints after the sign-off.' : 'Added at the end — edit the highlighted placeholder.'); });
+    $('#btnExport').onclick = () => checkRequirements(exportDocx);
     const menu = $('#exportMenu'), menuBtn = $('#btnExportMenu');
     const showMenu = on => { menu.hidden = !on; menuBtn.setAttribute('aria-expanded', on); };
     menuBtn.onclick = e => { e.stopPropagation(); showMenu(menu.hidden); };
     document.addEventListener('click', () => showMenu(false));
     document.addEventListener('keydown', e => { if (e.key === 'Escape') showMenu(false); });
-    $('#btnExportPdf').onclick = () => { showMenu(false); exportPdf(); };
+    $('#btnExportPdf').onclick = () => { showMenu(false); checkRequirements(exportPdf); };
     $('#btnSave').onclick = () => { window.KudosMerge.record(state); save(); download(new Blob([JSON.stringify(state)], { type: 'application/json' }), fileName('json', true)); };
     $('#btnLoad').onclick = () => {
       if (!state.typeId && !hasWork() && !state.summary.trim() && !state.sections.some(s => s.text.trim())) return $('#fileLoad').click();
