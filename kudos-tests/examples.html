@@ -85,7 +85,9 @@ async function run() {
       const c = d.createElement('canvas'); c.width = 40; c.height = 30;
       const blob = await new Promise(r => c.toBlob(r, 'image/png'));
       const dt = new w.DataTransfer(); dt.items.add(new w.File([blob], 'shot.png', { type: 'image/png' }));
-      input.files = dt.files; input.dispatchEvent(new w.Event('change')); await wait(800);
+      input.files = dt.files; input.dispatchEvent(new w.Event('change'));
+      for (let i = 0; i < 50 && !$('#preview figure'); i++) await wait(100); // image loads async, then the preview re-renders
+      await wait(300);
       check(`${key}: a real screenshot fills a placeholder`, slots().length === want - 1 && $('#preview figure figcaption').textContent.startsWith('Figure 1.'), [slots().length, $('#preview figure') && $('#preview figure').textContent]);
       check(`${key}: placeholders keep numbering after the real figure`, /Figure 2:/.test(slots()[0].textContent), slots()[0] && slots()[0].textContent);
     }
