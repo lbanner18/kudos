@@ -62,7 +62,7 @@
   function defaultState() {
     return {
       meta: {
-        team: '07', injectNo: '', to: '', from: 'Team {{team}}', date: today(), subject: '', company: '',
+        team: '', injectNo: '', to: '', from: 'Team {{team}}', date: today(), subject: '', company: '',
         summaryLabel: 'Summary:', closing: CLOSING, signoff: 'With Regards,', signature: 'Team {{team}}',
       },
       hosts: [],
@@ -134,6 +134,7 @@
     if (v.to && !state.meta.to) state.meta.to = v.to;
     state.summary = v.summary || '';
     state.sections = (v.sections || []).map(makeSection);
+    if (v.checklist && !state.checklist.text.trim()) state.checklist.text = v.checklist.map(l => '- ' + l).join('\n'); // the prompt's asks
   }
   function hasWork() {
     return state.sections.some(s => s.evidence.length || (s.perHost && Object.values(s.perHost.evidence).some(a => a.length)))
@@ -331,16 +332,26 @@
     return '';
   }
   // Unticked requirements with no matching heading: confirm before exporting.
-  function checkRequirements(go) {
+  // Also: unfilled {{placeholders}}/[[prompts]] (they print as written), and From/signature naming different teams.
+  function exportIssues() {
+    const out = [], vals = values(), all = allText();
     const miss = checkItems().filter(it => !state.checklist.done[it] && !headingFor(it));
-    if (!miss.length) return go();
+    if (miss.length) out.push([`${miss.length} requirement${miss.length > 1 ? 's have' : ' has'} no section (add one, or tick it in Inject requirements if the memo covers it):`, miss]);
+    const left = [...new Set([...Array.from(all.matchAll(PH_RE), x => x[0]), ...(all.match(PROMPT_RE) || [])])];
+    if (left.length) out.push([`${left.length} unfilled placeholder${left.length > 1 ? 's' : ''} will print as written:`, left.slice(0, 8).concat(left.length > 8 ? ['…'] : [])]);
+    const teamNo = t => (/team\s*0*(\d+)/i.exec(subst(t, vals)) || [])[1];
+    const a = teamNo(state.meta.from), b = teamNo(state.meta.signature);
+    if (a && b && a !== b) out.push(['From and the signature name different teams:', [subst(state.meta.from, vals), subst(state.meta.signature, vals)]]);
+    return out;
+  }
+  function checkRequirements(go) {
+    const issues = exportIssues();
+    if (!issues.length) return go();
     const close = () => wrap.remove();
     const wrap = h('div', { class: 'modal', onclick: e => { if (e.target === wrap) close(); }, onkeydown: e => { if (e.key === 'Escape') close(); } },
       h('div', { class: 'modal-card narrow' },
-        h('div', { class: 'modal-head' }, h('h3', { text: `${miss.length} requirement${miss.length > 1 ? 's have' : ' has'} no section` })),
-        h('p', { text: 'These inject requirements are not ticked and no section heading matches them:' }),
-        h('ul', {}, miss.map(it => h('li', { text: it }))),
-        h('p', { class: 'muted small', text: 'Add a section for each one, or tick it in Inject requirements if the memo already covers it.' }),
+        h('div', { class: 'modal-head' }, h('h3', { text: 'Check before exporting' })),
+        issues.map(([msg, items]) => [h('p', { text: msg }), h('ul', {}, items.map(it => h('li', { text: it })))]).flat(),
         h('div', { class: 'modal-actions' },
           h('button', { class: 'ghost', text: 'Cancel', onclick: close }),
           h('button', { class: 'danger', text: 'Export anyway', onclick: () => { close(); go(); } }))));
@@ -449,7 +460,7 @@
       }
       apply();
       pickedType = '';
-      syncInputs(); renderVars(); renderSectionCards(); renderTypeGrid(); renderVariants(); changed();
+      syncInputs(); renderChecklist(); renderVars(); renderSectionCards(); renderTypeGrid(); renderVariants(); changed();
       $('#summaryText').scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
     if (state.typeId) wrap.append(h('span', { class: 'subtle', text: 'Replaces the summary and sections below. Header, hosts and checklist are kept.' }));

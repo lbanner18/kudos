@@ -85,13 +85,13 @@ window.INJECT_TYPES.push({
           "perHost": {
             "filter": "all",
             "label": "{{host}}:",
-            "text": "- [[Item]]\n- [[Item]]\n- [[Item]]\n- [[Item]]"
+            "text": "- Permits inbound [[protocol / port, from where]]\n- Allows return traffic for [[...]]\n- Allows outbound [[queries this server makes]] and the expected return\n- Denies and logs [[everything else]]"
           }
         },
         {
           "id": "linux",
           "heading": "Example Linux Server: {{linux_example}}",
-          "text": "[[Describe what was done and what the evidence below shows]]",
+          "text": "[[Name the product or OS feature that implements the firewall, and what the screenshot shows]]",
           "evidence": [
             "Firewall rules on {{linux_example}}"
           ]
@@ -99,11 +99,19 @@ window.INJECT_TYPES.push({
         {
           "id": "windows",
           "heading": "Example Windows Server: {{windows_example}}",
-          "text": "[[Describe what was done and what the evidence below shows]]",
+          "text": "[[Name the product or OS feature that implements the firewall, and what the screenshot shows]]",
           "evidence": [
             "Firewall rules on {{windows_example}}"
           ]
         }
+      ],
+      "description": "SVRA05A Configure Server-based Firewalls (MWCCDC Invitational #1 2026): a policy description for every server (inbound, return traffic, outbound and its return), plus screenshots of one Windows and one Linux server showing the rules and the product or OS feature used.",
+      "checklist": [
+        "Security policy description for each server",
+        "Inbound, return, and outbound traffic covered",
+        "Both Linux and Windows servers",
+        "Screenshot of one Windows server: rules and firewall product/feature",
+        "Screenshot of one Linux server: rules and firewall product/feature"
       ]
     }
   ]

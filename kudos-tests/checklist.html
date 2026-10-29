@@ -33,6 +33,7 @@ async function run() {
   $$('#typeGrid button').find(b => b.firstChild.textContent === 'Login banner').click();
   $('#variantPanel input[value="banner"]').click();
   $('#variantPanel .variant-actions button.primary').click(); await settle();
+  check('variant fills empty requirements with its prompt asks', /Key concepts of a login banner/.test($('#checkText').value) && $$('#checkList li').length === 5, $('#checkText').value);
   type($('#checkText'), [
     '- Identify the key elements of a login banner',
     '- Install the banner on every Linux device',
@@ -58,7 +59,16 @@ async function run() {
   type(cards[cards.length - 1].querySelector('.sechead input[type=text]'), 'Disaster Recovery Cost Estimate'); await settle();
   check('a matching section clears the flag', !flagged().length, flagged());
   await exportNow();
-  check('no warning once every line has a heading', !$('.modal') && downloads.length === 1, [!!$('.modal'), downloads.length]);
+  // the template's own [[prompts]] are still unfilled, so the export check still opens, but without a requirement line
+  const m2 = $('.modal');
+  check('no requirement warning once every line has a heading', m2 && !/no section/.test(m2.textContent) && /unfilled placeholder/.test(m2.textContent), m2 && m2.textContent);
+  if (m2) { $$('.modal button').find(b => b.textContent === 'Export anyway').click(); await wait(1500); }
+  check('Export anyway after the unfilled warning exports', downloads.length === 1, downloads.length);
+  // From typed by hand with one team, signature from {{team}} with another
+  type($('[data-meta="team"]'), '07'); type($('[data-meta="from"]'), 'Team 02'); await settle();
+  await exportNow();
+  const m3 = $('.modal');
+  check('warns when From and signature name different teams', m3 && /different teams/.test(m3.textContent) && /Team 02/.test(m3.textContent) && /Team 07/.test(m3.textContent) && !downloads.length, m3 && m3.textContent);
   check('no page errors', !errors.length, errors);
 }
 

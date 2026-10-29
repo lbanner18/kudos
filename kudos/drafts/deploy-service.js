@@ -616,6 +616,15 @@ window.INJECT_TYPES.push({
             "File uploaded to {{server}} over TFTP"
           ]
         }
+      ],
+      "description": "SOFT04T Install a TFTP Server (MWCCDC Invitational #1 2026; Software Installation scored 100). Internal network only. Fill in the TFTP directory above: the Invitational memo printed the placeholder for it inside a pasted command.",
+      "checklist": [
+        "Which server was selected and why",
+        "What software was added for TFTP",
+        "Firewall and other security policy changes (protocols and port numbers)",
+        "Security profile of the TFTP directory",
+        "Protections against the server being overrun with files",
+        "Evidence of the TFTP service working"
       ]
     }
   ]

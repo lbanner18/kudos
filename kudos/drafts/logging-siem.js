@@ -343,6 +343,118 @@ window.INJECT_TYPES.push({
       ]
     },
     {
+      "id": "denied-packets",
+      "name": "Log denied firewall packets + analyze the last 30 minutes",
+      "description": "SOCS03A Logging Denied FW Packets (MWCCDC Invitational #1 2026): the firewall settings that log denied packets, an extract of the last 30 minutes uploaded as TXT or RTF with the memo, and an analysis of whether it shows reconnaissance or intrusion attempts. The Invitational answer had no extract and no analysis. Practice the log export before the competition.",
+      "subject": "Logging Denied Firewall Packets",
+      "to": "IT Support",
+      "vars": [
+        {
+          "key": "fw",
+          "label": "Firewall",
+          "default": "Palo Alto"
+        },
+        {
+          "key": "window",
+          "label": "Log window (from–to)"
+        },
+        {
+          "key": "extract_file",
+          "label": "Log extract file"
+        }
+      ],
+      "summary": "[[One or two sentences: what was requested and what this memo provides]]",
+      "sections": [
+        {
+          "id": "config",
+          "heading": "Configuration That Logs Denied Packets",
+          "text": "[[Which rules deny traffic, which setting makes each one log, and where the logs go]]",
+          "table": {
+            "columns": [
+              "Rule",
+              "Action",
+              "Logging Setting",
+              "Log Destination"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          },
+          "evidence": [
+            "Deny rule with logging enabled on the {{fw}}"
+          ]
+        },
+        {
+          "id": "extract",
+          "heading": "Log Extract: {{window}}",
+          "text": "[[How the extract was exported, its format, and how many entries it holds. It is attached as {{extract_file}}]]\n\n```\n[[Paste a few representative lines]]\n```"
+        },
+        {
+          "id": "analysis",
+          "heading": "Analysis of the Last 30 Minutes",
+          "text": "[[Group the entries into patterns]]",
+          "table": {
+            "columns": [
+              "Source",
+              "Destination",
+              "Port / Application",
+              "Count",
+              "Pattern",
+              "Reconnaissance, Intrusion Attempt, or Neither"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
+        },
+        {
+          "id": "conclusion",
+          "heading": "Conclusion",
+          "text": "[[Overall: what the 30 minutes show, and what we will do about it]]"
+        }
+      ],
+      "checklist": [
+        "Firewall configuration elements that cause denied packets to be logged",
+        "Extract of the most recent 30 minutes of denied-packet logs",
+        "Log extract uploaded as TXT or RTF",
+        "Analysis of the last 30 minutes: reconnaissance or intrusion attempt activity"
+      ]
+    },
+    {
       "id": "regex",
       "name": "Explain a firewall-log regex",
       "subject": "Regex Patterns Explanation",

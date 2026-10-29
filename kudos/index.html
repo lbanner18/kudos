@@ -21,7 +21,7 @@
       <button id="btnExport" class="primary">Export .docx</button>
       <button id="btnExportMenu" class="primary" title="More export formats" aria-haspopup="menu" aria-expanded="false">▾</button>
       <div class="menu" id="exportMenu" role="menu" hidden>
-        <button id="btnExportPdf" role="menuitem">Export PDF<small>Opens the print dialog: choose "Save as PDF"</small></button>
+        <button id="btnExportPdf" role="menuitem">Export PDF<small>Opens the print dialog: choose "Save as PDF" and untick "Headers and footers"</small></button>
       </div>
     </div>
     <input type="file" id="fileLoad" accept=".json,application/json" hidden>
@@ -44,7 +44,7 @@
     <details class="card" id="cardMeta" open>
       <summary><h2>Memo header</h2><span class="muted">To / From / Date / Subject / sign-off</span></summary>
       <div class="grid2">
-        <label>Team number<input data-meta="team" placeholder="07"></label>
+        <label>Team number<input data-meta="team" placeholder="changes each event"></label>
         <label>Inject number<input data-meta="injectNo" placeholder="12"></label>
         <label>To<input data-meta="to" placeholder="CISO"></label>
         <label>From<input data-meta="from"></label>

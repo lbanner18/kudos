@@ -473,27 +473,62 @@ window.INJECT_TYPES.push({
           ]
         },
         {
+          "id": "required",
+          "heading": "Required Traffic Flows",
+          "text": "[[Which services must stay reachable, inbound and outbound (egress), for each host. Check against the scored services]]",
+          "table": {
+            "columns": [
+              "Host",
+              "Service",
+              "Application",
+              "Direction",
+              "Source",
+              "Destination"
+            ],
+            "hostRows": {
+              "filter": "all",
+              "cells": [
+                "{{host}}",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            },
+            "rows": []
+          }
+        },
+        {
           "id": "changes-fw1",
           "heading": "{{fw1}}: Changes Made",
           "text": "[[Describe what was done and what the evidence below shows]]",
           "table": {
             "columns": [
               "Rule",
-              "Change",
+              "Application(s)",
+              "Source → Destination",
+              "Action",
               "Reason"
             ],
             "rows": [
               [
                 "",
                 "",
-                ""
-              ],
-              [
                 "",
                 "",
                 ""
               ],
               [
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
                 "",
                 "",
                 ""
@@ -501,10 +536,87 @@ window.INJECT_TYPES.push({
             ]
           },
           "evidence": [
-            "{{fw1}} security policy after changes",
-            "Packet inspection enabled on {{fw1}} rules",
-            "Denied packets logged on {{fw1}}"
+            "{{fw1}} security policy after changes"
           ]
+        },
+        {
+          "id": "inspect",
+          "heading": "Packet Inspection (IPS and Scanning)",
+          "text": "[[Which inspection and scanning profiles are enabled, and which allow rules they are attached to]]",
+          "table": {
+            "columns": [
+              "Profile",
+              "What It Inspects",
+              "Attached to Rules",
+              "Action on Detection"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          },
+          "evidence": [
+            "Packet inspection profiles on {{fw1}}",
+            "Profiles attached to the allow rules"
+          ]
+        },
+        {
+          "id": "deny-log",
+          "heading": "Logging Denied Packets",
+          "text": "[[Which rule denies everything not allowed, and the setting that logs it]]",
+          "evidence": [
+            "Deny rule with logging on {{fw1}}",
+            "Denied packets in the {{fw1}} traffic log"
+          ]
+        },
+        {
+          "id": "verify",
+          "heading": "Verification: Required Services Still Work",
+          "text": "[[How each required flow was checked after the change (scan from outside, service check, scoring page)]]",
+          "table": {
+            "columns": [
+              "Host",
+              "Service",
+              "Reachable After Change?",
+              "How Checked"
+            ],
+            "rows": [
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ],
+              [
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          }
         },
         {
           "id": "found-fw2",
@@ -544,7 +656,8 @@ window.INJECT_TYPES.push({
           },
           "evidence": [
             "{{fw2}} security policy as found"
-          ]
+          ],
+          "on": false
         },
         {
           "id": "changes-fw2",
@@ -578,8 +691,18 @@ window.INJECT_TYPES.push({
             "{{fw2}} security policy after changes",
             "Packet inspection enabled on {{fw2}} rules",
             "Denied packets logged on {{fw2}}"
-          ]
+          ],
+          "on": false
         }
+      ],
+      "description": "TOOL23T Firewall Setup & Configuration (MWCCDC Invitational #1 2026): policy as found, the traffic the business needs, application-layer rules, packet inspection, and logging of denied packets. The firewall evaluation there marked the result over-restrictive: HTTPS, webmail, Splunk, AD/DNS and MSSQL stopped working. Fill in Required Traffic Flows first and check each one still works afterward. Tick the Firewall 2 sections only if there is a second firewall.",
+      "checklist": [
+        "Security policies as initially configured (as found)",
+        "Changes made so only needed and expected packets are allowed",
+        "Policies written at the application layer",
+        "Packet inspection (IPS and scanning) enabled",
+        "All denied packets logged",
+        "Screenshots of the configuration changes and packet inspection"
       ]
     },
     {

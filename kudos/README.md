@@ -8,15 +8,15 @@ Pick the type and a variant, and the page lays out a **template**: the sections,
 
 ## Using it
 
-1. **requirements (private):** paste the deliverables from the request, one per line, and tick them off. This box is never exported. Each unticked line shows the section heading it matches (by shared keywords), or **no heading** if none does. Exporting with a **no heading** line left asks first, so every requirement gets its own section before the doc leaves Kudos. Tick a line when it is covered some other way (e.g. screenshots).
-2. **Memo header:** team number, number, To, subject, and sign-off. The exported file is named `NN_teamXX.docx`.
+1. **requirements (private):** paste the deliverables from the request, one per line, and tick them off. This box is never exported. Each unticked line shows the section heading it matches (by shared keywords), or **no heading** if none does. Exporting with a **no heading** line left asks first, so every requirement gets its own section before the doc leaves Kudos. Tick a line when it is covered some other way (e.g. screenshots). Variants built from a known prompt (search the picker for its inject ID, e.g. `TOOL19T`) fill this box with that prompt's asks when it is empty.
+2. **Memo header:** team number (it changes every event, so it starts blank), number, To, subject, and sign-off. The exported file is named `NN_teamXX.docx`.
 3. **writing type:** pick the type, then the variant closest to the request, then **Use this draft**. Search works on type and variant names. **Blank memo** starts with just the header and summary.
 4. **Environment hosts:** enter the competition's hosts once, or load the sample 8-host topology. Per-host sections ("Ubuntu Ecom:" + screenshot) and table rows are built from this list, and it's kept between them.
 5. **Draft details:** every `{{placeholder}}` in it gets a box here, so you never have to hunt through the text for blanks. Anything still unfilled is highlighted in the preview and in the Word file, and is counted next to "Autosaved".
 6. **Sections:** untick sections you don't need, edit the text and headings, reorder them, and use **Reset** to get the draft text back. Tables are editable grids, and **Fill rows from hosts** rebuilds the rows from your host list.
 7. **Evidence:** click a dashed box and paste a screenshot (Ctrl/⌘+V), drop images onto it, or add pasted command output as text. Click a *caption idea* to caption the first figure that doesn't have one yet.
 8. **Insert:** quick buttons for phrases we use often: the "unable to finish" note, a bold **Please note** callout, the AI-use disclosure, a Sources section, and an **Appendix**. An appendix section prints after the sign-off (on a new page in the `.docx` and PDF), with figure numbers continuing from the memo. Tick **Appendix** on any section card to move it there.
-9. **Export .docx**, or click **▾** next to it for **Export PDF**. The PDF is printed from the preview: pick **Save as PDF** as the printer in the print dialog. The file name is filled in for you.
+9. **Export .docx**, or click **▾** next to it for **Export PDF**. The PDF is printed from the preview: pick **Save as PDF** as the printer in the print dialog and untick **Headers and footers** (otherwise the page date and `file:///…` path print on every page). The file name is filled in for you. Before either export, Kudos also lists any `{{placeholder}}` or `[[prompt]]` still unfilled (they would print as written) and warns if From and the signature name different teams.
 
 Drafts autosave in your browser. **Save draft** / **Load draft** passes one (screenshots included) to a teammate as a `.json` file. **Load draft** replaces the whole page, so if you've started a draft it asks first and offers **Merge drafts** instead. **New** keeps the team settings and hosts and clears everything else, and needs two clicks.
 
@@ -92,6 +92,6 @@ index.html        page + list of draft <script> tags
 app.js            form, drafts, hosts, tables, evidence, preview, .docx export
 merge.js          Merge drafts: fold teammates' saved drafts into this one
 styles.css
-drafts/*.js       one template file per type (23 types, 125 variants)
+drafts/*.js       one template file per type (23 types, 132 variants)
 lib/docx.umd.js   docx 8.5.0 (MIT), included locally so the page works offline
 ```

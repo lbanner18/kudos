@@ -46,6 +46,7 @@ async function run() {
   body.click(); await settle();
   check('unticked section moves back', order('MAIN BODY TEXT', signoff), text());
   downloads = []; $('#btnExport').click(); await wait(1500);
+  const m = $('.modal'); if (m) { $$('.modal button').find(b => b.textContent === 'Export anyway').click(); await wait(1500); } // unfilled {{team}}
   check('docx export with an appendix', downloads.length === 1 && downloads[0].size > 5000, downloads.map(b => b.size));
   // survives a reload (autosave)
   await boot(); await settle();

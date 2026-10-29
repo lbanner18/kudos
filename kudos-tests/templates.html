@@ -28,7 +28,12 @@ const settle = () => wait(300);
 const prompts = () => +(($('#saveStatus').textContent.match(/(\d+) unfilled prompt/) || [])[1] || 0);
 // Heading text with {{placeholders}} cut out: every remaining fragment must show up in the preview
 const fragments = (text, vars) => text.replace(/\{\{(\w+)\}\}/g, (m, k) => (vars.find(x => x.key === k) || {}).default || '\u0000').split('\u0000').map(s => s.trim()).filter(Boolean);
-async function exportDocx() { downloads = []; $('#btnExport').click(); await wait(1500); return downloads.length === 1 ? downloads[0].size : 0; }
+// Templates still have [[prompts]], so the pre-export check opens: export anyway
+async function exportDocx() {
+  downloads = []; $('#btnExport').click(); await wait(1500);
+  const go = $$('.modal button').find(b => b.textContent === 'Export anyway'); if (go) { go.click(); await wait(1500); }
+  return downloads.length === 1 ? downloads[0].size : 0;
+}
 
 async function run() {
   localStorage.clear(); await boot();
@@ -50,7 +55,8 @@ async function run() {
     const missing = v.sections.filter(s => s.on !== false).flatMap(s => fragments(s.heading, v.vars)).filter(f => !preview().includes(f));
     check(`${key}: headings render`, !missing.length, missing);
     v.sections.forEach((s, i) => {
-      if (s.perHost) check(`${key}: per-host blocks in "${s.heading || s.id}"`, cards()[i].querySelectorAll('details.hostblock').length > 0);
+      // the sample hosts are all Linux or Windows, so a network-device ("other") section starts empty
+      if (s.perHost && s.perHost.filter !== 'other') check(`${key}: per-host blocks in "${s.heading || s.id}"`, cards()[i].querySelectorAll('details.hostblock').length > 0);
       if (s.table) check(`${key}: table in "${s.heading || s.id}"`, cards()[i].querySelector('table.grid'), s.id);
     });
     const n = prompts();

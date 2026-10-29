@@ -51,6 +51,7 @@ async function run() {
   click($('#btnSampleHosts')); await settle();
   click($$('#typeGrid button').find(b => b.textContent.startsWith('Host firewalls')));
   click($('#variantPanel .variant-actions button.primary')); await settle();
+  type($('[data-meta="team"]'), '07');
   type($('[data-meta="injectNo"]'), '12');
   click($('#btnAddSection')); await settle();
   type(cards()[3].querySelector('.sechead input[type=text]'), 'Extra'); await settle();

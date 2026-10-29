@@ -335,12 +335,40 @@ window.INJECT_TYPES.push({
         },
         {
           "id": "us",
-          "heading": "How We Have Used AI",
+          "heading": "How We Currently Use AI",
           "text": "[[Describe what was done and what the evidence below shows]]",
           "evidence": [
             "Troubleshooting a service conflict with AI",
             "Monitoring script created with a free AI tool"
           ]
+        },
+        {
+          "id": "opps",
+          "heading": "Opportunities",
+          "text": "[[Where more AI would help, within the limits of our environment]]"
+        },
+        {
+          "id": "staff",
+          "heading": "Reducing Team Size",
+          "level": 2,
+          "text": "[[Could AI reduce the number of team members needed? Be realistic]]"
+        },
+        {
+          "id": "productivity",
+          "heading": "Team Productivity",
+          "level": 2,
+          "text": "[[Write this section: Team Productivity]]"
+        },
+        {
+          "id": "analysis",
+          "heading": "Timely Analysis of Event Data and Machine State",
+          "level": 2,
+          "text": "[[Write this section: Timely Analysis of Event Data and Machine State]]"
+        },
+        {
+          "id": "limits",
+          "heading": "Limits and Risks",
+          "text": "[[Write this section: Limits and Risks]]"
         },
         {
           "id": "next",
@@ -353,6 +381,15 @@ window.INJECT_TYPES.push({
           "level": 2,
           "text": "- [[Item]]"
         }
+      ],
+      "description": "BC105 Role of AI in Cyber Defense (MWCCDC Invitational #1 2026; Business Communications scored 98): a management report for the Board packet. Current use, opportunities, and the three areas the board raised: fewer team members, productivity, and timely analysis of event data and machine state. Keep it practical for the competition environment.",
+      "checklist": [
+        "How the organization currently uses AI in cyber defense",
+        "Opportunities to leverage more AI",
+        "Reducing team size (number of team members needed)",
+        "Improving team member productivity",
+        "Analyzing event data or machine states in a timely manner",
+        "Limits and risks: practical within the competition environment"
       ]
     },
     {

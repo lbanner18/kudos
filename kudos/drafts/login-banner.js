@@ -56,7 +56,27 @@ window.INJECT_TYPES.push({
               "Login banner on {{host}}"
             ]
           }
+        },
+        {
+          "id": "network",
+          "heading": "Completion on Network Devices",
+          "text": "",
+          "perHost": {
+            "filter": "other",
+            "label": "{{host}}:",
+            "evidence": [
+              "Login banner on {{host}}"
+            ]
+          }
         }
+      ],
+      "description": "LEGP11T Identify Key Concepts in a Login Banner (MWCCDC Invitational #1 2026; also Regionals 2026): enumerate the key concepts that aid prosecution, the banner text, and a screenshot on every server and network device. Add firewalls and routers as hosts so they get a slot.",
+      "checklist": [
+        "Key concepts of a login banner that aid prosecution (enumerated)",
+        "Text of the login banner",
+        "Banner installed on every server",
+        "Banner installed on every network device",
+        "Screenshot of the banner on each server and network device"
       ]
     }
   ]
