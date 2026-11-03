@@ -10,13 +10,35 @@ Pick the type and a variant, and the page lays out a **template**: the sections,
 
 1. **requirements (private):** paste the deliverables from the request, one per line, and tick them off. This box is never exported. Each unticked line shows the section heading it matches (by shared keywords), or **no heading** if none does. Exporting with a **no heading** line left asks first, so every requirement gets its own section before the doc leaves Kudos. Tick a line when it is covered some other way (e.g. screenshots). Variants built from a known prompt (search the picker for its inject ID, e.g. `TOOL19T`) fill this box with that prompt's asks when it is empty.
 2. **Memo header:** team number (it changes every event, so it starts blank), number, To, subject, and sign-off. The exported file is named `NN_teamXX.docx`.
-3. **writing type:** pick the type, then the variant closest to the request, then **Use this draft**. Search works on type and variant names. **Blank memo** starts with just the header and summary.
+3. **writing type:** pick the type, then the variant closest to the request, then **Use this draft**. Search works on type and variant names, inject IDs and event names. Templates built from a past event's injects are also grouped in a box at the top of the picker (e.g. **MWCCDC Invitational #1**), one card per inject in inject order, and carry a blue event badge on their type and variant. **Blank memo** starts with just the header and summary.
 4. **Environment hosts:** enter the competition's hosts once, or load the sample 8-host topology. Per-host sections ("Ubuntu Ecom:" + screenshot) and table rows are built from this list, and it's kept between them.
 5. **Draft details:** every `{{placeholder}}` in it gets a box here, so you never have to hunt through the text for blanks. Anything still unfilled is highlighted in the preview and in the Word file, and is counted next to "Autosaved".
 6. **Sections:** untick sections you don't need, edit the text and headings, reorder them, and use **Reset** to get the draft text back. Tables are editable grids, and **Fill rows from hosts** rebuilds the rows from your host list.
 7. **Evidence:** click a dashed box and paste a screenshot (Ctrl/⌘+V), drop images onto it, or add pasted command output as text. Click a *caption idea* to caption the first figure that doesn't have one yet.
 8. **Insert:** quick buttons for phrases we use often: the "unable to finish" note, a bold **Please note** callout, the AI-use disclosure, a Sources section, and an **Appendix**. An appendix section prints after the sign-off (on a new page in the `.docx` and PDF), with figure numbers continuing from the memo. Tick **Appendix** on any section card to move it there.
-9. **Export .docx**, or click **▾** next to it for **Export PDF**. The PDF is printed from the preview: pick **Save as PDF** as the printer in the print dialog and untick **Headers and footers** (otherwise the page date and `file:///…` path print on every page). The file name is filled in for you. Before either export, Kudos also lists any `{{placeholder}}` or `[[prompt]]` still unfilled (they would print as written) and warns if From and the signature name different teams.
+9. **Export .docx**, or click **▾** next to it for **Export PDF**. The PDF is printed from the preview: pick **Save as PDF** as the printer in the print dialog and untick **Headers and footers** (otherwise the page date and `file:///…` path print on every page). The file name is filled in for you. Before either export, Kudos also lists any `{{placeholder}}` or `[[prompt]]` still unfilled (they would print as written) and warns if From and the signature name different teams. The `.docx` uses Calibri (Nextcloud Office shows it as Carlito, same letter widths; it has no Aptos) and real Word styles (Heading 1-3, Caption, Code), so text you add later picks up normal formatting. To keep working on it together, see **Finishing in Nextcloud** below.
+
+## Finishing in Nextcloud
+
+Upload the exported `.docx` to the shared folder and open it there (Nextcloud Office). Everyone can edit it at once; it saves by itself, and Ctrl+S saves right away.
+
+**Adding a screenshot.** Nextcloud pastes images *floating*: the text moves around them and they drift. Every screenshot needs these steps:
+
+1. Put the cursor on an empty line of its own. A **[[Paste screenshot…]]** line from the export is one: select the whole line and paste over it. To add a screenshot between two paragraphs, click at the very end of the first one and press **Enter**.
+2. Paste (Ctrl+V) or use **Insert → Image**.
+3. Right-click the image → **Anchor → As Character**. It now sits in the text like a big letter and moves with it.
+4. If any text ended up on the same line as the image, click just after the image and press **Enter**. The caption goes on the next line: **Figure N.** and what it shows.
+
+Doing step 3 while the image shares a line with text makes that line as tall as the image, with the text along its bottom edge. Split the line first (step 4), then anchor.
+
+**Fixing an image that's already in the wrong place.** Click just before it, press **Enter**; click just after it, press **Enter**; then right-click → **Anchor → As Character** again.
+
+**Cleaning up spacing.**
+- Turn on **View → Formatting Marks** to see empty lines (¶) and delete the extra ones.
+- A line that looks too big, bold or spaced out copied its formatting from the line above. Select it and pick **Default Paragraph Style** (or **Normal**) in the style box on the Home tab, or press **Ctrl+M** to clear its formatting.
+- Headings: pick **Heading 1** in the style box rather than making text bold and big by hand.
+
+**Before submitting:** search (Ctrl+H) for `[[`, `{{` and `____` to catch anything left unfilled, then download it (**File → Download as**) as `.docx` or PDF.
 
 Drafts autosave in your browser. **Save draft** / **Load draft** passes one (screenshots included) to a teammate as a `.json` file. **Load draft** replaces the whole page, so if you've started a draft it asks first and offers **Merge drafts** instead. **New** keeps the team settings and hosts and clears everything else, and needs two clicks.
 
@@ -59,6 +81,8 @@ window.INJECT_TYPES.push({
     id: 'variant-id',
     name: 'Variant name',
     description: 'What this variant covers.',
+    event: 'MWCCDC Invitational #1',      // optional: built from that event's inject
+    inject: '05 SOCS09A',                 // optional: inject number + ID, sorts the event's cards
     subject: 'Default subject line',
     to: 'CISO',                           // only used if To is empty
     vars: [{ key: 'siem', label: 'SIEM', default: 'Splunk' }],

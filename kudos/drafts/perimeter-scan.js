@@ -142,6 +142,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "nmap-config",
+      "event": "MWCCDC Invitational #1",
+      "inject": "07 TOOL19T",
       "name": "Nmap configuration for the external perimeter (explain each option)",
       "description": "TOOL19T Develop NMAP Configuration (MWCCDC Invitational #1 2026): a command line that quickly finds TCP and UDP services on the external perimeter, every option explained with why it is used, and proof that it works. Not a vulnerability scan. The Invitational answer scanned internal addresses, had no UDP command, and explained only some of the options.",
       "subject": "Nmap Configuration for the External Perimeter",
@@ -242,6 +244,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "external-eval",
+      "event": "MWCCDC Invitational #1",
+      "inject": "10 EVAL14A",
       "name": "External service evaluation (is each service needed?)",
       "description": "EVAL14A External Service Evaluation (MWCCDC Invitational #1 2026): scan the POD's external interface, name the tool, list the services and protocols an attacker could use, and decide whether each needs to be exposed. Risk Assessment scored 65 there: the scan ran against internal addresses and no service was judged needed or not. Scan from outside the firewall.",
       "subject": "External Service Evaluation",

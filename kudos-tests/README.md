@@ -30,6 +30,11 @@ Run it the same way; `?v=type/variant,...` checks only those.
 `appendix.html` adds a section and an appendix and checks the appendix prints after the sign-off, that ticking **Appendix**
 moves a section there and back, that it survives a reload, and that `.docx` export works.
 
+## Event section check
+
+`events.html` checks the past-event box at the top of the picker: one card per variant with an `event`, in inject order,
+clicking a card selects that variant (with the event badge on the type and variant), and search filters the box.
+
 ## Requirements check
 
 `checklist.html` enters inject requirements on the login banner draft and checks matched lines show their heading,

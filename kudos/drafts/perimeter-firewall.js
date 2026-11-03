@@ -415,6 +415,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "as-found",
+      "event": "MWCCDC Invitational #1",
+      "inject": "01 TOOL23T",
       "name": "Firewall policy as found vs. changes made",
       "subject": "Perimeter Firewall Setup and Configuration",
       "to": "Network Operations Management",

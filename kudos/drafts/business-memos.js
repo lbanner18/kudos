@@ -322,6 +322,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "ai",
+      "event": "MWCCDC Invitational #1",
+      "inject": "12 BC105",
       "name": "Role of AI in cyber defense",
       "subject": "Role of AI in Cyber Defense",
       "to": "IT Director",

@@ -536,6 +536,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "tftp",
+      "event": "MWCCDC Invitational #1",
+      "inject": "11 SOFT04T",
       "name": "Install a TFTP server",
       "subject": "TFTP Server on {{server}}",
       "to": "CISO",

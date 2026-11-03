@@ -63,6 +63,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "policy-summary",
+      "event": "MWCCDC Invitational #1",
+      "inject": "02 SVRA05A",
       "name": "Per-server firewall policy summary",
       "subject": "Server-Based Firewalls",
       "to": "CISO",

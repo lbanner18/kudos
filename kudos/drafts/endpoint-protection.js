@@ -75,6 +75,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "open-source",
+      "event": "MWCCDC Invitational #1",
+      "inject": "03 SRVA07A",
       "name": "Open-source anti-malware on Linux & Windows",
       "description": "SRVA07A Implement Anti-malware Tool on End Devices (MWCCDC Invitational #1 2026): an open-source tool on every Linux and Windows device (one per platform is fine), screenshots on one device per platform, and a list of every device. The prompt says open-source: fill in the license column to check that each tool you name is.",
       "subject": "Anti-Malware on End Devices",

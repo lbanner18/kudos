@@ -75,7 +75,8 @@
     };
   }
   let state = defaultState();
-  let pickedType = '';
+  let pickedType = '', pickedVariant = '';
+  const shortEvent = ev => ev.replace('Invitational', 'Inv');
 
   function hostsFor(filter, exclude) {
     return state.hosts.filter(hs => hs.name.trim()
@@ -364,14 +365,30 @@
     const q = $('#typeSearch').value.trim().toLowerCase();
     const grid = $('#typeGrid');
     grid.innerHTML = '';
-    const match = t => !q || [t.name, t.description, ...t.variants.map(v => v.name + ' ' + (v.description || ''))].join(' ').toLowerCase().includes(q);
+    const vText = v => [v.name, v.description, v.event, v.inject].filter(Boolean).join(' ').toLowerCase();
+    const match = t => !q || [t.name, t.description, ...t.variants.map(vText)].join(' ').toLowerCase().includes(q);
+    // Templates built from a past event's injects ("event"/"inject" on the variant), grouped at the top, in inject order.
+    const events = {};
+    TYPES.forEach(t => t.variants.forEach(v => { if (v.event && (!q || vText(v).includes(q) || t.name.toLowerCase().includes(q))) (events[v.event] = events[v.event] || []).push({ t, v }); }));
+    const evBox = $('#eventList');
+    evBox.innerHTML = '';
+    Object.keys(events).forEach(ev => {
+      const list = events[ev].sort((a, b) => (a.v.inject || '').localeCompare(b.v.inject || ''));
+      const d = h('details', { class: 'event', open: true }, h('summary', {}, ev, h('small', { text: ` ${list.length} inject${list.length > 1 ? 's' : ''}` })));
+      d.append(h('div', { class: 'types' }, ...list.map(({ t, v }) => h('button', {
+        class: (pickedType || state.typeId) === t.id && (pickedVariant || state.variantId) === v.id ? 'active' : '',
+        onclick: () => { pickedType = t.id; pickedVariant = v.id; renderTypeGrid(); renderVariants(); },
+      }, h('b', { text: v.inject || t.name }), h('small', { text: v.name })))));
+      evBox.append(d);
+    });
     const blank = h('button', { class: !state.typeId && pickedType === '__blank' ? 'active' : '', onclick: () => { pickedType = '__blank'; renderTypeGrid(); renderVariants(); } },
       'Blank memo', h('small', { text: 'Header, summary and your own sections' }));
     if (!q) grid.append(blank);
     TYPES.filter(match).forEach(t => grid.append(h('button', {
       class: (pickedType || state.typeId) === t.id ? 'active' : '',
-      onclick: () => { pickedType = t.id; renderTypeGrid(); renderVariants(); },
+      onclick: () => { pickedType = t.id; pickedVariant = ''; renderTypeGrid(); renderVariants(); },
     }, t.name, t.variants.some(v => EX[t.id + '/' + v.id]) ? h('em', { class: 'badge demo', text: 'Example Available' }) : null,
+      ...[...new Set(t.variants.map(v => v.event).filter(Boolean))].map(ev => h('em', { class: 'badge event', text: shortEvent(ev) })),
       h('small', { text: `${t.variants.length} draft${t.variants.length > 1 ? 's' : ''}` }))));
   }
   function renderVariants() {
@@ -388,11 +405,11 @@
     }
     const t = findType(tid);
     if (t.description) panel.append(h('p', { class: 'muted small', text: t.description }));
-    let chosen = state.typeId === t.id ? state.variantId : t.variants[0].id;
+    let chosen = t.variants.some(v => v.id === pickedVariant) ? pickedVariant : state.typeId === t.id ? state.variantId : t.variants[0].id;
     const exBox = h('div', { class: 'guide' });
     t.variants.forEach(v => panel.append(h('label', { class: 'variant' },
       h('input', { type: 'radio', name: 'variant', value: v.id, checked: v.id === chosen, onchange: () => { chosen = v.id; renderExample(t, v, exBox); } }),
-      h('div', {}, h('b', { text: v.name }, ...exampleBadges(EX[t.id + '/' + v.id])),
+      h('div', {}, h('b', { text: v.name }, v.event ? h('em', { class: 'badge event', text: [shortEvent(v.event), v.inject].filter(Boolean).join(' · ') }) : null, ...exampleBadges(EX[t.id + '/' + v.id])),
         h('span', { text: [v.description, v.source && `From: ${v.source}`].filter(Boolean).join(' — ') })))));
     panel.append(exBox);
     renderExample(t, t.variants.find(v => v.id === chosen), exBox);
@@ -800,18 +817,16 @@
       size: k.code ? 21 : base.size,
       highlight: k.ph ? 'yellow' : undefined,
     }));
-    const para = (text, opts = {}, base = {}) => new D.Paragraph({ children: runs(text, base), spacing: { after: 160 }, ...opts });
-    const heading = (text, level) => new D.Paragraph({
-      children: runs(text, { bold: true, size: level === 1 ? 32 : level === 2 ? 28 : 24 }),
-      spacing: { before: level === 1 ? 240 : 180, after: 120 }, keepNext: true,
-    });
+    // Formatting lives in named styles (Normal, Heading 1-3, Caption, Screenshot, Code), not on each paragraph, so a line
+    // added later in Word or Nextcloud Office picks up Normal instead of copying the heading or slot it was typed after.
+    const para = (text, opts = {}, base = {}) => new D.Paragraph({ children: runs(text, base), ...opts });
+    const tight = text => para(text, { spacing: { after: 0 } });
+    const HEADS = [D.HeadingLevel.HEADING_1, D.HeadingLevel.HEADING_2, D.HeadingLevel.HEADING_3];
+    const heading = (text, level) => new D.Paragraph({ heading: HEADS[Math.min(level || 1, 3) - 1], children: runs(text) });
     const codeParas = text => {
       const lines = String(text || '').split('\n');
-      return lines.map((line, i) => new D.Paragraph({
-        children: [new D.TextRun({ text: line || ' ', font: 'Courier New', size: 18 })],
-        shading: { type: D.ShadingType.CLEAR, color: 'auto', fill: 'F2F2F2' },
-        spacing: { after: i === lines.length - 1 ? 160 : 0 },
-      }));
+      return lines.map((line, i) => new D.Paragraph({ style: 'Code', children: [new D.TextRun(line || ' ')],
+        spacing: i === lines.length - 1 ? { after: 160 } : undefined }));
     };
     const mdParas = blocks => blocks.flatMap(b => {
       if (b.type === 'p') return [para(b.text)];
@@ -827,7 +842,7 @@
         borders: { top: cellBorder, bottom: cellBorder, left: cellBorder, right: cellBorder },
         shading: head ? { type: D.ShadingType.CLEAR, color: 'auto', fill: 'D9D9D9' } : undefined,
         margins: { top: 60, bottom: 60, left: 100, right: 100 },
-        children: String(t || '').split('\n').map(line => new D.Paragraph({ children: runs(line, head ? { bold: true } : {}) })),
+        children: String(t || '').split('\n').map(line => new D.Paragraph({ children: runs(line, head ? { bold: true } : {}), spacing: { after: 0 } })),
       });
       return [new D.Table({
         width: { size: total, type: D.WidthType.DXA },
@@ -837,13 +852,16 @@
       }), new D.Paragraph({ children: [], spacing: { after: 120 } })];
     };
     const bytes = url => { const bin = atob(url.split(',')[1]); const out = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out; };
+    // Images are inline (they move with the text). Height is capped at 5" (480 px) so a tall screenshot doesn't push
+    // itself and its caption onto the next page and leave most of a page blank.
+    const image = (data, w, hh) => new D.Paragraph({ style: 'Screenshot',
+      children: [new D.ImageRun({ data, transformation: { width: Math.round(w), height: Math.round(hh) } })] });
     const figure = b => {
-      const cap = new D.Paragraph({ spacing: { after: 240 }, children: runs(`Figure ${b.n}. ${subst(b.ev.caption || '', vals) || '{{caption}}'}`, { italics: true }) });
+      const cap = new D.Paragraph({ style: 'Caption', children: runs(`Figure ${b.n}. ${subst(b.ev.caption || '', vals) || '{{caption}}'}`) });
       if (b.ev.type === 'output') return [...codeParas(b.ev.text), cap];
       let w = Math.min(600, b.ev.w || 600), hh = b.ev.w ? w * b.ev.h / b.ev.w : w * 0.6;
-      if (hh > 720) { w = w * 720 / hh; hh = 720; }
-      return [new D.Paragraph({ keepNext: true, spacing: { before: 120, after: 60 },
-        children: [new D.ImageRun({ data: bytes(b.ev.data), transformation: { width: Math.round(w), height: Math.round(hh) } })] }), cap];
+      if (hh > 480) { w = w * 480 / hh; hh = 480; }
+      return [image(bytes(b.ev.data), w, hh), cap];
     };
     const children = [
       new D.Paragraph({ alignment: D.AlignmentType.CENTER, border: { bottom: border }, spacing: { after: 160 }, children: [new D.TextRun({ text: 'INTEROFFICE MEMORANDUM', bold: true })] }),
@@ -855,20 +873,39 @@
     if (m.summaryLabel) children.push(heading(m.summaryLabel, 1));
     children.push(...mdParas(parseBlocks(subst(state.summary, vals))));
     const model = docModel();
-    const slot = b => [new D.Paragraph({ keepNext: true, spacing: { before: 120, after: 1440 }, children: [
-      ...runs(`Figure ${b.n}: `, { italics: true }), new D.TextRun({ text: '________', italics: true, highlight: 'yellow' })] })];
+    // An empty slot is one highlighted line where the screenshot goes (select it and paste), with its caption below.
+    // Nextcloud Office pastes images floating, so the line also says how to put the image back in line with the text.
+    const slot = b => { const hint = subst(b.hint || '', vals); return [
+      new D.Paragraph({ style: 'Screenshot', children: [new D.TextRun({ text: `[[Paste screenshot${hint ? ': ' + hint : ''}, on this line by itself. In Nextcloud, then right-click it > Anchor > As Character]]`, highlight: 'yellow' })] }),
+      new D.Paragraph({ style: 'Caption', children: [...runs(`Figure ${b.n}. `), new D.TextRun({ text: '________', highlight: 'yellow' })] })]; };
     const blockEls = b => b.t === 'h' ? [heading(b.text, b.level)] : b.t === 'md' ? mdParas(b.blocks) : b.t === 'table' ? tableEl(b) : b.t === 'slot' ? slot(b) : figure(b);
     children.push(...model.filter(b => !b.app).flatMap(blockEls));
     children.push(para(subst(m.closing, vals), { spacing: { before: 240, after: 200 } }),
-      new D.Paragraph({ children: [new D.TextRun(m.signoff)] }),
-      ...subst(m.signature, vals).split('\n').map(line => new D.Paragraph({ children: runs(line) })));
+      tight(m.signoff),
+      ...subst(m.signature, vals).split('\n').map(tight));
     const app = model.filter(b => b.app);
     if (app.length) children.push(new D.Paragraph({ children: [new D.PageBreak()] }), ...app.flatMap(blockEls));
     const doc = new D.Document({
       creator: subst(m.from, vals), title: subst(m.subject, vals),
-      styles: { default: { document: { run: { font: 'Aptos', size: 24 } } } },
+      // Calibri, not the preview's Aptos: Nextcloud Office has no Aptos and falls back to a serif, but it ships Carlito,
+      // which has Calibri's exact letter widths, so lines and page breaks come out the same as in Word.
+      styles: {
+        default: {
+          document: { run: { font: 'Calibri', size: 24 }, paragraph: { spacing: { after: 160 } } },
+          heading1: { run: { font: 'Calibri', size: 32, bold: true, color: '000000' }, paragraph: { keepNext: true, spacing: { before: 240, after: 120 } } },
+          heading2: { run: { font: 'Calibri', size: 28, bold: true, color: '000000' }, paragraph: { keepNext: true, spacing: { before: 180, after: 120 } } },
+          heading3: { run: { font: 'Calibri', size: 24, bold: true, color: '000000' }, paragraph: { keepNext: true, spacing: { before: 180, after: 120 } } },
+        },
+        paragraphStyles: [
+          { id: 'Normal', name: 'Normal', quickFormat: true },
+          { id: 'Caption', name: 'Caption', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { italics: true }, paragraph: { spacing: { after: 240 } } },
+          { id: 'Screenshot', name: 'Screenshot', basedOn: 'Normal', next: 'Caption', paragraph: { keepNext: true, spacing: { before: 120, after: 60 } } },
+          { id: 'Code', name: 'Code', basedOn: 'Normal', next: 'Normal', run: { font: 'Courier New', size: 18 },
+            paragraph: { spacing: { after: 0 }, shading: { type: D.ShadingType.CLEAR, color: 'auto', fill: 'F2F2F2' } } },
+        ],
+      },
       numbering: { config: [{ reference: 'num', levels: [{ level: 0, format: D.LevelFormat.DECIMAL, text: '%1.', alignment: D.AlignmentType.LEFT, style: { paragraph: { indent: { left: 720, hanging: 360 } } } }] }] },
-      sections: [{ properties: { page: { margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 } } }, children }],
+      sections: [{ properties: { page: { size: { width: 12240, height: 15840 }, margin:{ top: 1440, bottom: 1440, left: 1440, right: 1440 } } }, children }],
     });
     const open = state.sections.filter(s => s.conflictOf).length;
     D.Packer.toBlob(doc).then(blob => {

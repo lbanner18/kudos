@@ -6,6 +6,8 @@ window.INJECT_TYPES.push({
   "variants": [
     {
       "id": "banner",
+      "event": "MWCCDC Invitational #1",
+      "inject": "04 LEGP11T",
       "name": "Company login banner",
       "subject": "Company Login Banner",
       "to": "CISO",

@@ -344,6 +344,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "denied-packets",
+      "event": "MWCCDC Invitational #1",
+      "inject": "08 SOCS03A",
       "name": "Log denied firewall packets + analyze the last 30 minutes",
       "description": "SOCS03A Logging Denied FW Packets (MWCCDC Invitational #1 2026): the firewall settings that log denied packets, an extract of the last 30 minutes uploaded as TXT or RTF with the memo, and an analysis of whether it shows reconnaissance or intrusion attempts. The Invitational answer had no extract and no analysis. Practice the log export before the competition.",
       "subject": "Logging Denied Firewall Packets",
