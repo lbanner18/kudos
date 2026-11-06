@@ -418,7 +418,7 @@
 
   // ---------- examples (examples.js) ----------
   // Review status of an example, shown on its variant only (the type just says "Example Available").
-  const EX_STATUS = { review: 'Needs Review', incomplete: 'Incomplete', outdated: 'Outdated' };
+  const EX_STATUS = { good: 'Good', review: 'Needs Review', incomplete: 'Incomplete', outdated: 'Outdated' };
   const exampleBadges = g => !g ? [] : [h('em', { class: 'badge demo', text: 'Example Available' }),
     EX_STATUS[g.example.status] ? h('em', { class: `badge status-${g.example.status}`, text: EX_STATUS[g.example.status] }) : null];
   function renderExample(t, v, box) {

@@ -58,11 +58,11 @@ Teammates must start from the shared draft with **Load draft**, not a draft of t
 
 ## Examples
 
-`examples.js` adds sample answers to variants without touching `drafts/`. Each one is a team submission, transcribed as written (typos included) and sanitized. Types and variants that have one show an **Example Available** badge in the picker. Pick the variant and click **View example** to read it. Check the team playbook for notes on an example before using it. **Start from this example** loads it as the draft, and sections the example doesn't fill keep their `[[prompt]]`. Each screenshot the team included shows in the draft as a blank **Figure N: ________** with space below it (counted as "screenshots to add" in the status bar) until you add your own; the on-screen gap says what it should show.
+`examples.js` adds sample answers to variants without touching `drafts/`. Each one is a team submission, transcribed as written and sanitized (some with obvious typos fixed). Types and variants that have one show an **Example Available** badge in the picker. Pick the variant and click **View example** to read it. Check the team playbook for notes on an example before using it. **Start from this example** loads it as the draft, and sections the example doesn't fill keep their `[[prompt]]`. Each screenshot the team included shows in the draft as a blank **Figure N: ________** with space below it (counted as "screenshots to add" in the status bar) until you add your own; the on-screen gap says what it should show.
 
 Entries are keyed `typeId/variantId`. A section can have `text`, `rows` for its table (plus `columns` if the team's differ), `on: true` to turn on an off-by-default section, `screenshots` (descriptions of the figures the team included, shown in the example and offered as caption ideas; never the images), and an optional `why` note. `vars` on the example fills the variant's `{{vars}}`. This repo is public: never put real IPs, usernames, passwords or screenshots in an example.
 
-Set `status` on an example to show its review state next to **Example Available** on the variant (the type only shows **Example Available**): `'review'` → **Needs Review**, `'incomplete'` → **Incomplete** (a section is still an unfilled template prompt), `'outdated'` → **Outdated** (needs updating for the current competition).
+Set `status` on an example to show its review state next to **Example Available** on the variant (the type only shows **Example Available**): `'good'` → **Good** (scored well; still check the playbook), `'review'` → **Needs Review**, `'incomplete'` → **Incomplete** (a section is still an unfilled template prompt), `'outdated'` → **Outdated** (needs updating for the current competition).
 
 ## Text formatting
 
