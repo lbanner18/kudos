@@ -72,7 +72,9 @@ async function run() {
       if (!card.classList.contains('off')) want += e.screenshots.length * (v.sections.find(s => s.id === id).perHost ? hosts : 1);
       const ideas = Array.from(card.querySelectorAll('.suggest button'), b => b.textContent).join(' | ');
       const first = e.screenshots[0].replace(/\{\{\w+\}\}/g, '');
-      check(`${key}: "${id}" offers the screenshots as caption ideas`, first.split(/\s+/).filter(x => x.length > 3).every(wd => ideas.includes(wd)), ideas);
+      // A per-host section shows caption ideas per host, so there is nothing to check when the sample has none of its hosts.
+      if (!(v.sections.find(s => s.id === id).perHost && !hosts))
+        check(`${key}: "${id}" offers the screenshots as caption ideas`, first.split(/\s+/).filter(x => x.length > 3).every(wd => ideas.includes(wd)), ideas);
     }
     check(`${key}: modal closed after start`, !$('.modal'));
     const slots = () => $$('#preview .slot');

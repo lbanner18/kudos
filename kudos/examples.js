@@ -5,20 +5,6 @@
 // Keys are "typeId/variantId". Never paste real IPs, usernames, passwords or screenshots here: this repo is public.
 window.KUDOS_EXAMPLES = {
 
-  'login-banner/banner': {
-    example: {
-      label: 'Check the playbook before using.',
-      summary: 'A company login banner was implemented on each device which warns of disciplinary action for unauthorized access (ISO 2001:2022 Annex A 8.5).',
-      sections: {
-        previous: { on: true, text: 'Our previous login banners provided information about our systems including the operating system in use. Our new login banners reference the company Acceptable Use Policy and emphasize the ability to prosecute misuse or unauthorized access.' },
-        elements: { text: 'A Login Banner should include an expectation of privacy and a statement of acceptable use. It should likewise provide a warning of possible disciplinary action or legal repercussions as a  result of misuse. Our New Login Banner includes each of these key element.' },
-        text: { text: '```\n******** WARNING ********\nThis system is the property of a private organization and is for authorized use only. By accessing this system, users agree to comply with the company’s Acceptable Use Policy.\nAll activities on this system may be monitored, recorded, and disclosed to authorized personnel for security purposes. There is no expectation of privacy while using this system.\nUnauthorized or improper use may result in disciplinary action or legal penalties. By continuing to use this system you indicate your awareness of and consent to these terms and conditions of use.\n*************\n```' },
-        linux: { text: '[[Add your Linux hosts (section 2), then a screenshot of the login banner on each one]]', screenshots: ['Login banner on {{host}}'] },
-        windows: { text: '[[Add your Windows hosts (section 2), then a screenshot of the login banner on each one]]', screenshots: ['Login banner on {{host}}'] },
-      },
-    },
-  },
-
   'policies/ir-policy': {
     example: {
       label: 'Check the playbook before using.',
@@ -491,21 +477,6 @@ window.KUDOS_EXAMPLES = {
     },
   },
 
-  'deploy-service/tftp': {
-    example: {
-      label: 'Check the playbook before using.',
-      summary: 'Team {{team}} has successfully installed a TFTP Server within our existing infrastructure on the {{server}}. We have modified the firewall and security policy to allow for file upload and access to this TFTP Server’s dedicated directory. This TFTP server can now be used to serve OS software updates or other files. The TFTP is only accessible from the internal network.',
-      sections: {
-        why: { text: 'The {{server}} was selected because it is in the “Internal” subnet and has sufficient storage space to hold files uploaded to the TFTP directory. The storage available on the {{server}} is show in the screenshot below:', screenshots: ['The storage available on the {{server}}'] },
-        software: { text: 'We installed the tftp-hpa package through apt install available in the Debian Linux distribution. This installs the necessary files and software to run a TFTP server. By installing this software we are able to run our TFTP server. A screenshot of the software installation is shown below:\n\n```\nsudo apt update\nsudo apt install tftpd-hpa\n```', screenshots: ['The software installation'] },
-        fw: { text: 'To prevent abuse or unauthorized access of our TFTP server we opened port 69 outbound for our known internal IP addresses over UDP. This was set by an access list of our internal machines. While FTP uses TCP, TFTP or Trivial File Transfer Protocol uses UDP. We allowed for inbound traffic over UDP to port 69 on the {{server}}.' },
-        dir: { text: 'The directory used by TFTP is {{tftp_dir}} has been set to have the least privilege needed for use which is show by the ls -la command in the screenshot below:', screenshots: ['ls -la of the TFTP directory {{tftp_dir}}'] },
-        overrun: { text: 'To prevent our TFTP directory from being overrun with files we set up a cron job on the {{server}} that is hosting the TFTP server which will run every minute and if there is a file that has been in the directory for more than 30 days it will be deleted. This will free up space so that there is enough available storage for new files.\n\n```\n0 0 * * * find {{tftp_dir}}* -type f -mtime +30 -exec rm {} \\;\n```', screenshots: ['The cron job that deletes files older than 30 days'] },
-        proof: { text: 'This screenshot shows our functioning TFTP service on the {{server}}\n\nThis screenshot shows our ability to connect to the {{server}} TFTP server from our [[other host]] and then put a file into the TFTP directory', screenshots: ['Our functioning TFTP service on the {{server}}', 'Connecting to the {{server}} TFTP server from our [[other host]] and putting a file into the TFTP directory'] },
-      },
-    },
-  },
-
   'business-memos/firewall-features': {
     example: {
       label: 'Check the playbook before using.',
@@ -576,6 +547,228 @@ window.KUDOS_EXAMPLES = {
         why: { text: 'The Palo Alto firewall has been configured to perform SSL decryption, to allow for better security, monitoring, and control. Precautions have been taken to comply with local laws and regulations.' },
         exclude: { text: 'There are some exceptions to the decrypting traffic. The security team chose not to decrypt web traffic that contains financial or health data. Health information is sensitive and requires significant measures to protect confidentiality. Additionally, decrypting this information may violate HIPPA, PCI, and other laws and regulations dictating PII and other sensitive personal information.' },
         test: { text: 'After configuring this system, the security team tested it by trying to send malware through the Palo Alto firewall. Figure 3 shows the Palo Alto logs. Figure 4 shows the malware triggering an alert.\n\n### Resources\n\n- https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000ClEZCA0&lang=en_US', screenshots: ['Palo Alto firewall logs.', 'Palo Alto alert on tested malware.'] },
+      },
+    },
+  },
+
+  'perimeter-firewall/as-found': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { fw1: 'Palo Alto' },
+      summary: 'This memo outlines the efforts taken by Team {{team}} to configure the perimeter firewall to only allow expected traffic.',
+      sections: {
+        'found-fw1': { text: 'The initial configurations for the perimeter firewall were extremely insecure, specifically allow all traffic inbound and all traffic outbound. This configuration was extremely insecure as it all all traffic to any port rather than only the expect ports and services which means malicious traffic can easily enter and penetrate our network. The screenshot below shows the initial configurations.', screenshots: ['Initial perimeter firewall configuration'] },
+        'changes-fw1': { text: 'The Palo Alto perimeter firewall is configured to only allow expected outbound and inbound packets, being implemented at the application-layer rather than layer-3 meaning that the firewall rules are configured to accept or deny packets based on the service they are attempting to access rather than the port that they are requesting.\n\nThe current configurations are allowing only the applications necessary for our business operations. For instance, rules allowing Webmail traffic, SSH, DNS, WinRM, Ping, HTTP, HTTPS, MsSQL, SMB, Splunk, IMAP, and POP3 traffic. These are bound to the specific hosts that require these.' },
+        inspect: { text: 'Current firewall configurations likewise block CVEs marked medium, high, critical and capture packets through IPS. The following screenshot shows our implementation.', screenshots: ['IPS implementation'] },
+        'deny-log': { text: 'We are logging dropped packets in order to identify patterns of malicious behavior. Logging Dropped Packets was accomplished in the Palo Alto settings by going to Polices > Security, and creating a new default-deny firewall policy that drops all packets that do not match a configured accept rule and then by clicking the box for ‘Log at Session End’. This screenshot likewise shows packets being dropped.\n\nAt the time of writing no packets have been dropped yet.', screenshots: ['Default-deny policy logging dropped packets'] },
+      },
+    },
+  },
+
+  'host-firewalls/policy-summary': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { linux_example: 'Email Ubuntu Server', windows_example: 'AD Windows Server' },
+      summary: 'Each server’s firewall has been configured to only accept inbound and outbound expected packets as requested.',
+      sections: {
+        hosts: {
+          columns: ['Service', 'Firewall Rule'],
+          rows: [
+            ['Ecom Rocky Linux', 'Inbound: Allows TCP, HTTPS, HTTP, SSH, UDP ICMP\nOutbound: Allows ICMP, Splunk, DNS, HTTP, HTTPS, MSSQL,'],
+            ['Email Ubuntu Server', 'Allow Inbound 22, 25, 587, 143, 993, 995, 80, 443\nOutbound: Allows ICMP, Splunk, DNS, HTTP, HTTPS, MSSQL,'],
+            ['Splunk Debian Server', 'Allow Inbound 22, 80, 9997, 8089, 8000\nOutbound: Allows ICMP, Splunk, DNS, HTTP, HTTPS, MSSQL,'],
+            ['AD Windows Server', 'Allow Inbound: 53, 135, 445, 389, 88, 5985, 5986\nOutbound: RPC, Kerberos, DNS, WinRM, LDAP'],
+            ['MSSQL Windows Server', 'Domain-Applied Firewall:\nInbound: SQL, RDP, SMB, Ping\nOutbound: 53, 135, 445, 389, 88, 5985, 5986'],
+            ['Ubuntu Workstation', 'Denies all inbound traffic\nOnly allows outbound HTTP, HTTPS, and DNS'],
+            ['Windows Workstation', 'Denies all inbound traffic\nOnly allows outbound HTTP, HTTPS, and DNS'],
+          ],
+        },
+        linux: { screenshots: ['Ubuntu Server Firewall'] },
+        windows: { screenshots: ['AD Server Firewall'] },
+      },
+    },
+  },
+
+  'endpoint-protection/open-source': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { linux_tool: 'ClamAV', windows_tool: 'Windows Defender' },
+      summary: 'This document outlines our decision to use ClamAV and Windows Defender as our chosen Anti-malware and Anti-Virus solution. These tools have been implemented on each of the Linux and Windows devices respectively.',
+      sections: {
+        linux: { text: 'We decided to use ClamAV as our Anti-malware solution for our Linux devices as it effectively scans all files in a specified directory and compares them against known malware variants to identify malicious or infected files that match known malware patterns. We installed ClamAV on each of the devices and did a sample run on the current directory to show that it operates successfully. After installation was completed, we likewise created a CronJob to run the clamscans every 15 minutes. This ensures that our devices are consistently monitoring their file systems to identify malicious files and remain secure.' },
+        windows: { text: 'Windows Defender is pre-installed on all Windows Workstations and Servers and is an effective Anti-Malware and Anti-Virus solution. Windows Defender runs consistent file scans on the devices most important directories and has options to scan all files on the system for suspicious patterns. Windows Defenders works with the Windows Defender advanced firewall to block incoming malicious traffic and malicious files that are being transmitted to the device. Ensuring Windows Defender is installed and running on each Windows device is an essential step to securing our networks and devices. Windows Defender likewise informs the user if any malicious files are identified.' },
+        'linux-devices': {
+          columns: ['Service', 'ClamAV Installation Status'],
+          rows: [
+            ['Ecom Rocky Linux', 'Completed - ClamAV'],
+            ['Email Ubuntu Server', 'Completed - ClamAV'],
+            ['Splunk Debian Server', 'Completed - Clamav'],
+            ['Ubuntu Workstation', 'Completed - ClamAV'],
+          ],
+          screenshots: ['ClamAV scan summary and cron job on Ecom Rocky Linux', 'ClamAV scan summary and clamav-daemon status on Email Ubuntu Server', 'ClamAV cron job and clamav-daemon status on Splunk Debian Server', 'ClamAV install, scan summary and cron job on Ubuntu Workstation'],
+        },
+        'windows-devices': {
+          columns: ['Service', 'ClamAV Installation Status'],
+          rows: [
+            ['AD Windows Server', 'Completed – Windows Defender'],
+            ['MSSQL Windows Server', 'Completed – Windows Defender'],
+            ['Windows Workstation', 'Completed – Windows Defender'],
+          ],
+          screenshots: ['Windows Security virus & threat protection on AD Windows Server', 'Windows Security virus & threat protection on MSSQL Windows Server', 'Windows Security virus & threat protection on Windows Workstation'],
+        },
+      },
+    },
+  },
+
+  'login-banner/banner': {
+    example: {
+      label: 'Check the playbook before using.',
+      summary: 'Thank you for expressing your concern regarding our computer systems’ login banners.\n\nWe have taken steps to correct this shortcoming by modifying login banners on our devices so that when someone logs in to access a device they are informed of our company’s acceptable use and security monitoring actions. Due to the Computer Fraud and Abuse Act, when someone unauthorized accesses one of our devices, they can now be prosecuted for the unauthorized access because they are warned about accessing devices without authorization.',
+      sections: {
+        previous: { on: true, text: 'Our systems did not previously have a login banner. Our new login banners reference the company Acceptable Use Policy and emphasize the ability to prosecute misuse or unauthorized access.' },
+        text: { text: '```\n******** WARNING ********\nThis system is the property of a private organization and is for authorized use only. By accessing this system, users agree to comply with the company’s Acceptable Use Policy.\nAll activities on this system may be monitored, recorded, and disclosed to authorized personnel for security purposes. There is no expectation of privacy while using this system.\nUnauthorized or improper use may result in disciplinary action or legal penalties. By continuing to use this system you indicate your awareness of and consent to these terms and conditions of use.\n**************************\n```\n\nThe new login banner has successfully been installed on our machines and is evident in the images below:', screenshots: ['New Login Banner'] },
+        linux: { screenshots: ['Splunk Login Banner Updated', 'Ubuntu Wkst Server Login Banner', 'Ubuntu Email Login Banner Updated', 'Rocky Ecom Login Banner Updated', 'Kali Wkst'] },
+        windows: { screenshots: ['AD Windows Login Banner', 'MSSQL Windows Login Banner', 'Windows Wks Login Banner Updated'] },
+        network: { screenshots: ['Vyos Login Banner', 'Palo Alto'] },
+      },
+    },
+  },
+
+  'network-infrastructure/l2-decode': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { protocol: 'Dynamic Trunk Protocol' },
+      summary: 'The packet in question is using layer 2 Dynamic Trunk Protocol for switches to negotiate a trunk link.',
+      sections: {
+        noip: { text: 'Because this is a layer 2 protocol, it does not have an IP address, which is specific to layer 3.' },
+        what: { text: 'This packet is using a protocol known as Dynamic Trunk Protocol. It is a CISCO protocol that\'s used to start a trunk link between two switches.' },
+        decode: { text: 'This protocol has two major parts. The first is the Ethernet header. This header sends to CISCO\'s mutlicast MAC address (01:00:0c:cc:cc:cc) and contains the source router ([[source MAC]]). It also contains the length of the packet. The next part is the Dynamic Trunk Protocol (DTP). It contains the version number and the management domain name (blank in this case). After that it has the Trunk Status. This tells the second switch what the current state is (Trunk and ON in this case). It also lists Trunk Type, which is set to 802.1Q for both Operating Type and Administrative Type.' },
+        unique: { text: 'One point to note about this packet is that the source and the destination mac addresses are the same. This seems to indicate that the switch is talking to itself on it\'s own port.' },
+      },
+    },
+  },
+
+  'network-infrastructure/ha-firewall': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { fw: 'Palo Alto' },
+      summary: 'Below is a plan outlining the implementation of a second Palo Alto firewall utilizing HA links to ensure no single point of failure. This plan also covers the implementation of a second internet feed provider.',
+      sections: {
+        current: { text: 'Currently, our network topology supports a single Palo Alto PA-VM, which acts as a single source of failure for the firewall, which connects and filters the packets being sent from the External Network Segment (our VyOS Router) to the internal network segments.' },
+        hardware: { text: 'To remediate this, Security Team recommends the purchase and implementation of second Palo Alto PA-VM Firewall. This device will work with the existing Palo Alto Firewall to ensure a seamless and transparent failover. This firewall should match the existing firewall\'s model, PAN-OS version, and CPU allocation.' },
+        detect: { text: 'The secondary Palo Alto Firewall will act as a passive Standby, utilizing a "heartbeat" ping message to ensure the health of the active firewall and a transition should the active firewall go down. The firewalls should be connected utilizing Palo Alto\'s available High-Availability (HA) links. HA1 will act as the Control Link to exchange heartbeats, mange control-plane communication, and ensure device health. HA2 will act as the Data Link, which will manage data-plane and session state synchronization.' },
+        failover: { text: 'To connect these devices, Team {{team}} recommends utilizing VLANs since the firewall connections are also virtual. To ensure no single point-of-failure, it is essential that the second firewall is hosted on a separate host. Ensure that appropriate anti-affinity rules are set.' },
+        drawing: { text: 'The following diagram shows the wiring topology to interconnect the firewalls using Cat6 Ethernet Cables. Source: https://storage.ghost.io/c/27/3a/273a3b8f-882f-4589-9659-f17410001182/content/images/2022/04/diagram-with-ip-v1.PNG', screenshots: ['Palo Alto firewall connection topology'] },
+        isp: { text: 'If a second internet feed provider was included, this would be wired into the VyOS router to ensure proper failover. The VyOS router can be configured for automatic WAN failover which will ensure that a failure in one provider will automatically trigger a switch to the second provider. Ensure that a second ISP circuit is added, along with its provider handoff device. The HA configuration of the firewalls would remain the same.' },
+        src: { text: 'Official Palo Alto HA documentation can be found here: https://docs.paloaltonetworks.com/ngfw/administration/high-availability/ha-ports-on-palo-alto-networks-firewalls.' },
+      },
+    },
+  },
+
+  'perimeter-scan/nmap-config': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { scanner: 'Kali Linux' },
+      summary: 'This document outlines how Nmap can be used to scan the external perimeter of our Network to identify open ports and publicly accessible services.',
+      sections: {
+        scope: { text: 'Welcome to the team! We are excited to help you learn how to use Nmap to identify the services that are exposed on our network\'s external firewall. In order to scan the ‘external perimeter of the firewall’, we need to run an Nmap scan on all of our network devices.\n\nNmap stands for ‘Network Map’ and allows for a clear mapping of the open ports services running on network devices so that we can determine the current integrity of our network security. The following Nmap command will list services and ports open on' },
+        tcp: { text: 'We would suggest running the following command to scan the external perimeter of all of our network devices that are essential for business continuity.\n\n```\n> nmap -Pn -sV -T4 {{target}}\n```\n\nAlternatively, you can run the following command to use a text file which lists each network device\'s IP address on a separate line to scan all of them.\n\n```\n> nmap -iL \'file containing host names\'\n```' },
+        options: { text: 'Explanation of the command:\n\n- The \'-Pn\' flag skips the process where it pings the host to see if it is up. This is important if you are getting errors saying the host is not up.\n- The \'-T4\' flag increases the speed at which the Nmap is completed.\n- The \'-sV\' flag also displays the version of the service that is open. This flag makes the Nmap scan take longer and is optional.\n- The command likewise lists the private IP address for our network device. It specifically scans {{target}}' },
+        proof: { text: 'Here is an example result from running the suggested nmap command and the result it returned for the Rocky Ecom device ([[IP]]) from the Kali Linux device. Nmap outputs the results from the scan into your terminal.\n\n```\n> nmap -Pn -T4 {{target}}\n\nStarting Nmap 7.99 ( https://nmap.org ) at [[date and time]]\nNmap scan report for [[IP]]\nHost is up (0.00100s latency).\nNot shown: 997 filtered tcp ports (no-response)\nPORT STATE SERVICE\n22/tcp open ssh\n80/tcp open http\n443/tcp open https\n\nNmap done: 6 IP addresses (5 hosts up) scanned in 12.03 seconds\n```\n\nWe hope you found this guide to using Nmap on the Kali device helpful. Welcome to the team!' },
+      },
+    },
+  },
+
+  'logging-siem/denied-packets': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { fw: 'Palo Alto' },
+      summary: 'We are actively working on logging dropped packets on our firewall.',
+      sections: {
+        config: { text: 'Firewall logging is configured in each individual Security Policy Rule. This is edited by selecting the Security Policy Rule > Actions > Log at Session End.', screenshots: ['Configure logging for firewall rule'] },
+        extract: { text: 'We were unable to upload a log snippet due to issues with our logging system. We have attached a screenshot of some of the logs as follows.', screenshots: ['Configure logging for firewall rule'] },
+        analysis: { text: 'We have not detected any red team intrusion since we began logging. This is most likely due to a firewall misconfiguration. We are actively working to remediate it.' },
+      },
+    },
+  },
+
+  'network-infrastructure/snmp-v2c': {
+    example: {
+      label: 'Check the playbook before using.',
+      summary: 'We have properly configured SNMP within our network. This document displays our Network hosts with their associated IPs and SNMP Public Community String.',
+      sections: {
+        devices: {
+          columns: ['Host Name', 'External IP Address / \'Public\' IP', 'Public Community String (Read-Only)'],
+          rows: [
+            ['Rocky Ecom', '[[External IP]]', '[[community string]]'],
+            ['Ubuntu Email', '[[External IP]]', '[[community string]]'],
+            ['Debian Splunk', '[[External IP]]', '[[community string]]'],
+            ['2022 AD', '[[External IP]]', '[[community string]]'],
+            ['2019 MSSQL', '[[External IP]]', '[[community string]]'],
+            ['Ubuntu Wkst', '[[Router external IP]]', '[[community string]]'],
+            ['Windows 11 Wks', '[[Router external IP]]', '[[community string]]'],
+            ['Kali', '[[Router external IP]]', '[[community string]]'],
+            ['Palo Alto', '[[Management IP]] (Management IP)', '[[community string]]'],
+            ['VyOS Router', '[[Router external IP]]/29 (External IP)', '[[community string]]'],
+          ],
+        },
+        config: { text: 'We chose to implement SNMPv2 because it is more secure than SNMPv1. SNMPv1 only supports 32 bit counters whereas SNMPv2 supports 64 bit counters. This means that SNMPv2 is much more reliable in keeping a total count of the events that occurred over the protocol. SNMPv2 also has added functionality to access information via a bulk access function.\n\n### Linux Implementation\n\nIn order to implement SNMP of the Linux devices we followed these steps:\n\n1. Install SNMP using sudo apt install snmpd\n2. Edit the configuration file located at /etc/snmp/snpmd.conf\n3. Bind addresses with the following command “adentAddress udp:161”\n4. Add the line “rocummunity [[community string]] default”\n\nThis screenshot shows the successful configuration of SNMP on the Ubuntu Webmail device:\n\n### Windows Implementation\n\nIn order to implement SNMPv2 on the Windows devices, we followed these steps:\n\n1. In an Adminstrator PowerShell prompt, run “Install-WindowsFeature SNMP-Service -IncludeManagementTools\n2. Open services.msc and find the SNMP service and view its properties.\n3. Navigate to the security tab\n4. Add the community string “[[community string]]” under “Accepted Community Names”\n5. Select “Accept SNMP from any host”\n6. Restart the service.\n\nThis screenshot shows the successful configuration of SNMP on the AD Windows device:', screenshots: ['snmpd.conf with agentAddress and rocommunity lines on the Ubuntu Webmail device', 'SNMP Service running on the AD Windows device'] },
+        fw: { text: 'This screenshot shows that UDP port 161 which is what SNMP runs on, allowing SNMP to successfully connect to all devices.', screenshots: ['SNMP Out firewall rule allowing snmp'] },
+      },
+    },
+  },
+
+  'perimeter-scan/external-eval': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { tool: 'Nmap' },
+      summary: 'We performed the scan and discovered the services that are observably open or filtered. A majority of our open services are filtered and have specific rules for access. These open services are listed below.',
+      sections: {
+        tool: { text: 'We used nmap for host discovery because it is the built in process that systematically iterates through the ports and initiates a relationship to see if it is open. It then records the port and gives us information about the service that is open or closed. This information ranges from protocol to a description of the service.\n\n```\n> nmap -Pn -T4 -sV -iL “devices.txt”\n```' },
+        services: {
+          columns: ['Host Name', 'Private IP Address', 'Exposed Ports/Services Identified'],
+          rows: [
+            ['Rocky Ecom', '[[IP]]', 'This device is currently experiencing network issues'],
+            ['Ubuntu Email', '[[IP]]', 'This device is currently experiencing network issues'],
+            ['Debian Splunk', '[[IP]]', '22/tcp SSH\n8000/tcp http\n8089/tcp ssl/http'],
+            ['2022 AD', '[[IP]]', '5985/tcp http'],
+            ['2019 MSSQL', '[[IP]]', '22/tcp ssh\n80/tcp http\n135/tcp msrpc\n445/tcp microsoft-ds\n1433/tcp ms-sql-s\n5985/tcp wsman'],
+            ['Ubuntu Wkst', '[[IP]]', '22/tcp ssh\n135/tcp msrpc\n445/tcp microsoft-ds'],
+            ['Windows Wkst', '[[IP]]', 'This device is currently experiencing network issues'],
+          ],
+        },
+      },
+    },
+  },
+
+  'deploy-service/tftp': {
+    example: {
+      label: 'Check the playbook before using.',
+      vars: { server: 'Debian Splunk', tftp_dir: '/var/lib/tftpboot' },
+      summary: 'Team {{team}} has successfully installed a TFTP Server within our existing infrastructure on the Debian Splunk. We have modified the firewall and security policy to allow for file upload and access to this TFTP Server\'s dedicated directory. This TFTP server can now be used to serve OS software updates or other files. The TFTP is only accessible from the internal network.',
+      sections: {
+        why: { text: 'The Debian Splunk server was selected because it is in the "Internal" subnet and has sufficient storage space to hold files uploaded to the TFTP directory. The storage available on the Debian Splunk server is shown in the screenshot below:', screenshots: ['Storage Capacity of Debian Splunk Server'] },
+        software: { text: 'We installed the tftp-hpa package through apt install available in the Debian Linux distribution. This installs the necessary files and software to run a TFTP server. By installing this software we are able to run our TFTP server. A screenshot of the software installation is shown below:\n\n```\nsudo apt update\nsudo apt install tftpd-hpa\n```', screenshots: ['Proof of tftp-hpa software installation'] },
+        fw: { text: 'This was set through our firewall rules for all internal and external traffic. While FTP uses TCP, TFTP or Trivial File Transfer Protocol uses UDP. We allowed firewall traffic for the TFTP application in our Palo Alto Firewall.' },
+        dir: { text: 'The directory used by TFTP is /var/lib/tftpboot has been set to have the least privilege needed for use which is show by the ls -la command in the screenshot below:', screenshots: ['Security Profile of TFTP directory'] },
+        overrun: { text: 'To prevent our TFTP directory from being overrun with files we set up a cron job on the Debian Splunk server that is hosting the TFTP server which will run every minute and if there is a file that has been in the directory for more than 30 days it will be deleted. This will free up space so that there is enough available storage for new files.\n\n```\n0 0 * * * find {{tftp_dir}}* -type f -mtime +30 -exec rm {} \\;\n```', screenshots: ['Cron job to free space on the Debian Splunk server'] },
+        proof: { text: 'This screenshot shows our functioning TFTP service on the Debian Splunk server\n\nThis screenshot shows our ability to connect to the Debian Splunk TFTP server from our Ubuntu Workstation and then retrieve a file from and upload a file to the TFTP directory', screenshots: ['Connection to Debian Splunk server from the Ubuntu Workstation, file retrieved', 'File uploaded from Ubuntu Workstation on Debian Splunk server'] },
+      },
+    },
+  },
+
+  'business-memos/ai': {
+    example: {
+      label: 'Check the playbook before using.',
+      summary: 'This memo discusses how AI technology can be useful in providing Cyber Defense capabilities to an organization.',
+      sections: {
+        intro: { text: 'We hope you find this report helpful for use in the next board of directors meeting.\n\nArtificial Intelligence, almost synonymous with machine learning, has revolutionized the Cybersecurity industry. From AI enable next-generation firewalls for intrusion detection and prevention systems, to smart filtering and blocking of phishing emails, as McKinsey & Company puts it, "AI is the greatest threat-and defense-in Cybersecurity today. For the sake of our organization, it\'s been our greatest asset.' },
+        us: { text: 'Over the past few hours, while combating active incidents, our security team has been able to both thwart attacks and troubleshoot critical business services leveraging free AI platforms. This has substantially decrease our time-to-resolve incidents, and troubleshooting critical service failures.\n\nFor example, troubleshooting issues with our SIEM monitoring tools. AI was used to help us understand why our Webmail Roundtable service was inaccessible as it has a strong ability to parse large amounts of data and pinpoint configuration errors.\n\nAI has also been incredibly impact for our security engineers when it comes to the creation of custom tooling, monitoring, and further security control development. For example, we leveraged AI to create scripts to automatically install ClamAV on our Linux devices which software now scans our devices to identify malware.\n\nBy leveraging AI for this service level troubleshooting, we were able to determine the root cause of the service downtime and remediate almost immediately.', screenshots: ['Dense logs from our Roundtable Web server.', 'ClamAV script that was utilized on our devices.'] },
+        opps: { text: 'Moving forward, we believe that integrating AI agents, services, and systems will be how we differentiate our security posture from other organizations. One goal that our team has moving forward is the creation of a threat hunting, incident response AI enabled agent to continuously monitor our networks, identify indicators of compromise, and further protect our environment.' },
+        staff: { text: 'Effective use of AI in our organization could potential lead to the reduction of the number of team members required to monitor and secure our network.' },
+        limits: { text: 'However, Artificial Intelligence can make mistakes and needs knowledgeable humans to review and correct its work and report. AI is an extremely effective tool in identify malicious activity, troubleshooting, and implementing security solutions into our systems but Humans will need to be involved in every step of the process.\n\nHowever, with the small size of our business network, investing a large amount of money in AI tools may be unnecessary as Humans can easily manage the current load of configuration needs and log analysis with free-tier models that we have access to.' },
+        next: { text: 'We are firm believers that integrating AI into our Cybersecurity applications, tooling, services, and workflows, in a responsible and practical fashion, will allow us to be at the forefront of technology, adding security layers throughout our organization, and optimizing for overall availability for our customers by establishing advanced security controls.' },
+        src: { text: '- https://www.mckinsey.com/about-us/new-at-mckinsey-blog/ai-is-the-greatest-threat-and-defense-in-cybersecurity-today' },
       },
     },
   },
