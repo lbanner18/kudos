@@ -33,7 +33,8 @@ async function run() {
   $$('#typeGrid button').find(b => b.firstChild.textContent === 'Login banner').click();
   $('#variantPanel input[value="banner"]').click();
   $('#variantPanel .variant-actions button.primary').click(); await settle();
-  check('requirements start empty', !$('#checkText').value.trim() && !$$('#checkList li').length, $('#checkText').value);
+  const asks = w.INJECT_TYPES.find(t => t.id === 'login-banner').variants.find(v => v.id === 'banner').checklist || [];
+  check('requirements start with the variant\'s asks, if any', $$('#checkList li').length === asks.length && asks.every(a => $('#checkText').value.includes(a)), $('#checkText').value);
   type($('#checkText'), [
     '- Identify the key elements of a login banner',
     '- Install the banner on every Linux device',

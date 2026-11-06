@@ -35,8 +35,8 @@ async function run() {
   check('one section per event', sec.length === new Set(tagged.map(x => x.v.event)).size, sec.length);
   const btns = $$('#eventList button');
   check('a card per tagged variant', btns.length === tagged.length, [btns.length, tagged.length]);
-  const labels = btns.map(b => b.querySelector('b').textContent);
-  check('cards in inject order', labels.join() === labels.slice().sort().join(), labels);
+  const order = sec.map(s => Array.from(s.querySelectorAll('button b'), b => b.textContent));
+  check('cards in inject order', order.every(l => l.join() === l.slice().sort().join()), order);
   check('the sample event has 3 injects', tagged.filter(x => x.v.event === 'Sample Invitational #1').length === 3);
 
   const pick = btns.find(b => b.textContent.includes('Layer 2 capture'));
@@ -44,7 +44,7 @@ async function run() {
   const checked = $('#variantPanel input[name=variant]:checked');
   check('card selects its variant', checked && checked.value === 'l2-decode', checked && checked.value);
   check('variant shows the event badge', $$('#variantPanel .badge.event').some(b => b.textContent.includes('Inv #1 · 05')));
-  check('type shows the event badge', $$('#typeGrid button.active .badge.event').length === 1);
+  check('type shows the event badge', $$('#typeGrid button.active .badge.event').some(b => b.textContent === 'Sample Inv #1'), $$('#typeGrid button.active .badge.event').map(b => b.textContent));
   $$('#variantPanel button').find(b => /Use this draft/.test(b.textContent)).click(); await settle();
   const m = $('.modal'); if (m) { $$('.modal button').pop().click(); await settle(); }
   check('using it loads the template', /Full Decode/.test($('#preview').textContent), $('#preview').textContent.slice(0, 200));
