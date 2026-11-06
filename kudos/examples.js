@@ -1,17 +1,15 @@
 // Kudos examples. Adds a team-written sample to a variant, without changing drafts/*.js.
-// Each one is a scored submission transcribed as written (typos included), sanitized only: no wording added or fixed.
-// The label says where it came from and READY, or FLAGGED with the one thing to watch.
+// Each one is a team submission transcribed as written (typos included), sanitized only: no wording added or fixed.
+// Notes on each example are in the team playbook, keyed the same way.
 // "Start from this example" loads it as your draft; sections it doesn't fill keep their [[prompt]].
 // Keys are "typeId/variantId". Never paste real IPs, usernames, passwords or screenshots here: this repo is public.
 window.KUDOS_EXAMPLES = {
 
   'login-banner/banner': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - key elements are one sentence, but the prompt says "enumerate" them (graders expect a list); "ISO 2001:2022" should be ISO 27001:2022 · from Team 07, Regionals 2026 (LEGP11T)',
+      label: 'Check the playbook before using.',
       summary: 'A company login banner was implemented on each device which warns of disciplinary action for unauthorized access (ISO 2001:2022 Annex A 8.5).',
       sections: {
-        why: { text: 'Thank you for expressing your concern regarding our computer systems’ login banners.\n\nWe have taken steps to implement login banners on our devices so that when someone logs in to access a device they are informed of our company’s acceptable use and security monitoring actions. Due to the Computer Fraud and Abuse Act, when someone unauthorized accesses one of our devices, they can now be prosecuted for the unauthorized access because they are warned about accessing devices without authorization.' },
         previous: { on: true, text: 'Our previous login banners provided information about our systems including the operating system in use. Our new login banners reference the company Acceptable Use Policy and emphasize the ability to prosecute misuse or unauthorized access.' },
         elements: { text: 'A Login Banner should include an expectation of privacy and a statement of acceptable use. It should likewise provide a warning of possible disciplinary action or legal repercussions as a  result of misuse. Our New Login Banner includes each of these key element.' },
         text: { text: '```\n******** WARNING ********\nThis system is the property of a private organization and is for authorized use only. By accessing this system, users agree to comply with the company’s Acceptable Use Policy.\nAll activities on this system may be monitored, recorded, and disclosed to authorized personnel for security purposes. There is no expectation of privacy while using this system.\nUnauthorized or improper use may result in disciplinary action or legal penalties. By continuing to use this system you indicate your awareness of and consent to these terms and conditions of use.\n*************\n```' },
@@ -23,8 +21,7 @@ window.KUDOS_EXAMPLES = {
 
   'policies/ir-policy': {
     example: {
-      status: 'review',
-      label: 'FLAGGED - the closing paragraph says "up to and including orbital debris re-entry", copied from a different event\'s prompt (the original also spells the company two ways) · from Team 05, WRCCDC #5 2025-26 (Inject 01), adapted from the FRSecure public template it cites',
+      label: 'Check the playbook before using.',
       summary: 'Below is the incident response policy and incident response form as requested.',
       sections: {
         purpose: { text: '### Purpose\n\nThe purpose of {{company}}\'s Incident Response Policy is to formalize the company\'s requirements for responding to security incidents.\n\n### Audience\n\nThis policy applies to all {{company}} employees, executives, contractors, and other partners; anyone with access to the organization\'s resources.\n\n### Policy\n\nAll individuals who use {{company}} information resources are responsible for reporting possible security incidents immediately to the IT/Cyber Division team.' },
@@ -47,15 +44,14 @@ window.KUDOS_EXAMPLES = {
             ['Remediation', '(How was this incident remediated)'],
           ],
         },
-        close: { text: 'This incident response policy and incident response form will help {{company}} in case of incidents up to and including orbital debris re-entry. Furthermore, the incident response form will help track the who, what, when, where, why, and how regarding security incidents.' },
+        close: { text: 'This incident response policy and incident response form will help {{company}} in case of incidents. Furthermore, the incident response form will help track the who, what, when, where, why, and how regarding security incidents.' },
       },
     },
   },
 
   'policies/ir-elements': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 07, Regionals 2026 (BCOM04T)',
+      label: 'Check the playbook before using.',
       summary: 'The requested company incident response document is attached regarding the companies due diligence when it comes to handling breaches and security postures.',
       sections: {
         table: {
@@ -76,8 +72,7 @@ window.KUDOS_EXAMPLES = {
 
   'team-feedback/team-org': {
     example: {
-      status: 'outdated',
-      label: 'FLAGGED - area 4 of the prompt ("missing areas of coverage, or other improvements") is answered only as "we cover everything"; no improvement is named · from Team 03, MW Invitational #1 2025 (ORGR06T)',
+      label: 'Check the playbook before using.',
       sections: {
         how: { text: 'Our security team works across multiple technical disciplines and professional responsibility. [[Number]] full-time staff comprise the security team.\n\nTo best organize business needs and strengthened team efficacy, each team member has a primary responsibility and a secondary responsibility.\n\nTeam members spend most of their time developing skills and tools to aid their primary responsibility although they also work diligently to ensure that they are foundationally proficient in their secondary role. Team members practice consistently to develop these skills and maintain their effectiveness. In the case that an individual is unable to fulfill their primary responsibility, the secondary lead will step in and assume given role.\n\nThe team is also cross-trained in all responsibilities at a shallow level in order to best understand the cohesion of the business.' },
         table: {
@@ -101,8 +96,7 @@ window.KUDOS_EXAMPLES = {
 
   'hardening/checklist': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 07, MW Invitational #3 2025 (SVRA05T). The Implementation column was screenshots: add yours as evidence.',
+      label: 'Check the playbook before using.',
       summary: 'This memo outlines the measures Team{{team}} has taken to harden our servers and each host device. These measures have been implemented on all windows and Linux servers in our topology. The main objective of these actions is to reduce the attack surface and strengthen the defenses against unauthorized access to our systems through defense-in-depth. We have sought to align our configurations with Industry Control Standards.\n\nThe following tables outline the initial hardening steps that we have followed to secure the individual devices on our network with the action’s associated Industry Control Standard along with screenshot evidence of implementation on each device.',
       sections: {
         win: {
@@ -134,8 +128,7 @@ window.KUDOS_EXAMPLES = {
 
   'logging-siem/regex': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 07, MW Invitational #3 2025 (SOCS18T). The submitted PDF lost "<src>" from the pattern; it is restored here.',
+      label: 'Check the playbook before using.',
       sections: {
         pattern: { text: 'The written Regex expression is a filter meant to search through system logs and find entries specifically from the Linux firewall (iptables or netfilter). It looks for events where the firewall has blocked and discarded (DROPPED) a network packet.\n\n```\n[r"(?:iptables|netfilter).*DROP.*SRC=(?P<src>\\d{1,3}(?:\\.\\d{1,3}){3})",]\n```\n\nThis script is configured to automatically identify and extract the Source IP address of the computer that sent the blocked packet. This can be extremely helpful for our analysts to quickly identify who is sending malicious traffic.' },
         tokens: {
@@ -154,8 +147,7 @@ window.KUDOS_EXAMPLES = {
 
   'monitoring-scripts/disk-linux': {
     example: {
-      status: 'review',
-      label: 'FLAGGED - cites no sources, and the 2026 prompt says "Be sure to cite any sources used" · from Team 07, Regionals 2026 (LINX04T). Script and cron line typed from the screenshots; the text says "every minute" but the cron line runs hourly.',
+      label: 'Check the playbook before using.',
       summary: 'This document details the implementation of a disk space monitoring script for the Linux servers on our network.',
       sections: {
         how: { text: 'The script is implemented using two Linux tools: df, which monitors disk space, and logger, which can send alerts to syslog. It sets a threshold to either 95% usage or the first argument passed to the script. Then, it checks the various mounts of the system using df and if the disk usage is greater than the threshold, it logs the mount, device, and usage percentage to the console and syslog.\n\n```\n#!/bin/bash\n\nTHRESHOLD=${1:-95}\n\ndf -h | awk -v ts="$THRESHOLD" \'NR>1 {sub(/%/,"",$5); if($5>=ts) print $1, $5, $6}\' | while read -r device usage mount; do\n\n        logger -s -p local0.crit "ALERT: Disk space on $device ($mount) is at ${usage}% (Threshold: ${THRESHOLD}%)"\n\ndone\n```', screenshots: ['The disk monitor script'] },
@@ -167,8 +159,7 @@ window.KUDOS_EXAMPLES = {
 
   'monitoring-scripts/disk-windows': {
     example: {
-      status: 'review',
-      label: 'FLAGGED - the variable $percentFull actually holds the FREE fraction (FreeSpace/Size); the thresholds work, but the name says the opposite · from Team 01, Qualifiers 2025 (WINS05T). Script typed from the screenshot.',
+      label: 'Check the playbook before using.',
       sections: {
         how: { text: '### Overview\n\nAs requested, the security team has implemented a system that alerts administrators when the available disk space of a machine fills up to specified capacities. Additionally, the disk capacity alerts are logged to Windows event logs.\n\n### Details\n\nDetails of the script in Appendix 1:\n\n- Line 1 retrieves the storage capacity of the disks.\n- Lines 2-6 calculate the disk usage percentage.\n- Lines 7-11 trigger an alert when the disk usage is at 50 percent capacity.\n- Lines 12-16 trigger an alert when the disk usage is at 80 percent capacity.\n- Lunes 17-21 trigger an alert when the disk usage is at 90 percent capacity.\n\n### Script Execution\n\nThe script is executed every hour, using the Windows Task Scheduler program. This ensures that the script is reliably run on a consistent basis. Figure 1 below shows the custom disk usage script being executed every hour. When an alert is created, the event is also logged to Windows logs, as shown in Figure 2.\n\n### Conclusion\n\nThe newly implemented disk usage monitoring script will inform system administrators when disk capacity reaches the specified thresholds of 50%, 80%, and 90%. This will allow administrators to take appropriate action to manage the disk space, before disk space becomes a major issue.', screenshots: ['Windows Task Scheduler with custom disk usage monitoring script.', 'Windows Event Viewer with log entry from disk usage script.'] },
         script: { text: '```\n$disks = Get-WmiObject -class win32_logicalDisk -computername localhost\n$disks | foreach-object {\n    if ($_.Size -ne $null) {\n\n    $percentFull = $_.FreeSpace/$_.Size\n\n    if ($percentFull -lt .5 -and -not (Test-Path ./"$($_.DeviceID[0])50")) {\n        Write-EventLog -Logname Application -Source "Application" -EventID 8001 -EntryType Warning -Message "Disk usage at 50 percent full"\n        New-Item -Path ./"$($_.DeviceID[0])50"\n        write-host 50\n    }\n    if ($percentFull -lt .2 -and -not (Test-Path ./"$($_.DeviceID[0])80")) {\n        Write-EventLog -Logname Application -Source "Application" -EventID 8001 -EntryType Warning -Message "Disk usage at 80 percent full"\n        New-Item -Path ./"$($_.DeviceID[0])80"\n        write-host 80\n    }\n    if ($percentFull -lt .1 -and -not (Test-Path ./"$($_.DeviceID[0])90")) {\n        Write-EventLog -Logname Application -Source "Application" -EventID 8001 -EntryType Error -Message "Disk usage at 90 percent full"\n        New-Item -Path ./"$($_.DeviceID[0])90"\n        write-host 90\n    }\n    }\n\n}\n```' },
@@ -178,8 +169,7 @@ window.KUDOS_EXAMPLES = {
 
   'integrity-scripts/web-hash': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - no alerting (it only writes a log file) and no schedule (no cron/timer), so nothing runs it automatically or tells anyone · from Team 07, MW Invitational #3 2025 (CRYP08T)',
+      label: 'Check the playbook before using.',
       summary: 'This document contains a developed Python Script that detects changes in web page integrity.',
       sections: {
         dirs: { text: '- {{web_dirs}}' },
@@ -192,8 +182,7 @@ window.KUDOS_EXAMPLES = {
 
   'policies/ir-procedure': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 01, Qualifiers 2026 (SCEN20T(E)), full points in the 2026 review',
+      label: 'Check the playbook before using.',
       summary: 'Team {{team}} created an incident response plan procedure to assist with responding to future incidents involving malware from a web site or phishing email campaign infecting a system. The procedure outlines the process for responding to cybersecurity incidents, following SANS Incident Response Plan outlined on their website at https://www.sans.org/media/score/504-incident-response-cycle.pdf.',
       sections: {
         prep: { text: 'Implement various safeguard to assist the organization in managing cyber-security risks. This includes the following:\n\n- Create a security policy that identifies and outlines rules and procedures to be implemented in order to further protect the organizations data, systems, and other assets.\n- Classify systems and data based on the sensitivity of the information and applicable laws and regulations such as HIPAA and PCI DSS to help prioritize and identify severity of the compromise.\n- Regularly backup data and test backups.\n- Incident response team should engage in tabletop exercises to brainstorm response strategies and capabilities.' },
@@ -209,8 +198,7 @@ window.KUDOS_EXAMPLES = {
 
   'business-memos/log-evidence': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - never answers the prompt\'s actual question ("any concerns with the file you prepared being admitted?"), so Concerns stays empty · from Team 01, Qualifiers 2025 (LEGP05A). "not been monitored" (means modified) is as written.',
+      label: 'Check the playbook before using.',
       summary: 'As requested, the security team has explained the process for filtering and exporting logs, proven the admissibility of logs in court, provided defense for Palo Alto’s logs, and provided chain of custody instructions to be followed.',
       sections: {
         hearsay: { text: '1. Hearsay exception: Computer generated logs are generally admissible under the business records exception rule. See #1 in resources.' },
@@ -224,8 +212,7 @@ window.KUDOS_EXAMPLES = {
 
   'business-memos/breach-regulation': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - says affected individuals must be notified within 72 hours; under GDPR the 72 hours is for the supervisory authority (Art. 33), individuals are "without undue delay" (Art. 34) · from Team 01, Qualifiers 2025 (LEGP09A). Cites no sources.',
+      label: 'Check the playbook before using.',
       sections: {
         framework: { text: 'Your organization has detected exfiltration of network packets that contain individual customer data. This includes profiles from citizens of [[affected countries]]. These countries have strict data protection regulations. Your organization must comply with the obligations of data protections and notifications of these countries.\n\nThe main regulatory framework involved is the General Data Protection Regulation (GDPR). This governs the collection, processing, and transfer of personal data of citizens in the EU.' },
         steps: { text: '### #1 Notification of Data Breach\n\n- Within 72 hours, the relevant data protection authorities in [[affected countries]] must be notified of the breach discovery.\n- Impacted individuals must also be notified within 72 hours.\n\n### #2 Data Security Measures\n\n- Immediately implement measures to secure the compromised data and prevent further unauthorized access and exfiltration.\n- The security team must conduct a thorough investigation to identify the source and scope of the breach.\n\n### #3 Review Data Handling Practices\n\n- After the incident, the security team must assess and update policies and procedures for data handling to ensure compliance with GDPR, and other relevant laws and regulations.' },
@@ -236,8 +223,7 @@ window.KUDOS_EXAMPLES = {
 
   'policies/policy-vs-procedure': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - the PAM procedure is technically wrong: the same pam_pwquality line is repeated, one copy is put in common-auth (belongs in common-password), and "maxlen" is not a pam_pwquality option · from Team 01, Qualifiers 2025 (LEGP17A)',
+      label: 'Check the playbook before using.',
       sections: {
         diff: { text: 'The difference between a policy and a procedure is that a policy outlines your organization\'s security requirements and needs. On the other hand, procedures are the technical implementation and steps in order to execute said policy.' },
         policy: { text: 'It is crucial to use secure, complex passwords. Complex passwords prevent a malicious hacker from guessing your password and gaining unauthorized access to the organization\'s computers. Hackers can access your personal data or the company\'s resources if non-complex passwords are used. Here are some guidelines for how to create a complex secure password.\n\nPasswords should have the following characteristics to be considered complex and secure. These characteristics come from the National Institute of Standards and Technology (NIST) security standards (https://pages.nist.gov/800-63-3/sp800-63b.html) and the Microsoft Security Standards (https://support.microsoft.com/en-us/windows/create-and-use-strong-passwords-c5cebb49-8c53-4f5e-2bc4-fe357ca048eb) .\n\n1. User-generated passwords should be at least 8 characters long, and the key space for users should support up to at least 64 characters.\n1. Passwords should contain a combination of uppercase letters, lowercase letters, numbers, and symbols.\n1. Users should be able to create passwords at least 64 characters in length.\n1. Knowledge-based passwords or security questions, such as "What was the name of your first pet?" should not be used.\n1. Passwords should not have hints.\n1. Context-specific words, such as the name of the service for which the password will be used or the user\'s specific username, should not be permitted.\n\nTo generate a secure password, users can use a passphrase-based approach. A passphrase is a more secure form of a password. People use passphrases for the same reasons and in the same way as a password. A passphrase is typically longer and contains spaces. A passphrase can also contain symbols and does not need to be grammatically correct. (As defined by Okta, a security firm: https://www.okta.com/identity-101/password-vs-passphrase/).\n\nSeveral online sites can help you generate secure passwords and passphrases. The website https://www.useapassphrase.com/ details how to create a secure passphrase and helps generate secure passphrases. The website https://www.avast.com/en-us/random-password-generator details how to create a secure password, although these passwords are very complex and are hard to remember for a user.' },
@@ -249,8 +235,7 @@ window.KUDOS_EXAMPLES = {
 
   'deploy-service/wsl-docker': {
     example: {
-      status: 'review',
-      label: 'FLAGGED - its own cons list says Docker Desktop does not support Windows Server 2019, which undercuts recommending it for the server · from Team 01, Qualifiers 2025 (VIRT01A)',
+      label: 'Check the playbook before using.',
       vars: { solution_a: 'WSL', solution_b: 'Docker Desktop', pick: 'Docker Desktop' },
       summary: 'The security team has prepared and summarized two solutions to run Linux-based applications on Windows, as part of a disaster recovery plan—Windows Subsystem for Linux (WSL) and Docker Desktop. The security team recommends Docker Desktop as ideal for this business work environment.',
       sections: {
@@ -271,8 +256,7 @@ window.KUDOS_EXAMPLES = {
 
   'accounts-passwords/session-lock': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - says "after 30 minutes of activity"; it means inactivity · from Team 01, Qualifiers 2025 (WINS04T). No verification beyond a GPO screenshot.',
+      label: 'Check the playbook before using.',
       summary: 'As requested, a new GPO was created to enforce session lockout with a screensaver after 30 minutes of activity.',
       sections: {
         gpo: { text: '- Open GPMC (Group Policy Management Console) by searching in the Windows search bar.\n- Create a new GPO titled “Session Locking Policy”.\n- Navigate to User Configuration > Policies > Administrative Templates > Control Panel > Personalization.\n- Enable the setting “Screen Saver Timeout” and set the value to 1800 seconds (30 minutes).\n- Enable the setting “Password Protect the Screen Saver”.', screenshots: ['Showing GPO configuration that enforces session lockout.'] },
@@ -283,8 +267,7 @@ window.KUDOS_EXAMPLES = {
 
   'business-memos/job-description': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 07, RMCCDC 2024 (ORGR03A "Hiring a New Staff Member"; same variant as ORGR04T). Its "shift left" figure is not included: add your own evidence.',
+      label: 'Check the playbook before using.',
       vars: { position: 'Security Threat Hunter' },
       summary: 'After reflecting on challenges faced by Team {{team}} and current business needs, Team {{team}} recommends the hiring of an additional staff member to serve as a team Threat Hunter. This will improve team performance by helping the security team be proactive in identifying potential weaknesses in our defenses. A job description to be used in the recruiting and hiring process is provided.',
       sections: {
@@ -300,8 +283,7 @@ window.KUDOS_EXAMPLES = {
 
   'hardening/smb': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 02, WRCCDC Invitational #3 2025-26 (Inject 05 "SMB Hardening"). Figures 1-4 were screenshots: add yours as evidence.',
+      label: 'Check the playbook before using.',
       vars: { share: 'FTPRoot' },
       sections: {
         steps: { text: 'We were able to connect to our FTP server over SMB from the Windows computer {{client}}.\n\nWe then checked the sharing settings of the FTP share folder and discovered that it was indeed shared.\n\nBy navigating to Advanced Sharing and unchecking the box "Share Folder" we were able to disable sharing.\n\nWe then checked if we could still access that folder over SMB from {{client}} and verified that we could not.', screenshots: ['{{share}} Connected Over SMB', '{{share}} Shared to the Network', 'Sharing Disabled', 'No {{share}} Access'] },
@@ -312,8 +294,7 @@ window.KUDOS_EXAMPLES = {
 
   'policies/incident-report': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 03, MW Invitational #1 2025 (MWCCDC IR template). Figures 1-4 were screenshots: add yours as evidence.',
+      label: 'Check the playbook before using.',
       summary: 'This report documents the actions of malicious actors within our systems and the steps taken to respond to these incidents and remediate the actions taken.\n\nTeam {{team}} would like to report evidence of a malicious actor in the domain controller attempting to move laterally through the network.\n\nWe identified that they were attempting to change remote code execution using psexec.exe.',
       sections: {
         details: {
@@ -340,8 +321,7 @@ window.KUDOS_EXAMPLES = {
 
   'logging-siem/central': {
     example: {
-      status: 'incomplete',
-      label: 'READY · from Team 03, MW Invitational #1 2025 (TOOL25T). Mostly figure captions: it shows the structure more than the wording. Add your screenshots as evidence.',
+      label: 'Check the playbook before using.',
       summary: 'The following memo shares information regarding centralized logging using Splunk. This allows us to efficiently use the syslog and event log data produced by the servers, bringing all logging to one place.',
       sections: {
         repo: { text: 'The server hosting the central logging is the Splunk server at local IP Address {{siem_ip}} and public IP Address [[public IP]]. It is running Splunk Enterprise version [[version]] (upgraded to patch a severe security vulnerability).', screenshots: ['List of hosts (partial)'] },
@@ -354,8 +334,7 @@ window.KUDOS_EXAMPLES = {
 
   'vpn/research': {
     example: {
-      status: 'incomplete',
-      label: 'READY · from Team 01, WRCCDC Western #2 2024 (Inject 8 "Company VPN"). Its deployment and user-guide half is not included here; see the vpn/implement example for that part.',
+      label: 'Check the playbook before using.',
       vars: { pick: 'PI VPN' },
       sections: {
         table: {
@@ -374,8 +353,7 @@ window.KUDOS_EXAMPLES = {
 
   'vpn/implement': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 02, WRCCDC Invitational #3 2025-26 (Inject 08 "Tailscale VPN"). Its 36 screenshots are not included: add yours as evidence.',
+      label: 'Check the playbook before using.',
       vars: { vpn: 'Tailscale', device1: 'Windows 2019 Server', device2: 'Windows 2022 server' },
       summary: 'This documents outlines the successful installation and implementation of Tailscale for our organization.\n\nTailscale was successfully installed on the {{device1}} and on the {{device2}}, having two devices to show full implementation.',
       sections: {
@@ -387,8 +365,7 @@ window.KUDOS_EXAMPLES = {
 
   'deploy-service/powershell-linux': {
     example: {
-      status: 'review',
-      label: 'FLAGGED - $DISK_USAGE is a string, so "-ge 90" compares as text and "100" -ge 90 comes out false · from Team 04, Regionals 2025 (LINX09T). The memo has no install commands; the script and output are typed from its screenshot.',
+      label: 'Check the playbook before using.',
       summary: 'As requested, Team {{team}} has implemented Power Shell on Linux.',
       sections: {
         steps: { text: 'The {{server}} machine was chosen to run Power Shell. Figure 1 shows the version of Power Shell installed on {{server}} ([[version]]).', screenshots: ['Showing Power Shell version to be [[version]].'] },
@@ -399,8 +376,7 @@ window.KUDOS_EXAMPLES = {
 
   'deploy-service/nms': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - says SNMP is secured, but its own command is SNMP v2c with community "public" · from Team 01, Qualifiers 2025 (SOFT02T)',
+      label: 'Check the playbook before using.',
       sections: {
         install: { text: 'The security team has installed LibreNMS via a Docker Container. The chosen device to host LibreNMS was the {{server}}. LibreNMS was configured to monitor all servers on the network to provide alerts if a device becomes unreachable. Once a host was added via SNMP, the following command was run on LibreNMS to confirm connectivity\n\n```\nsnmpwalk -v 2c -c public [[IP]]\n```\n\n### Securing LibreNMS\n\nSNMP was secured by restricting the IP address to only be readable from the LibreNMS server. This ensures the NMS server can poll interface packet rate statistics which preventing exploitation of the SNMP protocol across the network. Additionally, LibreNMS was configured to accept packets from specific hosts by IP address.', screenshots: ['Working LibreNMS environment', 'Current packet rate statistics for each server.', 'LibreNMS SNMP accepting packets from specific hosts by IP address', 'LibreNMS setup security'] },
         devices: {
@@ -424,8 +400,7 @@ window.KUDOS_EXAMPLES = {
 
   'remote-access-automation/playbooks': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - the submitted memo printed the Ansible Vault password in plain text (that sentence is left out here; never put the vault password in a memo) · from Team 03, WRCCDC Invitational #1 2026-27 (Inject 06 "Infrastructure Automation"). Playbooks are as submitted, including the odd indentation in Playbook 5.',
+      label: 'Check the playbook before using.',
       vars: { playbook_3: 'System_info', playbook_4: 'Network_info', playbook_5: 'Backup' },
       summary: 'Ansible has been deployed and tested on the central host **{{control_host}}** ([[IP]]). 5 tests have been created: cpu_memory, storage, system_info, network_info, and backup. These playbooks have been tested on our infrastructure and have been shown to accurately report device data.',
       sections: {
@@ -443,8 +418,7 @@ window.KUDOS_EXAMPLES = {
 
   'disaster-recovery/dr-facility': {
     example: {
-      status: 'review',
-      label: 'FLAGGED - the mysqldump option is printed with an em dash ("—all-databases"); it must be --all-databases or the command fails · from Team 01, Qualifiers 2025 (DSGN06T). backup.sh is typed from its screenshot.',
+      label: 'Check the playbook before using.',
       sections: {
         scope: { text: 'This memo provides documentation of the Disaster Recovery Plan for the {{server}} which hosts our publicly accessible E-Commerce website. If the server is made inoperable this solution enables the website to be restored and made available on another compatible server.' },
         backup: { text: '### 1. Maintain regular backups of website files and database\n\nIn order to restore the website, regular backups of the website files (/var/www/html directory) and the MySQL database must be kept so that the website data is available to be transferred to the new server which will host the restored website. Backups can be created by running the command: mysqldump —all-databases for MySQL and cp /var/www/html -r for the website files. Figure 1 below demonstrates these commands running on the {{server}}.\n\n### 2. Copy backup of website files and database to new server\n\nThe database and website backup files must be copied to the new server so they are available to perform the website restore. This involves using **scp** to securely copy the files to the new server.\n\nTeam {{team}} designed a cron job (named backup.sh) which performs the backup (step 1) and copy (step 2) actions at a regular interval so that backup files are continually created of the {{server}} and are stored on an additional VM (currently no IP address is known for the blank DR VM server).\n\n```\nsudo mysqldump --all-databases > ~/db_backup.sql\ncp -r /var/www/html ~/html\nzip -r html.zip ~/html\n\nscp db_backup.sql user@ip:.\nscp html.zip user@ip:.\n```', screenshots: ['Creating backups of the {{server}} MySQL database and website files', 'backup.sh script to be run as cron job', 'Cron job to execute backup.sh'] },
@@ -458,8 +432,7 @@ window.KUDOS_EXAMPLES = {
 
   'team-feedback/skills-gap': {
     example: {
-      status: 'outdated',
-      label: 'FLAGGED - no plan to close the gap (Plan to Close the Gaps stays empty) · from Team 01, Qualifiers 2025 (ORGR01T). Member initials replaced with Member 1-8.',
+      label: 'Check the playbook before using.',
       sections: {
         needs: { text: 'Our team is responsible for actively defending multiple machines, including Windows Servers, Linux Servers, Linux workstations, Windows workstations, and a Palo Alto firewall.  Below is a list of the devices running required services/technologies:\n\n- Windows Server: Active Directory, DNS, Docker\n- Linux servers: HTTP servers, Splunk, DNS, SMTP, POP3\n- Firewall: QoS, port blocking' },
         matrix: {
@@ -483,8 +456,7 @@ window.KUDOS_EXAMPLES = {
 
   'hardening/verify-protocol': {
     example: {
-      status: 'review',
-      label: 'FLAGGED - the PowerShell command used is never written in the text, only shown in screenshots · from Team 01, Qualifiers 2025 (WINS01T). Its 9 figures (3 per server) are not included: add yours under each server.',
+      label: 'Check the playbook before using.',
       vars: { protocol: 'NetBEUI' },
       sections: {
         how: { text: '- First, the security team checked the network adapter properties for each of the Windows machines and confirmed that NetBEUI drivers were not installed.\n- Then the team confirmed that NetBEUI wasn’t running via PowerShell commands.\n- Finally, the team confirmed that there were no NetBEUI network devices in Device Manager. Screenshots proving this are visible in Figures 1 to 9 in the Appendix.' },
@@ -496,8 +468,7 @@ window.KUDOS_EXAMPLES = {
 
   'deploy-service/ids': {
     example: {
-      status: 'incomplete',
-      label: 'READY · from Team 06, WRCCDC Western #1 2024 (Inject 02 "Install IDS"). Its installation proof was screenshots: add yours as evidence.',
+      label: 'Check the playbook before using.',
       vars: { ids: 'Suricata', option_2: 'Snort', option_3: 'Zeek' },
       summary: 'As requested, our team has identified and installed an intrusion detection system (IDS). We have chosen to use Suricata. This memo details our reasoning for choosing Suricata, proof of installation, details of incompatible hosts, and a guide for operating Suricata.',
       sections: {
@@ -522,8 +493,7 @@ window.KUDOS_EXAMPLES = {
 
   'deploy-service/tftp': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 01, Qualifiers 2024 (SOFT04T). The cron line is typed from its screenshot (the text says "every minute"; the line runs daily). Minor: says port 69 "outbound" then "inbound".',
+      label: 'Check the playbook before using.',
       summary: 'Team {{team}} has successfully installed a TFTP Server within our existing infrastructure on the {{server}}. We have modified the firewall and security policy to allow for file upload and access to this TFTP Server’s dedicated directory. This TFTP server can now be used to serve OS software updates or other files. The TFTP is only accessible from the internal network.',
       sections: {
         why: { text: 'The {{server}} was selected because it is in the “Internal” subnet and has sufficient storage space to hold files uploaded to the TFTP directory. The storage available on the {{server}} is show in the screenshot below:', screenshots: ['The storage available on the {{server}}'] },
@@ -538,8 +508,7 @@ window.KUDOS_EXAMPLES = {
 
   'business-memos/firewall-features': {
     example: {
-      status: 'incomplete',
-      label: 'READY · from Team 01, Qualifiers 2025 (BCOM06A). Figures 1-5 were screenshots: add yours as evidence.',
+      label: 'Check the playbook before using.',
       sections: {
         concern: { text: 'This memo provides an outline of the features enabled on the firewall which can thwart the exploitation of applications by verifying the communications between client and server are legitimate business traffic. There are four security features in effect to protect network traffic which are: 1) Web Download and Upload Preventions 2) URL Blocking Security Policy 3) Security Profiles 4) SSL Decryption. Working together these features provide strong security and ensure that attempts to exploit application communications are found and stopped. Security is our highest priority at {{company}} and we hope this memo helps you feel assured that we are maintaining the highest levels of security.' },
         features: { text: 'There are several exploit prevention features on the Palo Alto Next Generation firewall specifically for preventing exploitation of websites and apps. Each feature that is enabled is described in detail with screenshots demonstrating the functionality currently in place on the firewall.\n\n### 1. Web Download and Upload Preventions\n\nThere are several web download and upload preventions enabled through a File Blocking Security Policy that prevents the upload of various malicious file types as well as the download of php files (to prevent the servers reaching out to remote php instances).\n\n### 2. URL Blocking Security Policy\n\nURL Blocking Security Policy is also enabled which is attached to any browsing of websites that will block access of suspicious URLs, including newly created domains and known malicious domains.\n\n### 3. Security Profiles\n\nSecurity Profiles are also installed and enabled with up-to-date malware signatures and information about vulnerabilities to block the exploitation of known vulnerabilities against our servers.\n\n### 4. SSL Decryption\n\nLastly, SSL decryption is enabled on the firewall so that any web access from inside our network (except for traffic containing PII and PHI) will be decrypted and analyzed to make sure there are no malicious file downloads or web activity.' },
@@ -550,8 +519,7 @@ window.KUDOS_EXAMPLES = {
 
   'network-infrastructure/qos': {
     example: {
-      status: 'review',
-      label: 'FLAGGED - no verification that QoS works under load (Verification stays empty); it also prioritizes TELNET · from Team 01, Qualifiers 2025 (DSGN15A)',
+      label: 'Check the playbook before using.',
       sections: {
         overview: { text: 'During a high traffic event where network bandwidth is limited the Palo Alto Router/Firewall will be able to prioritize management capabilities and key protocols such as SNMP, SSH, TELNET, ICMP because of the Palo Alto QoS features which are now enabled across the network. This memo provides documentation and description of the configuration changes made on the Palo Alto Firewall.' },
         devices: { rows: [['Palo Alto Router/Firewall', '', 'SNMP, SSH, TELNET, and ICMP']] },
@@ -562,8 +530,7 @@ window.KUDOS_EXAMPLES = {
 
   'hardening/guideline-sections': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 01, Qualifiers 2025 (SVRA01T). Figures 1a-3b were screenshots: add yours as evidence.',
+      label: 'Check the playbook before using.',
       vars: { point_1: 'Control both ingress and egress traffic.', point_2: 'Secure administrative and in-band management to each server.', point_3: 'Structure the rules in a granular fashion to the level of protocol (TCP, UDP, ICMP) and requisite port numbers.' },
       summary: 'This memo outlines the steps taken by Team {{team}} to secure traffic coming in and out of the servers which provides strong defense against attackers. The network defensive features are described below.',
       sections: {
@@ -590,8 +557,7 @@ window.KUDOS_EXAMPLES = {
 
   'perimeter-firewall/nat-sessions': {
     example: {
-      status: 'incomplete',
-      label: 'FLAGGED - a file named "ChatGPTPaloInstructions.pdf" was submitted with it, so parts may be AI-written; check before relying on the wording · from Team 01, Qualifiers 2025 (TOOL11T). All IPs replaced with prompts.',
+      label: 'Check the playbook before using.',
       sections: {
         policy: { text: 'Our team uses a combination of NAT and PAT rules on the Palo Alto firewall to manage both inbound and outbound network traffic. Below is a summary of how the translation policies are structured. To see the session table, see figure 4 at the bottom of the memo.' },
         mapping: { text: '### #1 Static NAT for critical services\n\nCritical services such as Splunk, webmail, etc., use static NAT. These machines are assigned a fixed public IP address.\n\n- Splunk has an internal IP of [[Splunk internal IP]] and is mapped to the external IP address of [[Splunk external IP]].\n- Webmail has an internal IP of [[Webmail internal IP]] and is mapped to the external IP address of [[Webmail external IP]].\n\nRefer to Figures 1 and 3 for the NAT rules.\n\n### #2 Dynamic PAT for Outbound Traffic\n\nMost of the outbound traffic uses PAT (Port Address Translation). This translates private IP addresses in the range [[internal range]] to a pool of public IP addresses: [[public IP pool]]. Each outgoing port is assigned a unique port number.\n\nFor example, internal devices such as [[internal IP]] and [[internal IP]] may both use [[public IP]] as their public IP. However, each of these devices will be assigned a different port number, such as 50002 or 50505.\n\nRefer to figures 2 and 3 for the PAT rules.\n\n### #3 Firewall Management Address\n\nThe firewall itself is mapped to the external IP address of [[firewall management IP]] for management.\n\n### Public and Private Addressing\n\n- Private addresses: Devices in the network use private IP addresses.\n- For example, Splunk has the private IP of [[Splunk internal IP]].\n- Public addresses: Our team uses public Ips such as [[public IP]] for PAT and static mappings such as [[Splunk external IP]] for services.', screenshots: ['NAT rules.', 'PAT rules.', 'Firewall rules.'] },
@@ -603,8 +569,7 @@ window.KUDOS_EXAMPLES = {
 
   'perimeter-firewall/ssl-decryption': {
     example: {
-      status: 'review',
-      label: 'READY · from Team 01, Qualifiers 2025 (TOOL12T). Figures 1-4 were screenshots: add yours as evidence. Typo "HIPPA" as written.',
+      label: 'Check the playbook before using.',
       summary: 'The security team has successfully configured SSL decryption on the Palo Alto firewall, providing greater insight into encrypted traffic to and from workstations and servers.',
       sections: {
         steps: { text: 'First, a self-signed SSL certificate was created, allowing the firewall to decrypt the traffic. Refer to Figures 1 and 2 for the firewall rules on SSL decryption.\n\nNext, the self-signed certificate was deployed to every machine in the network. This allowed each machine to communicate to the internet, by establishing an encrypted communication session with the Palo Alto firewall.', screenshots: ['SSL certificate on PA firewall', 'PA firewall decryption rules'] },

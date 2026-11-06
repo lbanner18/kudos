@@ -6,19 +6,12 @@ window.INJECT_TYPES.push({
   "variants": [
     {
       "id": "banner",
-      "event": "MWCCDC Invitational #1",
-      "inject": "04 LEGP11T",
       "name": "Company login banner",
       "subject": "Company Login Banner",
       "to": "CISO",
       "vars": [],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
       "sections": [
-        {
-          "id": "why",
-          "heading": "",
-          "text": "[[Write this paragraph]]"
-        },
         {
           "id": "elements",
           "heading": "Key Elements of a Login Banner",
@@ -72,14 +65,7 @@ window.INJECT_TYPES.push({
           }
         }
       ],
-      "description": "LEGP11T Identify Key Concepts in a Login Banner (MWCCDC Invitational #1 2026; also Regionals 2026): enumerate the key concepts that aid prosecution, the banner text, and a screenshot on every server and network device. Add firewalls and routers as hosts so they get a slot.",
-      "checklist": [
-        "Key concepts of a login banner that aid prosecution (enumerated)",
-        "Text of the login banner",
-        "Banner installed on every server",
-        "Banner installed on every network device",
-        "Screenshot of the banner on each server and network device"
-      ]
+      "description": "Enumerate the key concepts that aid prosecution, the banner text, and a screenshot on every server and network device. Add firewalls and routers as hosts so they get a slot."
     }
   ]
 });

@@ -415,8 +415,6 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "as-found",
-      "event": "MWCCDC Invitational #1",
-      "inject": "01 TOOL23T",
       "name": "Firewall policy as found vs. changes made",
       "subject": "Perimeter Firewall Setup and Configuration",
       "to": "Network Operations Management",
@@ -697,15 +695,7 @@ window.INJECT_TYPES.push({
           "on": false
         }
       ],
-      "description": "TOOL23T Firewall Setup & Configuration (MWCCDC Invitational #1 2026): policy as found, the traffic the business needs, application-layer rules, packet inspection, and logging of denied packets. The firewall evaluation there marked the result over-restrictive: HTTPS, webmail, Splunk, AD/DNS and MSSQL stopped working. Fill in Required Traffic Flows first and check each one still works afterward. Tick the Firewall 2 sections only if there is a second firewall.",
-      "checklist": [
-        "Security policies as initially configured (as found)",
-        "Changes made so only needed and expected packets are allowed",
-        "Policies written at the application layer",
-        "Packet inspection (IPS and scanning) enabled",
-        "All denied packets logged",
-        "Screenshots of the configuration changes and packet inspection"
-      ]
+      "description": "Policy as found, the traffic the business needs, application-layer rules, packet inspection, and logging of denied packets. An over-restrictive policy breaks business services: fill in Required Traffic Flows first and check that each one still works afterward. Tick the Firewall 2 sections only if there is a second firewall."
     },
     {
       "id": "isolation-design",

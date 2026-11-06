@@ -75,10 +75,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "open-source",
-      "event": "MWCCDC Invitational #1",
-      "inject": "03 SRVA07A",
       "name": "Open-source anti-malware on Linux & Windows",
-      "description": "SRVA07A Implement Anti-malware Tool on End Devices (MWCCDC Invitational #1 2026): an open-source tool on every Linux and Windows device (one per platform is fine), screenshots on one device per platform, and a list of every device. The prompt says open-source: fill in the license column to check that each tool you name is.",
+      "description": "An open-source tool on every Linux and Windows device (one per platform is fine), a screenshot on one device per platform, and a list of every device, with Linux and Windows in separate tables.",
       "subject": "Anti-Malware on End Devices",
       "to": "CISO",
       "vars": [
@@ -102,92 +100,59 @@ window.INJECT_TYPES.push({
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
       "sections": [
         {
-          "id": "tools",
-          "heading": "Tools Selected",
-          "text": "[[Which tool on each platform and why it was chosen]]",
-          "table": {
-            "columns": [
-              "Platform",
-              "Tool",
-              "Open-Source License",
-              "Why This Tool"
-            ],
-            "rows": [
-              [
-                "Linux",
-                "{{linux_tool}}",
-                "",
-                ""
-              ],
-              [
-                "Windows",
-                "{{windows_tool}}",
-                "",
-                ""
-              ]
-            ]
-          }
-        },
-        {
           "id": "linux",
-          "heading": "Implementation on Linux: {{linux_example}}",
-          "text": "[[Install, signature updates, scheduled or real-time scanning, and what the screenshots show]]\n\n```\n[[Paste the commands, script, or output]]\n```",
+          "heading": "{{linux_tool}} Use and Installation",
+          "text": "[[Why this tool for the Linux devices (it must be open-source), how it was installed, and how scans are scheduled]]\n\n```\n[[Paste the commands, script, or output]]\n```",
           "evidence": [
-            "{{linux_tool}} installed on {{linux_example}}",
-            "Signature update and a test scan on {{linux_example}}",
-            "Scheduled or real-time scanning on {{linux_example}}"
+            "{{linux_tool}} installed and scanning on {{linux_example}}"
           ]
         },
         {
           "id": "windows",
-          "heading": "Implementation on Windows: {{windows_example}}",
-          "text": "[[Install, signature updates, scheduled or real-time scanning, and what the screenshots show]]\n\n```\n[[Paste the commands, script, or output]]\n```",
+          "heading": "{{windows_tool}} Use and Installation",
+          "text": "[[Why this tool for the Windows devices (it must be open-source), how it was installed, and how scans are scheduled]]",
           "evidence": [
-            "{{windows_tool}} installed on {{windows_example}}",
-            "Signature update and a test scan on {{windows_example}}",
-            "Scheduled or real-time scanning on {{windows_example}}"
+            "{{windows_tool}} installed and scanning on {{windows_example}}"
           ]
         },
         {
-          "id": "devices",
-          "heading": "Devices With the Tool Installed",
+          "id": "linux-devices",
+          "heading": "Linux Devices",
           "text": "",
           "table": {
             "columns": [
               "Device",
-              "OS",
-              "Tool",
-              "Version",
-              "Signatures Updated",
-              "Scan Schedule"
+              "{{linux_tool}} Installation Status"
             ],
+            "rows": [],
             "hostRows": {
-              "filter": "all",
+              "filter": "linux",
               "cells": [
                 "{{host}}",
-                "{{host_os}}",
-                "",
-                "",
-                "",
                 ""
               ]
-            },
-            "rows": []
+            }
           }
         },
         {
-          "id": "detections",
-          "heading": "Detections",
-          "on": false,
-          "text": "[[Anything the first scans found, and what was done]]"
+          "id": "windows-devices",
+          "heading": "Windows Devices",
+          "text": "",
+          "table": {
+            "columns": [
+              "Device",
+              "{{windows_tool}} Installation Status"
+            ],
+            "rows": [],
+            "hostRows": {
+              "filter": "windows",
+              "cells": [
+                "{{host}}",
+                ""
+              ]
+            }
+          }
         }
-      ],
-      "checklist": [
-        "Open-source anti-malware tool selected (per platform if needed)",
-        "Implemented on all Linux and Windows devices",
-        "Screenshots of the implementation on one Linux device",
-        "Screenshots of the implementation on one Windows device",
-        "List of all devices the tool is implemented on"
       ]
     }
   ]

@@ -33,7 +33,7 @@ async function run() {
   $$('#typeGrid button').find(b => b.firstChild.textContent === 'Login banner').click();
   $('#variantPanel input[value="banner"]').click();
   $('#variantPanel .variant-actions button.primary').click(); await settle();
-  check('variant fills empty requirements with its prompt asks', /Key concepts of a login banner/.test($('#checkText').value) && $$('#checkList li').length === 5, $('#checkText').value);
+  check('requirements start empty', !$('#checkText').value.trim() && !$$('#checkList li').length, $('#checkText').value);
   type($('#checkText'), [
     '- Identify the key elements of a login banner',
     '- Install the banner on every Linux device',
@@ -65,10 +65,10 @@ async function run() {
   if (m2) { $$('.modal button').find(b => b.textContent === 'Export anyway').click(); await wait(1500); }
   check('Export anyway after the unfilled warning exports', downloads.length === 1, downloads.length);
   // From typed by hand with one team, signature from {{team}} with another
-  type($('[data-meta="team"]'), '07'); type($('[data-meta="from"]'), 'Team 02'); await settle();
+  type($('[data-meta="team"]'), '11'); type($('[data-meta="from"]'), 'Team 12'); await settle();
   await exportNow();
   const m3 = $('.modal');
-  check('warns when From and signature name different teams', m3 && /different teams/.test(m3.textContent) && /Team 02/.test(m3.textContent) && /Team 07/.test(m3.textContent) && !downloads.length, m3 && m3.textContent);
+  check('warns when From and signature name different teams', m3 && /different teams/.test(m3.textContent) && /Team 12/.test(m3.textContent) && /Team 11/.test(m3.textContent) && !downloads.length, m3 && m3.textContent);
   check('no page errors', !errors.length, errors);
 }
 

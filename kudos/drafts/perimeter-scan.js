@@ -142,10 +142,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "nmap-config",
-      "event": "MWCCDC Invitational #1",
-      "inject": "07 TOOL19T",
       "name": "Nmap configuration for the external perimeter (explain each option)",
-      "description": "TOOL19T Develop NMAP Configuration (MWCCDC Invitational #1 2026): a command line that quickly finds TCP and UDP services on the external perimeter, every option explained with why it is used, and proof that it works. Not a vulnerability scan. The Invitational answer scanned internal addresses, had no UDP command, and explained only some of the options.",
+      "description": "A command line that quickly finds TCP and UDP services on the external perimeter, every option explained with why it is used, and proof that it works. Not a vulnerability scan: scan the external addresses, include a UDP command, and explain every option.",
       "subject": "Nmap Configuration for the External Perimeter",
       "to": "New Team Member",
       "vars": [
@@ -233,21 +231,12 @@ window.INJECT_TYPES.push({
             "UDP scan of {{target}} from {{scanner}}"
           ]
         }
-      ],
-      "checklist": [
-        "Command-line configuration for NMAP against the external perimeter",
-        "TCP and UDP command lines",
-        "Each command-line option/token: what it does and the rationale",
-        "Efficient and time-constrained",
-        "Evidence of a working command"
       ]
     },
     {
       "id": "external-eval",
-      "event": "MWCCDC Invitational #1",
-      "inject": "10 EVAL14A",
       "name": "External service evaluation (is each service needed?)",
-      "description": "EVAL14A External Service Evaluation (MWCCDC Invitational #1 2026): scan the POD's external interface, name the tool, list the services and protocols an attacker could use, and decide whether each needs to be exposed. Risk Assessment scored 65 there: the scan ran against internal addresses and no service was judged needed or not. Scan from outside the firewall.",
+      "description": "Scan the external interface, name the tool, list the services and protocols an attacker could use, and decide whether each one needs to be exposed. Scan from outside the firewall, and give a verdict for every service.",
       "subject": "External Service Evaluation",
       "to": "CISO",
       "vars": [
@@ -325,11 +314,6 @@ window.INJECT_TYPES.push({
           "heading": "Assessment and Recommendations",
           "text": "[[For each service that does not need to be exposed: what to change. For each that does: why it must stay and how it is protected]]"
         }
-      ],
-      "checklist": [
-        "Identify the tool used to scan the POD's external interface",
-        "Available services and protocols an attacker may leverage",
-        "Assessment and recommendation: whether each service needs to be exposed externally"
       ]
     },
     {

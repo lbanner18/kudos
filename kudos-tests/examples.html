@@ -52,7 +52,7 @@ async function run() {
     const label = $(`#variantPanel input[value="${vid}"]`).closest('label');
     check(`${key}: variant shows Example Available`, /Example Available/.test(label.textContent), label.textContent);
     const status = { review: 'Needs Review', incomplete: 'Incomplete', outdated: 'Outdated' }[ex.status];
-    check(`${key}: variant shows its status (${status})`, status && label.querySelector(`.badge.status-${ex.status}`) && label.textContent.includes(status), label.textContent);
+    check(`${key}: variant shows its status (${status || 'none'})`, status ? label.querySelector(`.badge.status-${ex.status}`) && label.textContent.includes(status) : !label.querySelector('[class*="status-"]'), label.textContent);
     check(`${key}: type shows no status or NEW badge`, !typeBtn.querySelector('[class*="status-"]') && !/NEW|Needs Review|Incomplete|Outdated/.test(typeBtn.textContent), typeBtn.textContent);
     const view = $$('#variantPanel button').find(b => b.textContent === 'View example');
     if (!check(`${key}: View example button`, view)) continue;

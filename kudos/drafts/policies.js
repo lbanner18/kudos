@@ -556,8 +556,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "incident-report",
-      "name": "Incident report (MWCCDC IR template)",
-      "description": "The organizers’ Incident Response Template: Incident Details table, then Vulnerability, Initial Access, Impact, Eradication, Remediation. Under Memo header, set From to “Team {{team}} – IT & Cyber Defense Division”, Summary label to (none), and clear the Closing line: the template’s own closing is the last section. WRCCDC: a report without the attacker’s source IP scores zero.",
+      "name": "Incident report (IR template)",
+      "description": "Incident Details table, then Vulnerability, Initial Access, Impact, Eradication, Remediation. Under Memo header, set From to “Team {{team}} – IT & Cyber Defense Division”, Summary label to (none), and clear the Closing line: the template’s own closing is the last section. Always include the attacker’s source IP.",
       "subject": "Incident Report",
       "to": "CISO",
       "vars": [],

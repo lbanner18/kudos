@@ -77,10 +77,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "snmp-v2c",
-      "event": "MWCCDC Invitational #1",
-      "inject": "09 SA103",
       "name": "SNMPv2c read-only access for an external monitor",
-      "description": "SA103 Implement SNMP (MWCCDC Invitational #1 2026): SNMPv2c read-only on every server and network device, reachable from the external network by a monitoring provider. Put the table the deliverable asks for first. External IP means the address the provider queries from outside, so check each device's address is right for it. The Invitational table listed internal addresses and repeated one IP for several devices.",
+      "description": "SNMPv2c read-only on every server and network device, reachable from the external network by a monitoring provider. Put the device table first. External IP means the address the provider queries from outside, so check that each device's address is right for it.",
       "subject": "SNMP Implementation",
       "to": "CISO",
       "vars": [],
@@ -164,11 +162,6 @@ window.INJECT_TYPES.push({
           "on": false,
           "text": "[[What SNMPv2c exposes and how access is limited]]"
         }
-      ],
-      "checklist": [
-        "SNMPv2c configured on each server and network device",
-        "Read-only access available from the external network",
-        "Table for each device: host name, external IP address, read-only community string"
       ]
     },
     {
@@ -380,10 +373,8 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "l2-decode",
-      "event": "MWCCDC Invitational #1",
-      "inject": "05 SOCS09A",
       "name": "Decode a Layer 2 capture (no IP addresses)",
-      "description": "SOCS09A LAN Switch Question (MWCCDC Invitational #1 2026): a capture between two switches with no IP addresses. One section per ask. The decode table should turn every field, bit pattern and flag into what it means, not just name the fields. Also fits CDP, LLDP, STP or VTP captures.",
+      "description": "A capture between two switches with no IP addresses. One section per ask. The decode table should turn every field, bit pattern and flag into what it means, not just name the fields. Also fits CDP, LLDP, STP or VTP captures.",
       "subject": "LAN Switch Capture Analysis",
       "to": "LAN Management Team",
       "vars": [
@@ -476,20 +467,12 @@ window.INJECT_TYPES.push({
           "on": false,
           "text": "[[The risk this exposes and how to close it]]"
         }
-      ],
-      "checklist": [
-        "Why there are no IP addresses",
-        "What protocol this is, what it does, what it represents",
-        "Full decode: bit patterns and flags translated to meaning",
-        "What is unique about the segment connecting the two switches"
       ]
     },
     {
       "id": "ha-firewall",
-      "event": "MWCCDC Invitational #1",
-      "inject": "06 DSGN17A",
       "name": "High-availability firewall design (+ second ISP)",
-      "description": "DSGN17A Design a High Availability Solution (MWCCDC Invitational #1 2026): every component needed for no single point of failure from the external connection to the internal segments, how failures are detected and failover stays transparent, your own drawing, and how two Internet providers change hardware, configuration and addressing. Design scored 51 there. The hardware list stopped at the firewall pair, the drawing was copied from the web, and addressing for two providers was not covered.",
+      "description": "Every component needed for no single point of failure from the external connection to the internal segments, how failures are detected and failover stays transparent, your own drawing, and how two Internet providers change hardware, configuration and addressing. List the hardware past the firewall pair, and draw the diagram yourself.",
       "subject": "High Availability Firewall Design",
       "to": "CIO",
       "vars": [
@@ -598,15 +581,6 @@ window.INJECT_TYPES.push({
           "level": 2,
           "text": "- [[Item]]"
         }
-      ],
-      "checklist": [
-        "Every hardware component needed so there is no single point of failure",
-        "Technology that detects a failure",
-        "Seamless, transparent failover",
-        "Drawing of the components and wiring",
-        "Two Internet providers: hardware",
-        "Two Internet providers: configuration",
-        "Two Internet providers: addressing"
       ]
     },
     {

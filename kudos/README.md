@@ -8,9 +8,9 @@ Pick the type and a variant, and the page lays out a **template**: the sections,
 
 ## Using it
 
-1. **requirements (private):** paste the deliverables from the request, one per line, and tick them off. This box is never exported. Each unticked line shows the section heading it matches (by shared keywords), or **no heading** if none does. Exporting with a **no heading** line left asks first, so every requirement gets its own section before the doc leaves Kudos. Tick a line when it is covered some other way (e.g. screenshots). Variants built from a known prompt (search the picker for its inject ID, e.g. `TOOL19T`) fill this box with that prompt's asks when it is empty.
+1. **requirements (private):** paste the deliverables from the request, one per line, and tick them off. This box is never exported. Each unticked line shows the section heading it matches (by shared keywords), or **no heading** if none does. Exporting with a **no heading** line left asks first, so every requirement gets its own section before the doc leaves Kudos. Tick a line when it is covered some other way (e.g. screenshots). Variants built from a known prompt (the past-event cards at the top of the picker) fill this box with that prompt's asks when it is empty.
 2. **Memo header:** team number (it changes every event, so it starts blank), number, To, subject, and sign-off. The exported file is named `NN_teamXX.docx`.
-3. **writing type:** pick the type, then the variant closest to the request, then **Use this draft**. Search works on type and variant names, inject IDs and event names. Templates built from a past event's injects are also grouped in a box at the top of the picker (e.g. **MWCCDC Invitational #1**), one card per inject in inject order, and carry a blue event badge on their type and variant. **Blank memo** starts with just the header and summary.
+3. **writing type:** pick the type, then the variant closest to the request, then **Use this draft**. Search works on type and variant names, inject numbers and event names. Templates built from a past event's injects are also grouped in a box at the top of the picker, one card per inject in inject order, and carry a blue event badge on their type and variant. **Blank memo** starts with just the header and summary.
 4. **Environment hosts:** enter the competition's hosts once, or load the sample 8-host topology. Per-host sections ("Ubuntu Ecom:" + screenshot) and table rows are built from this list, and it's kept between them.
 5. **Draft details:** every `{{placeholder}}` in it gets a box here, so you never have to hunt through the text for blanks. Anything still unfilled is highlighted in the preview and in the Word file, and is counted next to "Autosaved".
 6. **Sections:** untick sections you don't need, edit the text and headings, reorder them, and use **Reset** to get the draft text back. Tables are editable grids, and **Fill rows from hosts** rebuilds the rows from your host list.
@@ -58,7 +58,7 @@ Teammates must start from the shared draft with **Load draft**, not a draft of t
 
 ## Examples
 
-`examples.js` adds sample answers to variants without touching `drafts/`. Each one is a scored team submission, transcribed as written (typos included) and sanitized. Types and variants that have one show an **Example Available** badge in the picker. Pick the variant and click **View example** to read it. The label says where it came from and whether it is **READY** or **FLAGGED** (good apart from the one thing named). **Start from this example** loads it as the draft, and sections the example doesn't fill keep their `[[prompt]]`. Each screenshot the team included shows in the draft as a blank **Figure N: ________** with space below it (counted as "screenshots to add" in the status bar) until you add your own; the on-screen gap says what it should show.
+`examples.js` adds sample answers to variants without touching `drafts/`. Each one is a team submission, transcribed as written (typos included) and sanitized. Types and variants that have one show an **Example Available** badge in the picker. Pick the variant and click **View example** to read it. Check the team playbook for notes on an example before using it. **Start from this example** loads it as the draft, and sections the example doesn't fill keep their `[[prompt]]`. Each screenshot the team included shows in the draft as a blank **Figure N: ________** with space below it (counted as "screenshots to add" in the status bar) until you add your own; the on-screen gap says what it should show.
 
 Entries are keyed `typeId/variantId`. A section can have `text`, `rows` for its table (plus `columns` if the team's differ), `on: true` to turn on an off-by-default section, `screenshots` (descriptions of the figures the team included, shown in the example and offered as caption ideas; never the images), and an optional `why` note. `vars` on the example fills the variant's `{{vars}}`. This repo is public: never put real IPs, usernames, passwords or screenshots in an example.
 
@@ -81,8 +81,8 @@ window.INJECT_TYPES.push({
     id: 'variant-id',
     name: 'Variant name',
     description: 'What this variant covers.',
-    event: 'MWCCDC Invitational #1',      // optional: built from that event's inject
-    inject: '05 SOCS09A',                 // optional: inject number + ID, sorts the event's cards
+    event: 'Event name',                  // optional: built from that event's inject
+    inject: '05',                         // optional: inject number, sorts the event's cards
     subject: 'Default subject line',
     to: 'CISO',                           // only used if To is empty
     vars: [{ key: 'siem', label: 'SIEM', default: 'Splunk' }],

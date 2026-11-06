@@ -26,6 +26,10 @@ const type = (el, v) => { el.value = v; el.dispatchEvent(new w.Event('input', { 
 
 async function run() {
   localStorage.clear(); await boot();
+  // The public templates carry no event tags, so tag three here under a made-up event, then redraw the picker.
+  [['login-banner', 'banner', '04'], ['network-infrastructure', 'l2-decode', '05'], ['perimeter-scan', 'external-eval', '10']].forEach(([t, v, n]) =>
+    Object.assign(w.INJECT_TYPES.find(x => x.id === t).variants.find(x => x.id === v), { event: 'Sample Invitational #1', inject: n }));
+  type($('#typeSearch'), ''); await settle();
   const tagged = w.INJECT_TYPES.flatMap(t => t.variants.filter(v => v.event).map(v => ({ t, v })));
   const sec = $$('#eventList details.event');
   check('one section per event', sec.length === new Set(tagged.map(x => x.v.event)).size, sec.length);
@@ -33,19 +37,19 @@ async function run() {
   check('a card per tagged variant', btns.length === tagged.length, [btns.length, tagged.length]);
   const labels = btns.map(b => b.querySelector('b').textContent);
   check('cards in inject order', labels.join() === labels.slice().sort().join(), labels);
-  check('Invitational #1 has 12 injects', tagged.filter(x => x.v.event === 'MWCCDC Invitational #1').length === 12);
+  check('the sample event has 3 injects', tagged.filter(x => x.v.event === 'Sample Invitational #1').length === 3);
 
-  const pick = btns.find(b => b.textContent.includes('SOCS09A'));
+  const pick = btns.find(b => b.textContent.includes('Layer 2 capture'));
   pick.click(); await settle();
   const checked = $('#variantPanel input[name=variant]:checked');
   check('card selects its variant', checked && checked.value === 'l2-decode', checked && checked.value);
-  check('variant shows the event badge', $$('#variantPanel .badge.event').some(b => b.textContent.includes('05 SOCS09A')));
+  check('variant shows the event badge', $$('#variantPanel .badge.event').some(b => b.textContent.includes('Inv #1 · 05')));
   check('type shows the event badge', $$('#typeGrid button.active .badge.event').length === 1);
   $$('#variantPanel button').find(b => /Use this draft/.test(b.textContent)).click(); await settle();
   const m = $('.modal'); if (m) { $$('.modal button').pop().click(); await settle(); }
   check('using it loads the template', /Full Decode/.test($('#preview').textContent), $('#preview').textContent.slice(0, 200));
 
-  type($('#typeSearch'), 'eval14a'); await settle();
+  type($('#typeSearch'), 'external service evaluation'); await settle();
   check('search filters the event section', $$('#eventList button').length === 1, $$('#eventList button').length);
   type($('#typeSearch'), 'zzzz-nothing'); await settle();
   check('no section when nothing matches', !$$('#eventList details').length);

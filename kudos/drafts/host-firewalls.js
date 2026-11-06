@@ -63,8 +63,6 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "policy-summary",
-      "event": "MWCCDC Invitational #1",
-      "inject": "02 SVRA05A",
       "name": "Per-server firewall policy summary",
       "subject": "Server-Based Firewalls",
       "to": "CISO",
@@ -107,14 +105,7 @@ window.INJECT_TYPES.push({
           ]
         }
       ],
-      "description": "SVRA05A Configure Server-based Firewalls (MWCCDC Invitational #1 2026): a policy description for every server (inbound, return traffic, outbound and its return), plus screenshots of one Windows and one Linux server showing the rules and the product or OS feature used.",
-      "checklist": [
-        "Security policy description for each server",
-        "Inbound, return, and outbound traffic covered",
-        "Both Linux and Windows servers",
-        "Screenshot of one Windows server: rules and firewall product/feature",
-        "Screenshot of one Linux server: rules and firewall product/feature"
-      ]
+      "description": "A policy description for every server (inbound, return traffic, outbound and its return), plus screenshots of one Windows and one Linux server showing the rules and the product or OS feature used."
     }
   ]
 });

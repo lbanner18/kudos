@@ -322,8 +322,6 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "ai",
-      "event": "MWCCDC Invitational #1",
-      "inject": "12 BC105",
       "name": "Role of AI in cyber defense",
       "subject": "Role of AI in Cyber Defense",
       "to": "IT Director",
@@ -384,15 +382,7 @@ window.INJECT_TYPES.push({
           "text": "- [[Item]]"
         }
       ],
-      "description": "BC105 Role of AI in Cyber Defense (MWCCDC Invitational #1 2026; Business Communications scored 98): a management report for the Board packet. Current use, opportunities, and the three areas the board raised: fewer team members, productivity, and timely analysis of event data and machine state. Keep it practical for the competition environment.",
-      "checklist": [
-        "How the organization currently uses AI in cyber defense",
-        "Opportunities to leverage more AI",
-        "Reducing team size (number of team members needed)",
-        "Improving team member productivity",
-        "Analyzing event data or machine states in a timely manner",
-        "Limits and risks: practical within the competition environment"
-      ]
+      "description": "A management report on AI in cyber defense: how it is used today, opportunities to use more, and its effect on team size, productivity, and timely analysis of event data and machine state, with practical limits and risks."
     },
     {
       "id": "state",

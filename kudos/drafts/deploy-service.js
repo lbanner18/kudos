@@ -337,7 +337,7 @@ window.INJECT_TYPES.push({
     {
       "id": "wsl-docker",
       "name": "Compare WSL and Docker Desktop",
-      "description": "Run Linux business apps on Windows for disaster recovery (VIRT01A): WSL and Docker Desktop (the container option), benefits and limitations of each, then recommend one and justify it.",
+      "description": "Run Linux business apps on Windows for disaster recovery: WSL and Docker Desktop (the container option), benefits and limitations of each, then recommend one and justify it.",
       "subject": "Develop a Solution to Run a Linux App on Windows",
       "to": "CISO",
       "vars": [
@@ -536,8 +536,6 @@ window.INJECT_TYPES.push({
     },
     {
       "id": "tftp",
-      "event": "MWCCDC Invitational #1",
-      "inject": "11 SOFT04T",
       "name": "Install a TFTP server",
       "subject": "TFTP Server on {{server}}",
       "to": "CISO",
@@ -619,15 +617,7 @@ window.INJECT_TYPES.push({
           ]
         }
       ],
-      "description": "SOFT04T Install a TFTP Server (MWCCDC Invitational #1 2026; Software Installation scored 100). Internal network only. Fill in the TFTP directory above: the Invitational memo printed the placeholder for it inside a pasted command.",
-      "checklist": [
-        "Which server was selected and why",
-        "What software was added for TFTP",
-        "Firewall and other security policy changes (protocols and port numbers)",
-        "Security profile of the TFTP directory",
-        "Protections against the server being overrun with files",
-        "Evidence of the TFTP service working"
-      ]
+      "description": "Internal network only. Fill in the TFTP directory above so it shows up in the pasted commands instead of a placeholder."
     }
   ]
 });
