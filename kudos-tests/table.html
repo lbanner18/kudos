@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Kudos add-table check</title>
+<iframe id="f" style="width:1400px;height:900px"></iframe>
+<script>
+// Clicks + Add table (next to + Add section), fills the new table section, checks the preview, export, autosave and deleting it.
+const KUDOS = '/kudos/index.html';
+const results = [];
+const check = (name, ok, detail) => (results.push({ name, ok: !!ok, detail: ok ? undefined : detail }), !!ok);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const frame = document.getElementById('f');
+let w, d, downloads = [], errors = [];
+
+async function boot() {
+  frame.src = KUDOS + '?' + Math.random();
+  await new Promise(r => frame.onload = r);
+  w = frame.contentWindow; d = w.document;
+  w.addEventListener('error', e => errors.push(String(e.message)));
+  w.URL.createObjectURL = blob => { downloads.push(blob); return 'blob:captured'; };
+  w.HTMLAnchorElement.prototype.click = function () {};
+  await wait(100);
+}
+const $ = s => d.querySelector(s);
+const $$ = s => Array.from(d.querySelectorAll(s));
+const settle = () => wait(300);
+const cards = () => $$('#sectionCards > .card');
+const last = () => cards()[cards().length - 1];
+const btn = (root, label) => Array.from(root.querySelectorAll('button')).find(b => b.textContent.trim() === label);
+const type = (el, v) => { el.value = v; el.dispatchEvent(new w.Event('input', { bubbles: true })); };
+
+async function run() {
+  localStorage.clear(); await boot();
+  const bar = $('.addbar');
+  const labels = Array.from(bar.querySelectorAll('button')).map(b => b.textContent.trim());
+  check('+ Add table sits right after + Add section', labels[0] === '+ Add section' && labels[1] === '+ Add table', labels);
+  const before = cards().length;
+  $('#btnAddTable').click(); await settle();
+  check('one new section is added', cards().length === before + 1, [before, cards().length]);
+  check('the new section has a table grid with 3 columns', last().querySelectorAll('table.grid th').length === 3, last().innerHTML.length);
+  check('the grid starts with one blank row', last().querySelectorAll('table.grid tr').length === 2, last().querySelectorAll('table.grid tr').length);
+  type(last().querySelector('table.grid th input'), 'Device');
+  type(last().querySelector('table.grid td textarea'), 'Ubuntu Wkst');
+  btn(last(), '+ Row').click(); await settle();
+  check('+ Row adds a row', last().querySelectorAll('table.grid tr').length === 3, last().querySelectorAll('table.grid tr').length);
+  await settle();
+  const pv = $('#preview');
+  check('preview shows the table with the typed text', pv.querySelector('table') && pv.textContent.includes('Device') && pv.textContent.includes('Ubuntu Wkst'), pv.textContent.slice(-300));
+  downloads = []; $('#btnExport').click(); await wait(1500);
+  const m = $('.modal'); if (m) { $$('.modal button').find(b => b.textContent === 'Export anyway').click(); await wait(1500); }
+  check('docx export with the table', downloads.length === 1 && downloads[0].size > 5000, downloads.map(b => b.size));
+  // survives a reload (autosave)
+  await boot(); await settle();
+  check('table kept after reload', last().querySelector('table.grid') && last().querySelector('table.grid td textarea').value === 'Ubuntu Wkst', last().innerHTML.slice(0, 200));
+  // a second table makes a second section
+  const n = cards().length;
+  $('#btnAddTable').click(); await settle();
+  check('a second click adds a second table section', cards().length === n + 1 && last().querySelector('table.grid'), [n, cards().length]);
+  // delete it with the section's ✕
+  Array.from(last().querySelectorAll('button')).find(b => b.title === 'Delete section').click(); await settle();
+  check('✕ on the section removes the table', cards().length === n);
+  check('no page errors', !errors.length, errors);
+}
+
+run().catch(e => check('test crashed', false, String(e && e.stack || e)))
+  .finally(() => fetch('/results', { method: 'POST', body: JSON.stringify(results, null, 1) }));
+</script>

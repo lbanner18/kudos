@@ -30,6 +30,10 @@ Run it the same way; `?v=type/variant,...` checks only those.
 `appendix.html` adds a section and an appendix and checks the appendix prints after the sign-off, that ticking **Appendix**
 moves a section there and back, that it survives a reload, and that `.docx` export works.
 
+## Add-table check
+
+`table.html` clicks **+ Add table** (next to **+ Add section**), fills the new table section, and checks the preview, `.docx` export, reload, and deleting it with the section's ✕.
+
 ## Event section check
 
 `events.html` checks the past-event box at the top of the picker: one card per variant with an `event`, in inject order,

@@ -927,6 +927,7 @@
       renderHosts(); hostsChanged();
     };
     $('#btnAddSection').onclick = () => { state.sections.push(makeSection({ heading: 'New section', text: '' })); renderSectionCards(); };
+    $('#btnAddTable').onclick = () => { state.sections.push(makeSection({ heading: 'New table', text: '', table: { columns: ['Column 1', 'Column 2', 'Column 3'] } })); renderSectionCards(); flash('Table added at the end: rename the columns, then use + Row / + Column.'); };
     $$('[data-snippet]').forEach(b => b.onclick = () => { state.sections.push(makeSection(SNIPPETS[b.dataset.snippet])); renderSectionCards(); flash(b.dataset.snippet === 'appendix' ? 'Appendix added at the end: it prints after the sign-off.' : 'Added at the end — edit the highlighted placeholder.'); });
     $('#btnExport').onclick = () => checkRequirements(exportDocx);
     const menu = $('#exportMenu'), menuBtn = $('#btnExportMenu');
