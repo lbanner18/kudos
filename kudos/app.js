@@ -815,7 +815,7 @@
       bold: base.bold || k.bold || undefined,
       font: k.code ? 'Courier New' : base.font,
       size: k.code ? 21 : base.size,
-      highlight: k.ph ? 'yellow' : undefined,
+      highlight: k.ph ? 'red' : undefined,
     }));
     // Formatting lives in named styles (Normal, Heading 1-3, Caption, Screenshot, Code), not on each paragraph, so a line
     // added later in Word or Nextcloud Office picks up Normal instead of copying the heading or slot it was typed after.
@@ -876,8 +876,8 @@
     // An empty slot is one highlighted line where the screenshot goes (select it and paste), with its caption below.
     // Nextcloud Office pastes images floating, so the line also says how to put the image back in line with the text.
     const slot = b => { const hint = subst(b.hint || '', vals); return [
-      new D.Paragraph({ style: 'Screenshot', children: [new D.TextRun({ text: `[[Paste screenshot${hint ? ': ' + hint : ''}, on this line by itself. In Nextcloud, then right-click it > Anchor > As Character]]`, highlight: 'yellow' })] }),
-      new D.Paragraph({ style: 'Caption', children: [...runs(`Figure ${b.n}. `), new D.TextRun({ text: '________', highlight: 'yellow' })] })]; };
+      new D.Paragraph({ style: 'Screenshot', children: [new D.TextRun({ text: `[[Paste screenshot${hint ? ': ' + hint : ''}, on this line by itself. In Nextcloud, then right-click it > Anchor > As Character]]`, highlight: 'red' })] }),
+      new D.Paragraph({ style: 'Caption', children: [...runs(`Figure ${b.n}. `), new D.TextRun({ text: '________', highlight: 'red' })] })]; };
     const blockEls = b => b.t === 'h' ? [heading(b.text, b.level)] : b.t === 'md' ? mdParas(b.blocks) : b.t === 'table' ? tableEl(b) : b.t === 'slot' ? slot(b) : figure(b);
     children.push(...model.filter(b => !b.app).flatMap(blockEls));
     children.push(para(subst(m.closing, vals), { spacing: { before: 240, after: 200 } }),
