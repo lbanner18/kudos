@@ -27,6 +27,7 @@
 
   const TYPES = window.INJECT_TYPES || [];
   const EX = window.KUDOS_EXAMPLES || {};
+  const EX_IMG = window.KUDOS_EXAMPLE_IMAGES || {};
   const findType = id => TYPES.find(t => t.id === id);
   const findVariant = (tid, vid) => { const t = findType(tid); return t && t.variants.find(v => v.id === vid); };
 
@@ -443,6 +444,7 @@
         e.text ? md(sub(e.text)) : null,
         e.rows ? tbl(exCols(s, e), e.rows) : null,
         e.screenshots ? h('div', { class: 'shots' }, h('b', { text: 'Screenshots to include:' }), h('ul', {}, e.screenshots.map(c => h('li', { text: sub(c) })))) : null,
+        (e.images || []).filter(im => EX_IMG[im.src]).map(im => h('img', { src: EX_IMG[im.src], alt: im.caption || '', style: 'max-width:100%' })),
         e.why ? h('p', { class: 'why' }, h('b', { text: 'Why: ' }), e.why) : null); }));
     const close = () => wrap.remove();
     const start = useButton(() => {
@@ -456,6 +458,8 @@
         if (e.rows) s.table = { columns: clone(exCols(s, e)), rows: clone(e.rows) };
         if (e.on) s.on = true;
         if (e.screenshots) Object.assign(s.perHost || s, { captions: e.screenshots.slice(), expect: e.screenshots.length });
+        // Example images (examples/*.js data URLs) start as real figures in the section.
+        (e.images || []).forEach(im => EX_IMG[im.src] && s.evidence.push({ id: uid(), type: 'image', caption: im.caption || '', data: EX_IMG[im.src], w: im.w, h: im.h }));
       });
       close();
     }, 'Start from this example');
