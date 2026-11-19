@@ -39,18 +39,18 @@ async function run() {
   check('the new section has a table grid with 3 columns', last().querySelectorAll('table.grid th').length === 3, last().innerHTML.length);
   check('the grid starts with one blank row', last().querySelectorAll('table.grid tr').length === 2, last().querySelectorAll('table.grid tr').length);
   type(last().querySelector('table.grid th input'), 'Device');
-  type(last().querySelector('table.grid td textarea'), 'Ubuntu Wkst');
+  type(last().querySelector('table.grid td textarea'), 'Linux Workstation');
   btn(last(), '+ Row').click(); await settle();
   check('+ Row adds a row', last().querySelectorAll('table.grid tr').length === 3, last().querySelectorAll('table.grid tr').length);
   await settle();
   const pv = $('#preview');
-  check('preview shows the table with the typed text', pv.querySelector('table') && pv.textContent.includes('Device') && pv.textContent.includes('Ubuntu Wkst'), pv.textContent.slice(-300));
+  check('preview shows the table with the typed text', pv.querySelector('table') && pv.textContent.includes('Device') && pv.textContent.includes('Linux Workstation'), pv.textContent.slice(-300));
   downloads = []; $('#btnExport').click(); await wait(1500);
   const m = $('.modal'); if (m) { $$('.modal button').find(b => b.textContent === 'Export anyway').click(); await wait(1500); }
   check('docx export with the table', downloads.length === 1 && downloads[0].size > 5000, downloads.map(b => b.size));
   // survives a reload (autosave)
   await boot(); await settle();
-  check('table kept after reload', last().querySelector('table.grid') && last().querySelector('table.grid td textarea').value === 'Ubuntu Wkst', last().innerHTML.slice(0, 200));
+  check('table kept after reload', last().querySelector('table.grid') && last().querySelector('table.grid td textarea').value === 'Linux Workstation', last().innerHTML.slice(0, 200));
   // a second table makes a second section
   const n = cards().length;
   $('#btnAddTable').click(); await settle();

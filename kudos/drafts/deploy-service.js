@@ -116,7 +116,7 @@ window.INJECT_TYPES.push({
         {
           "key": "server",
           "label": "Server",
-          "placeholder": "Ubuntu Workstation"
+          "placeholder": "Linux Workstation"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",

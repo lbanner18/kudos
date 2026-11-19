@@ -222,7 +222,7 @@ window.INJECT_TYPES.push({
         {
           "key": "server_ip",
           "label": "Server IP",
-          "placeholder": "172.20.240.102"
+          "placeholder": "10.0.20.10"
         },
         {
           "key": "capture_tool",

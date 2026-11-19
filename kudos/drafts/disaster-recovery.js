@@ -12,18 +12,15 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "service",
-          "label": "Service",
-          "default": "ECOM"
+          "label": "Service"
         },
         {
           "key": "hot_server",
-          "label": "Hot site server",
-          "default": "Windows Server 2022 FTP"
+          "label": "Hot site server"
         },
         {
           "key": "primary",
-          "label": "Primary server",
-          "default": "Ubuntu Ecom"
+          "label": "Primary server"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
@@ -67,23 +64,21 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "service",
-          "label": "Service",
-          "default": "Ecom website"
+          "label": "Service"
         },
         {
           "key": "hot_server",
-          "label": "Hot site server",
-          "default": "Windows Server 2022 FTP"
+          "label": "Hot site server"
         },
         {
           "key": "hot_ip",
           "label": "Hot site IP",
-          "placeholder": "172.25.27.162"
+          "placeholder": "10.0.20.30"
         },
         {
           "key": "primary_ip",
           "label": "Primary IP",
-          "placeholder": "172.25.27.11"
+          "placeholder": "10.0.10.10"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
@@ -118,8 +113,7 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "server",
-          "label": "Server",
-          "default": "Ubuntu Ecom web server"
+          "label": "Server"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
@@ -185,13 +179,11 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "service",
-          "label": "Service",
-          "default": "Ecom web service"
+          "label": "Service"
         },
         {
           "key": "primary",
-          "label": "Repaired server",
-          "default": "Ubuntu Ecom"
+          "label": "Repaired server"
         },
         {
           "key": "hot_server",
@@ -293,8 +285,7 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "backup_server",
-          "label": "Backup server",
-          "default": "Oracle 9 Splunk server"
+          "label": "Backup server"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",

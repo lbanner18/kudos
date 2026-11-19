@@ -67,7 +67,7 @@ async function run() {
   check('A loaded the shared draft', cards().length === 4 && banner().includes('Loaded'), banner());
   type(cardBy('Packet Log Analysis').querySelector('.secbody > textarea'), 'A drops v1'); await settle();
   const A1 = await saveDraft(); A1.name = 'A1.json';
-  type(cardBy('Packet Log Analysis').querySelectorAll('table.grid textarea')[1], 'A: nothing unusual on Ubuntu Ecom'); await settle();
+  type(cardBy('Packet Log Analysis').querySelectorAll('table.grid textarea')[1], 'A: nothing unusual on Linux Web Server'); await settle();
   const A2 = await saveDraft(); A2.name = 'A2.json';
 
   // ---------- teammate B: Linux screenshots + also touches Packet Log Analysis ----------
@@ -91,7 +91,7 @@ async function run() {
   await pick('#fileMerge', [A1, A2]);
   check('A1+A2 merged in one pick without a conflict', !$('.dirty') && /A2\.json: 1 updated/.test(banner()), banner());
   check('A\'s latest Packet Log Analysis text', secText('Packet Log Analysis') === 'A drops v1');
-  check('A\'s table cell came through', cardBy('Packet Log Analysis').querySelectorAll('table.grid textarea')[1].value === 'A: nothing unusual on Ubuntu Ecom');
+  check('A\'s table cell came through', cardBy('Packet Log Analysis').querySelectorAll('table.grid textarea')[1].value === 'A: nothing unusual on Linux Web Server');
   check('lead\'s Windows edit kept', secText('Firewall Rules on Windows Devices') === 'Lead: Windows notes');
   check('Extra stays deleted', !cardBy('Extra'));
 

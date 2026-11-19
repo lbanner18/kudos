@@ -229,8 +229,7 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "server",
-          "label": "Server",
-          "default": "Ubuntu Ecom server"
+          "label": "Server"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
@@ -271,8 +270,7 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "server",
-          "label": "Where the file is stored",
-          "default": "Windows Server 2022 FTP"
+          "label": "Where the file is stored"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",

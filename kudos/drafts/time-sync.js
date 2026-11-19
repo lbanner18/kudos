@@ -13,12 +13,12 @@ window.INJECT_TYPES.push({
         {
           "key": "ntp_server",
           "label": "NTP server",
-          "placeholder": "Ubuntu Workstation"
+          "placeholder": "Linux Workstation"
         },
         {
           "key": "lan",
           "label": "Allowed network",
-          "default": "172.20.0.0/16"
+          "default": "10.0.0.0/16"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",

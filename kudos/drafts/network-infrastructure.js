@@ -267,7 +267,7 @@ window.INJECT_TYPES.push({
         {
           "key": "gw_ip",
           "label": "Gateway IP",
-          "placeholder": "172.20.240.254"
+          "placeholder": "10.0.20.1"
         },
         {
           "key": "gw_mac",

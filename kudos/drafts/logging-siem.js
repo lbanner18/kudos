@@ -17,13 +17,12 @@ window.INJECT_TYPES.push({
         },
         {
           "key": "siem_host",
-          "label": "SIEM server",
-          "default": "Splunk (Oracle 9)"
+          "label": "SIEM server"
         },
         {
           "key": "siem_ip",
           "label": "SIEM server IP",
-          "placeholder": "172.20.242.20"
+          "placeholder": "10.0.10.30"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
@@ -241,8 +240,7 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "win_host",
-          "label": "Windows host shown",
-          "default": "Server 2022 FTP"
+          "label": "Windows host shown"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",

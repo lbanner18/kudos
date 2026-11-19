@@ -13,7 +13,7 @@ window.INJECT_TYPES.push({
         {
           "key": "public_net",
           "label": "Public network",
-          "placeholder": "172.25.27.0/24"
+          "placeholder": "203.0.113.0/24"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
@@ -81,7 +81,7 @@ window.INJECT_TYPES.push({
         {
           "key": "public_net",
           "label": "Public network",
-          "placeholder": "172.25.27.0/24"
+          "placeholder": "203.0.113.0/24"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",

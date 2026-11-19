@@ -13,7 +13,7 @@ window.INJECT_TYPES.push({
         {
           "key": "wazuh_host",
           "label": "Wazuh dashboard host",
-          "placeholder": "Ubuntu Workstation"
+          "placeholder": "Linux Workstation"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",

@@ -496,7 +496,7 @@
       const sel = h('select', { onchange: e => { hs.os = e.target.value; hostsChanged(); } }, OS_OPTIONS.map(o => h('option', { text: o })));
       sel.value = OS_OPTIONS.includes(hs.os) ? hs.os : 'Other';
       root.append(h('div', { class: 'hostrow' },
-        h('input', { value: hs.name, placeholder: 'Host name, e.g. Ubuntu Ecom', oninput: e => { hs.name = e.target.value; hostsChanged(true); } }),
+        h('input', { value: hs.name, placeholder: 'Host name, e.g. Linux Web Server', oninput: e => { hs.name = e.target.value; hostsChanged(true); } }),
         sel,
         h('input', { value: hs.ip, placeholder: 'IP address', oninput: e => { hs.ip = e.target.value; hostsChanged(true); } }),
         h('button', { class: 'tiny danger', text: '✕', title: 'Remove host', onclick: () => { state.hosts.splice(i, 1); renderHosts(); hostsChanged(); } })));
@@ -686,7 +686,7 @@
           ev.type === 'image' ? h('img', { src: ev.data, alt: '' }) : null,
           h('div', { class: 'evbody' },
             ev.type === 'output' ? textArea(ev.text || '', v => { ev.text = v; changed(); }, 3) : null,
-            h('input', { value: ev.caption || '', placeholder: 'Caption, e.g. Splunk running on Fedora Webmail forwarding logs to the indexer', oninput: e => { ev.caption = e.target.value; changed(); } }),
+            h('input', { value: ev.caption || '', placeholder: 'Caption, e.g. Splunk forwarder running on the mail server, sending logs to the indexer', oninput: e => { ev.caption = e.target.value; changed(); } }),
             h('div', { class: 'evbtns' },
               h('button', { class: 'tiny', text: '↑', onclick: () => move(-1) }),
               h('button', { class: 'tiny', text: '↓', onclick: () => move(1) }),

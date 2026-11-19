@@ -2,7 +2,7 @@
 window.INJECT_TYPES.push({
   "id": "service-documentation",
   "name": "Service documentation",
-  "description": "Server build documentation (e.g. ECOM), DNS infrastructure, and admin/user guides for an application.",
+  "description": "Server build documentation (e.g. a web server), DNS infrastructure, and admin/user guides for an application.",
   "variants": [
     {
       "id": "server-doc",
@@ -13,7 +13,7 @@ window.INJECT_TYPES.push({
         {
           "key": "app",
           "label": "Application",
-          "placeholder": "ECOM (OpenCart)"
+          "placeholder": "Online store (OpenCart)"
         },
         {
           "key": "server",
@@ -23,7 +23,7 @@ window.INJECT_TYPES.push({
         {
           "key": "url",
           "label": "Site URL",
-          "placeholder": "http://172.25.27.11"
+          "placeholder": "http://203.0.113.10"
         }
       ],
       "summary": "[[One or two sentences: what was requested and what this memo provides]]",
@@ -96,8 +96,7 @@ window.INJECT_TYPES.push({
       "vars": [
         {
           "key": "dns_server",
-          "label": "DNS server",
-          "default": "Windows Server 2019"
+          "label": "DNS server"
         },
         {
           "key": "zone",
