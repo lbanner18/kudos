@@ -573,18 +573,6 @@ window.KUDOS_EXAMPLES = {
       vars: { linux_example: 'Email Ubuntu Server', windows_example: 'AD Windows Server' },
       summary: 'Each server’s firewall has been configured to only accept inbound and outbound expected packets as requested.',
       sections: {
-        hosts: {
-          columns: ['Service', 'Firewall Rule'],
-          rows: [
-            ['Ecom Rocky Linux', 'Inbound: Allows TCP, HTTPS, HTTP, SSH, UDP ICMP\nOutbound: Allows ICMP, Splunk, DNS, HTTP, HTTPS, MSSQL'],
-            ['Email Ubuntu Server', 'Allow Inbound 22, 25, 587, 143, 993, 995, 80, 443\nOutbound: Allows ICMP, Splunk, DNS, HTTP, HTTPS, MSSQL'],
-            ['Splunk Debian Server', 'Allow Inbound 22, 80, 9997, 8089, 8000\nOutbound: Allows ICMP, Splunk, DNS, HTTP, HTTPS, MSSQL'],
-            ['AD Windows Server', 'Allow Inbound: 53, 135, 445, 389, 88, 5985, 5986\nOutbound: RPC, Kerberos, DNS, WinRM, LDAP'],
-            ['MSSQL Windows Server', 'Domain-Applied Firewall:\nInbound: SQL, RDP, SMB, Ping\nOutbound: 53, 135, 445, 389, 88, 5985, 5986'],
-            ['Ubuntu Workstation', 'Denies all inbound traffic\nOnly allows outbound HTTP, HTTPS, and DNS'],
-            ['Windows Workstation', 'Denies all inbound traffic\nOnly allows outbound HTTP, HTTPS, and DNS'],
-          ],
-        },
         linux: { screenshots: ['Ubuntu Server Firewall'] },
         windows: { screenshots: ['AD Server Firewall'] },
       },
@@ -601,22 +589,9 @@ window.KUDOS_EXAMPLES = {
         linux: { text: 'We decided to use ClamAV as our Anti-malware solution for our Linux devices as it effectively scans all files in a specified directory and compares them against known malware variants to identify malicious or infected files that match known malware patterns. We installed ClamAV on each of the devices and did a sample run on the current directory to show that it operates successfully. After installation was completed, we likewise created a CronJob to run the clamscans every 15 minutes. This ensures that our devices are consistently monitoring their file systems to identify malicious files and remain secure.' },
         windows: { text: 'Windows Defender is pre-installed on all Windows Workstations and Servers and is an effective Anti-Malware and Anti-Virus solution. Windows Defender runs consistent file scans on the device’s most important directories and has options to scan all files on the system for suspicious patterns. Windows Defender works with the Windows Defender advanced firewall to block incoming malicious traffic and malicious files that are being transmitted to the device. Ensuring Windows Defender is installed and running on each Windows device is an essential step to securing our networks and devices. Windows Defender likewise informs the user if any malicious files are identified.' },
         'linux-devices': {
-          columns: ['Service', 'ClamAV Installation Status'],
-          rows: [
-            ['Ecom Rocky Linux', 'Completed - ClamAV'],
-            ['Email Ubuntu Server', 'Completed - ClamAV'],
-            ['Splunk Debian Server', 'Completed - ClamAV'],
-            ['Ubuntu Workstation', 'Completed - ClamAV'],
-          ],
           screenshots: ['ClamAV scan summary and cron job on Ecom Rocky Linux', 'ClamAV scan summary and clamav-daemon status on Email Ubuntu Server', 'ClamAV cron job and clamav-daemon status on Splunk Debian Server', 'ClamAV install, scan summary and cron job on Ubuntu Workstation'],
         },
         'windows-devices': {
-          columns: ['Service', 'Windows Defender Installation Status'],
-          rows: [
-            ['AD Windows Server', 'Completed – Windows Defender'],
-            ['MSSQL Windows Server', 'Completed – Windows Defender'],
-            ['Windows Workstation', 'Completed – Windows Defender'],
-          ],
           screenshots: ['Windows Security virus & threat protection on AD Windows Server', 'Windows Security virus & threat protection on MSSQL Windows Server', 'Windows Security virus & threat protection on Windows Workstation'],
         },
       },
@@ -707,21 +682,6 @@ window.KUDOS_EXAMPLES = {
       label: 'Check the playbook before using.',
       summary: 'We have properly configured SNMP within our network. This document displays our Network hosts with their associated IPs and SNMP Public Community String.',
       sections: {
-        devices: {
-          columns: ['Host Name', 'External IP Address / \'Public\' IP', 'Public Community String (Read-Only)'],
-          rows: [
-            ['Rocky Ecom', '[[External IP]]', '[[community string]]'],
-            ['Ubuntu Email', '[[External IP]]', '[[community string]]'],
-            ['Debian Splunk', '[[External IP]]', '[[community string]]'],
-            ['2022 AD', '[[External IP]]', '[[community string]]'],
-            ['2019 MSSQL', '[[External IP]]', '[[community string]]'],
-            ['Ubuntu Wkst', '[[Router external IP]]', '[[community string]]'],
-            ['Windows 11 Wks', '[[Router external IP]]', '[[community string]]'],
-            ['Kali', '[[Router external IP]]', '[[community string]]'],
-            ['Palo Alto', '[[Management IP]] (Management IP)', '[[community string]]'],
-            ['VyOS Router', '[[Router external IP]]/29 (External IP)', '[[community string]]'],
-          ],
-        },
         config: { text: 'We chose to implement SNMPv2 because it is more secure than SNMPv1. SNMPv1 only supports 32 bit counters whereas SNMPv2 supports 64 bit counters. This means that SNMPv2 is much more reliable in keeping a total count of the events that occurred over the protocol. SNMPv2 also has added functionality to access information via a bulk access function.\n\n### Linux Implementation\n\nIn order to implement SNMP on the Linux devices we followed these steps:\n\n1. Install SNMP using sudo apt install snmpd\n2. Edit the configuration file located at /etc/snmp/snmpd.conf\n3. Bind addresses with the following command “agentAddress udp:161”\n4. Add the line “rocommunity [[community string]] default”\n\nThis screenshot shows the successful configuration of SNMP on the Ubuntu Webmail device:\n\n### Windows Implementation\n\nIn order to implement SNMPv2 on the Windows devices, we followed these steps:\n\n1. In an Administrator PowerShell prompt, run “Install-WindowsFeature SNMP-Service -IncludeManagementTools”\n2. Open services.msc and find the SNMP service and view its properties.\n3. Navigate to the security tab\n4. Add the community string “[[community string]]” under “Accepted Community Names”\n5. Select “Accept SNMP from any host”\n6. Restart the service.\n\nThis screenshot shows the successful configuration of SNMP on the AD Windows device:', screenshots: ['snmpd.conf with agentAddress and rocommunity lines on the Ubuntu Webmail device', 'SNMP Service running on the AD Windows device'] },
         fw: { text: 'This screenshot shows that UDP port 161 which is what SNMP runs on, allowing SNMP to successfully connect to all devices.', screenshots: ['SNMP Out firewall rule allowing snmp'] },
       },
@@ -737,16 +697,6 @@ window.KUDOS_EXAMPLES = {
         tool: { text: 'We used nmap for host discovery because it is the built-in process that systematically iterates through the ports and initiates a relationship to see if it is open. It then records the port and gives us information about the service that is open or closed. This information ranges from protocol to a description of the service.\n\n```\n> nmap -Pn -T4 -sV -iL "devices.txt"   //devices.txt contains a list of all network device IPs\n```\n\nThis screenshot displays the conducted nmap scan from the Kali box with the first result it showed.', screenshots: ['Nmap scan from the Kali box, first result'] },
         services: {
           text: 'This table displays each publicly accessible server in our topology, their public IP address, and the open ports/protocol that is used for that service.',
-          columns: ['Machine', 'External IP', 'Exposed Ports', 'Assessment'],
-          rows: [
-            ['Rocky Ecom', '[[External IP]]', '80/tcp, 443/tcp', 'These ports are the only ports necessary for business continuity and provide no vector for attack.'],
-            ['Ubuntu Email', '[[External IP]]', '22/tcp, 25/tcp, 53/tcp, 80/tcp, 110/tcp, 143/tcp, 443/tcp, 515/tcp, 587/tcp, 993/tcp, 995/tcp', 'Having port 22 open on this device is unnecessary and provides a vector for access by malicious actors. Port 22 hosts the Secure Shell (SSH) service which can allow remote access to the device if malicious actors know account credentials. Since it is unnecessary, this port will be blocked on the firewall.'],
-            ['Debian Splunk', '[[External IP]]', '22/tcp, 8000/tcp, 8089/tcp', 'These ports are the only ports necessary for business continuity and provide no vector for attack.'],
-            ['Windows 2022 AD', '[[External IP]]', '53/tcp, 5985/tcp', 'These ports are the only ports necessary for business continuity and provide no vector for attack.'],
-            ['2019 MSSQL', '[[External IP]]', '445/tcp, 1433/tcp, 3389/tcp', 'These ports are the only ports necessary for business continuity and provide no vector for attack.'],
-            ['Ubuntu Wkst', '[[Internal IP]]', 'All inbound ports blocked', 'This workstation has no essential business services and as such should not have any inbound ports opened.'],
-            ['Windows Wkst', '[[Internal IP]]', 'All inbound ports blocked', 'This workstation has no essential business services and as such should not have any inbound ports opened.'],
-          ],
         },
       },
     },

@@ -8,14 +8,14 @@
   const CLOSING = 'If there are any concerns, questions, or clarifications, please do not hesitate to reach out.';
   const OS_OPTIONS = ['Linux', 'Windows', 'Network device', 'Other'];
   const SAMPLE_HOSTS = [
-    ['Ubuntu Ecom', 'Linux', '172.20.242.30'],
-    ['Fedora Webmail', 'Linux', '172.20.242.40'],
-    ['Splunk (Oracle 9)', 'Linux', '172.20.242.20'],
-    ['Ubuntu Workstation', 'Linux', 'DHCP'],
-    ['Server 2019 AD/DNS', 'Windows', '172.20.240.102'],
-    ['Server 2019 Web', 'Windows', '172.20.240.101'],
-    ['Server 2022 FTP', 'Windows', '172.20.240.104'],
-    ['Windows 11 Workstation', 'Windows', '172.20.240.100'],
+    ['Linux Web Server', 'Linux', '10.0.10.10'],
+    ['Linux Mail Server', 'Linux', '10.0.10.20'],
+    ['Log Server (SIEM)', 'Linux', '10.0.10.30'],
+    ['Linux Workstation', 'Linux', 'DHCP'],
+    ['Domain Controller (AD/DNS)', 'Windows', '10.0.20.10'],
+    ['Windows Web Server', 'Windows', '10.0.20.20'],
+    ['Windows File Server', 'Windows', '10.0.20.30'],
+    ['Windows Workstation', 'Windows', 'DHCP'],
   ];
   const SNIPPETS = {
     partial: { heading: '', text: 'We were unable to finish {{unfinished_task}} at this time due to the prioritized defense of the ongoing cyber attacks. We will continue working on this and will inform you when the task is complete.' },
