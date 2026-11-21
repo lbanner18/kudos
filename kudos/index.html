@@ -56,7 +56,8 @@
         </label>
         <label class="span2">Closing line<input data-meta="closing"></label>
         <label>Sign-off
-          <select data-meta="signoff"><option>With Regards,</option><option>Best regards,</option><option>Thank you,</option><option>Best,</option></select>
+          <select id="signoffPick"><option>With Regards,</option><option>Best regards,</option><option>Thank you,</option><option>Best,</option><option value="">Custom…</option></select>
+          <input data-meta="signoff" id="signoffCustom" placeholder="e.g. Respectfully," hidden>
         </label>
         <label>Signature<input data-meta="signature"></label>
       </div>

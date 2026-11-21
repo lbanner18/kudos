@@ -779,6 +779,14 @@
     $('#summaryText').value = state.summary;
     autoGrow($('#summaryText'));
     $('#checkText').value = state.checklist.text;
+    syncSignoff();
+  }
+  // Sign-off: a preset from the list, or "Custom…" to type your own.
+  function syncSignoff() {
+    const pick = $('#signoffPick'), v = state.meta.signoff || '';
+    const preset = [...pick.options].some(o => o.value && o.value === v);
+    pick.value = preset ? v : '';
+    $('#signoffCustom').hidden = preset;
   }
   function renderAll() {
     syncInputs(); renderChecklist(); renderTypeGrid(); renderVariants(); renderHosts(); renderVars(); renderSectionCards();
@@ -921,6 +929,11 @@
   // ---------- wiring ----------
   function wire() {
     $$('[data-meta]').forEach(inp => inp.addEventListener(inp.tagName === 'SELECT' ? 'change' : 'input', () => { state.meta[inp.dataset.meta] = inp.value; changed(); }));
+    $('#signoffPick').addEventListener('change', e => {
+      const c = $('#signoffCustom');
+      if (e.target.value) { state.meta.signoff = c.value = e.target.value; c.hidden = true; changed(); }
+      else { c.hidden = false; c.select(); }
+    });
     $('#summaryText').addEventListener('input', e => { state.summary = e.target.value; autoGrow(e.target); changed(); });
     $('#checkText').addEventListener('input', e => { state.checklist.text = e.target.value; renderChecklist(); save(); });
     $('#typeSearch').addEventListener('input', renderTypeGrid);
